@@ -72,16 +72,16 @@ export function BookDemoFormSection() {
   const [isLoadingSlots, setIsLoadingSlots] = useState<boolean>(false);
 
   // Parent fields
-  const [parentFirstName, setParentFirstName] = useState("Alice");
-  const [parentLastName, setParentLastName] = useState("Smith");
+  const [parentFirstName, setParentFirstName] = useState("");
+  const [parentLastName, setParentLastName] = useState("");
 
   // Student fields (optional)
-  const [studentFirstName, setStudentFirstName] = useState("Aarav");
-  const [studentLastName, setStudentLastName] = useState("Smith");
+  const [studentFirstName, setStudentFirstName] = useState("");
+  const [studentLastName, setStudentLastName] = useState("");
 
   // Contact fields
-  const [email, setEmail] = useState("candidate@gmail.com");
-  const [phone, setPhone] = useState("+1 (555) 019-2834");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   // Admissions notes
   const [admissionsNotes, setAdmissionsNotes] = useState("");
@@ -226,7 +226,7 @@ export function BookDemoFormSection() {
 
     const payload = {
       firstName: parentFirstName.trim(),
-      lastName: parentLastName.trim() || "Smith",
+      lastName: parentLastName.trim(),
       studentFirstName: studentFirstName.trim() || undefined,
       studentLastName: studentLastName.trim() || undefined,
       email: email.trim(),
