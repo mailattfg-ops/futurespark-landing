@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { getDefaultSectionState, SectionState } from "@/lib/section-config";
 import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/app/home/components/hero-section";
 import { WhyFinancialLiteracySection } from "@/app/home/components/why-financial-literacy";
@@ -20,67 +24,110 @@ import { ParentReviewsSection } from "@/app/home/components/parent-reviews";
 import { Footer } from "@/components/footer";
 
 export default function HomePage() {
+  const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
+
+  const loadConfig = async () => {
+    try {
+      // Check local storage first for quick client sync
+      if (typeof window !== "undefined") {
+        const cached = localStorage.getItem("landing_sections_config");
+        if (cached) {
+          try {
+            setSections({ ...getDefaultSectionState(), ...JSON.parse(cached) });
+          } catch {}
+        }
+      }
+
+      // Fetch latest from server
+      const res = await fetch("/api/sections");
+      const data = await res.json();
+      if (data.success && data.data) {
+        setSections(data.data);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("landing_sections_config", JSON.stringify(data.data));
+        }
+      }
+    } catch {
+      // Default fallback
+    }
+  };
+
+  useEffect(() => {
+    loadConfig();
+
+    const handleStorageUpdate = () => loadConfig();
+    window.addEventListener("storage_sections_updated", handleStorageUpdate);
+    window.addEventListener("storage", handleStorageUpdate);
+
+    return () => {
+      window.removeEventListener("storage_sections_updated", handleStorageUpdate);
+      window.removeEventListener("storage", handleStorageUpdate);
+    };
+  }, []);
+
+  const isEnabled = (key: string) => sections[key] !== false;
+
   return (
     <main className="min-h-screen flex flex-col bg-white">
       {/* 1. Header / Navigation */}
       <Navbar />
 
       {/* 2. Hero Section */}
-      <HeroSection />
+      {isEnabled("hero") && <HeroSection />}
 
       {/* 3. Why Financial Literacy */}
-      <WhyFinancialLiteracySection />
+      {isEnabled("whyFinancialLiteracy") && <WhyFinancialLiteracySection />}
 
       {/* 4. Student Spotlight */}
-      <StudentSpotlightSection />
+      {isEnabled("studentSpotlight") && <StudentSpotlightSection />}
 
       {/* 5. How It Works */}
-      <HowItWorksSection />
+      {isEnabled("howItWorks") && <HowItWorksSection />}
 
       {/* 6. Awards & Partners */}
-      <AwardsPartnersSection />
+      {isEnabled("awardsPartners") && <AwardsPartnersSection />}
 
       {/* 7. Team of Teachers */}
-      <TeamOfTeachersSection />
+      {isEnabled("teamOfTeachers") && <TeamOfTeachersSection />}
 
       {/* 8. Book Your Free Demo */}
-      <BookDemoFormSection />
+      {isEnabled("bookDemoForm") && <BookDemoFormSection />}
 
       {/* 9. Foundations of Wealth (Course Details Card) */}
-      <FoundationsOfWealthSection />
+      {isEnabled("foundationsOfWealth") && <FoundationsOfWealthSection />}
 
       {/* 10. Quarterly Physical Box Unboxing */}
-      <BoxUnboxingSection />
+      {isEnabled("boxUnboxing") && <BoxUnboxingSection />}
 
       {/* 11. Course Flow (Curriculum Roadmap) */}
-      <CourseFlowSection />
+      {isEnabled("courseFlow") && <CourseFlowSection />}
 
       {/* 12. Frequently Asked Questions */}
-      <FAQSection />
+      {isEnabled("faq") && <FAQSection />}
 
       {/* 13. Instagram Social Proof Showcase */}
-      <InstagramShowcaseSection />
+      {isEnabled("instagramShowcase") && <InstagramShowcaseSection />}
 
       {/* 14. US ON MEDIA */}
-      <UsOnMediaSection />
+      {isEnabled("usOnMedia") && <UsOnMediaSection />}
 
       {/* 15. Blogs & Articles */}
-      <BlogsSection />
+      {isEnabled("blogs") && <BlogsSection />}
 
       {/* 16. YouTube Class Highlights */}
-      <YoutubeSection />
+      {isEnabled("youtube") && <YoutubeSection />}
 
       {/* 17. Join Thousands Community Face Cloud */}
-      <JoinThousandsSection />
+      {isEnabled("joinThousands") && <JoinThousandsSection />}
 
       {/* 18. Our Certifications & Trust */}
-      <CertificationsTrustSection />
+      {isEnabled("certificationsTrust") && <CertificationsTrustSection />}
 
       {/* 19. What Parents and Kids Say (Reviews) */}
-      <ParentReviewsSection />
+      {isEnabled("parentReviews") && <ParentReviewsSection />}
 
       {/* 20. Footer */}
-      <Footer />
+      {isEnabled("footer") && <Footer />}
     </main>
   );
 }
