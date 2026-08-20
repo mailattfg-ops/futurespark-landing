@@ -41,6 +41,8 @@ export async function POST(req: Request) {
 
     // Potential endpoints to persist lead into PostgreSQL database
     const candidateEndpoints = [
+      "http://127.0.0.1:3002/courses/leads",
+      "http://127.0.0.1:3000/api/leads",
       "http://localhost:3002/courses/leads",
       "http://localhost:3000/api/leads",
       `${process.env.NEXT_PUBLIC_APP_API_URL || "https://app.finquo.ai"}/api/leads`,
@@ -64,9 +66,12 @@ export async function POST(req: Request) {
             message: "Lead registered and saved into webapp database successfully",
             data: data.data || data,
           });
+        } else {
+          const errorText = await response.text();
+          console.warn(`Endpoint ${url} responded with status ${response.status}: ${errorText}`);
         }
-      } catch {
-        // Try next candidate endpoint
+      } catch (err) {
+        console.warn(`Failed to connect to ${url}:`, err);
       }
     }
 
