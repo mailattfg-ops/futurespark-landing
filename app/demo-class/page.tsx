@@ -36,6 +36,13 @@ interface LeadData {
   telecallerNotes?: string;
   meetingUrl?: string;
   meetingLink?: string;
+  scheduledClass?: {
+    id: string;
+    meetingLink?: string;
+    startTime?: string;
+    endTime?: string;
+    status?: string;
+  };
   program?: {
     title?: string;
   };
@@ -80,6 +87,7 @@ function DemoClassJoinSection({
   telecallerNotes,
   leadMeetingUrl,
   leadMeetingLink,
+  scheduledClass,
 }: {
   sessionDate: string;
   preferredTime: string;
@@ -87,6 +95,7 @@ function DemoClassJoinSection({
   telecallerNotes?: string;
   leadMeetingUrl?: string;
   leadMeetingLink?: string;
+  scheduledClass?: { meetingLink?: string; startTime?: string };
 }) {
   const [timeLeft, setTimeLeft] = useState<{
     days: number;
@@ -96,12 +105,12 @@ function DemoClassJoinSection({
     isReady: boolean;
   }>({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: false });
 
-  // Extract meet URL from lead properties or notes (e.g. Google Meet, Zoom)
-  let meetUrl: string | null = leadMeetingUrl || leadMeetingLink || null;
+  // Extract meet URL from lead properties, scheduled class or notes (e.g. Google Meet, Zoom)
+  let meetUrl: string | null = leadMeetingUrl || leadMeetingLink || scheduledClass?.meetingLink || null;
 
   if (!meetUrl) {
     const combinedNotes = `${notes || ""} ${telecallerNotes || ""}`;
-    const urlMatch = combinedNotes.match(/(https?:\/\/(?:meet\.google\.com|zoom\.us|us02web\.zoom\.us|app\.finquo\.ai)[^\s]+)/i) ||
+    const urlMatch = combinedNotes.match(/(https?:\/\/(?:meet\.google\.com|zoom\.us|us06web\.zoom\.us|us02web\.zoom\.us|app\.finquo\.ai)[^\s]+)/i) ||
                      combinedNotes.match(/(https?:\/\/[^\s]+)/i);
     if (urlMatch && urlMatch[1]) {
       meetUrl = urlMatch[1];
@@ -109,7 +118,10 @@ function DemoClassJoinSection({
   }
 
   useEffect(() => {
-    const targetDate = parseTargetSessionTime(sessionDate, preferredTime);
+    let targetDate = parseTargetSessionTime(sessionDate, preferredTime);
+    if (!targetDate && scheduledClass?.startTime) {
+      targetDate = new Date(scheduledClass.startTime);
+    }
 
     function updateCountdown() {
       if (!targetDate) {
@@ -138,7 +150,7 @@ function DemoClassJoinSection({
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
-  }, [sessionDate, preferredTime]);
+  }, [sessionDate, preferredTime, scheduledClass]);
 
   const padZero = (num: number) => String(num).padStart(2, "0");
 
@@ -464,7 +476,7 @@ function DemoClassPortalContent() {
                 notes={lead.notes}
                 telecallerNotes={lead.telecallerNotes}
                 leadMeetingUrl={lead.meetingUrl}
-                leadMeetingLink={lead.meetingLink}
+                scheduledClass={lead.scheduledClass}
               />
             </div>
 
