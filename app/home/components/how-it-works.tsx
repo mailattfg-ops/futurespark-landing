@@ -89,7 +89,7 @@ export function HowItWorksSection() {
                   priority
                   quality={100}
                   sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
-                  className="object-cover object-center select-none"
+                  className="object-cover object-top select-none"
                 />
 
                 {/* Name Badge */}
@@ -108,7 +108,7 @@ export function HowItWorksSection() {
                   priority
                   quality={100}
                   sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
-                  className="object-cover object-center select-none"
+                  className="object-cover object-top select-none"
                 />
 
                 {/* Name Badge */}

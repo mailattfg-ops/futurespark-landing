@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element */
 
 export function CertificationsTrustSection() {
   return (
-    <section className="w-full bg-[#FAFAF7] py-16 sm:py-20 lg:py-24 border-t border-gray-200/60">
+    <section className="w-full bg-[#FAFAF7] py-16 sm:py-20 lg:py-24 border-t border-gray-200/60 font-sans">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight font-sans text-center mb-12 sm:mb-16">
@@ -14,55 +14,43 @@ export function CertificationsTrustSection() {
         {/* Top 3 Trust Rating Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-4xl mx-auto">
           {/* Card 1: Trustpilot */}
-          <div className="rounded-3xl border border-gray-200/90 bg-white p-6 sm:p-7 flex flex-col items-center justify-between min-h-[175px] shadow-xs hover:shadow-md transition-all">
-            <div className="relative w-36 h-10 flex items-center justify-center my-auto">
-              <Image
-                src="/cert-trustpilot.png"
+          <div className="rounded-3xl border border-gray-200/90 bg-white p-6 sm:p-8 flex flex-col items-center justify-between min-h-[220px] shadow-xs hover:shadow-md transition-all">
+            <div className="flex items-center justify-center my-auto w-full py-2">
+              <img
+                src="/cert-trustpilot.svg"
                 alt="Trustpilot rating"
-                fill
-                priority
-                unoptimized
-                sizes="150px"
-                className="object-contain object-center"
+                className="h-12 sm:h-14 w-auto max-w-[85%] object-contain mx-auto"
               />
             </div>
-            <span className="bg-[#00B67A] text-white text-xs sm:text-sm font-bold px-5 py-1.5 rounded-full font-sans shadow-xs mt-2">
+            <span className="bg-[#00B67A] text-white text-xs sm:text-sm font-extrabold px-5 py-2 rounded-full font-sans shadow-xs mt-3">
               4.8/5 TrustScore
             </span>
           </div>
 
           {/* Card 2: kidSAFE Certified */}
-          <div className="rounded-3xl border border-gray-200/90 bg-white p-6 sm:p-7 flex flex-col items-center justify-between min-h-[175px] shadow-xs hover:shadow-md transition-all">
-            <div className="relative w-36 h-12 flex items-center justify-center my-auto">
-              <Image
+          <div className="rounded-3xl border border-gray-200/90 bg-white p-6 sm:p-8 flex flex-col items-center justify-between min-h-[220px] shadow-xs hover:shadow-md transition-all">
+            <div className="flex items-center justify-center my-auto w-full py-1">
+              <img
                 src="/cert-kidsafe.png"
                 alt="kidSAFE Certified seal"
-                fill
-                priority
-                unoptimized
-                sizes="150px"
-                className="object-contain object-center"
+                className="h-20 sm:h-24 w-auto max-w-[90%] object-contain mx-auto"
               />
             </div>
-            <span className="bg-[#FCE7F3] text-[#A21CAF] text-xs sm:text-sm font-bold px-5 py-1.5 rounded-full font-sans shadow-xs mt-2">
+            <span className="bg-[#FCE7F3] text-[#A21CAF] text-xs sm:text-sm font-extrabold px-5 py-2 rounded-full font-sans shadow-xs mt-3">
               Vetted & Certified Safe
             </span>
           </div>
 
           {/* Card 3: Google Reviews */}
-          <div className="rounded-3xl border border-gray-200/90 bg-white p-6 sm:p-7 flex flex-col items-center justify-between min-h-[175px] shadow-xs hover:shadow-md transition-all">
-            <div className="relative w-36 h-12 flex items-center justify-center my-auto">
-              <Image
+          <div className="rounded-3xl border border-gray-200/90 bg-white p-6 sm:p-8 flex flex-col items-center justify-between min-h-[220px] shadow-xs hover:shadow-md transition-all">
+            <div className="flex items-center justify-center my-auto w-full py-2">
+              <img
                 src="/cert-google.png"
                 alt="Google reviews"
-                fill
-                priority
-                unoptimized
-                sizes="150px"
-                className="object-contain object-center"
+                className="h-12 sm:h-14 w-auto max-w-[85%] object-contain mx-auto"
               />
             </div>
-            <span className="bg-[#00B67A] text-white text-xs sm:text-sm font-bold px-5 py-1.5 rounded-full font-sans shadow-xs mt-2">
+            <span className="bg-[#00B67A] text-white text-xs sm:text-sm font-extrabold px-5 py-2 rounded-full font-sans shadow-xs mt-3">
               4.9/5 ★ (2,400+ reviews)
             </span>
           </div>
