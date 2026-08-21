@@ -14,12 +14,20 @@ export async function GET(
       );
     }
 
+    const isVercel = process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+
     const candidateEndpoints = [
-      `http://127.0.0.1:3002/courses/leads/${id}`,
-      `http://127.0.0.1:3000/api/leads/${id}`,
-      `http://localhost:3002/courses/leads/${id}`,
-      `http://localhost:3000/api/leads/${id}`,
-    ];
+      process.env.BACKEND_URL ? `${process.env.BACKEND_URL.replace(/\/$/, "")}/api/leads/${id}` : null,
+      process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/\/$/, "")}/api/leads/${id}` : null,
+      process.env.NEXT_PUBLIC_APP_API_URL ? `${process.env.NEXT_PUBLIC_APP_API_URL.replace(/\/$/, "")}/api/leads/${id}` : null,
+      `https://api.finquo.ai/api/leads/${id}`,
+      `https://app.finquo.ai/api/leads/${id}`,
+      `https://app.finquo.ai/api/courses/leads/${id}`,
+      !isVercel ? `http://127.0.0.1:3002/courses/leads/${id}` : null,
+      !isVercel ? `http://127.0.0.1:3000/api/leads/${id}` : null,
+      !isVercel ? `http://localhost:3002/courses/leads/${id}` : null,
+      !isVercel ? `http://localhost:3000/api/leads/${id}` : null,
+    ].filter(Boolean) as string[];
 
     for (const url of candidateEndpoints) {
       try {
