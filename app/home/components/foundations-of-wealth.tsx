@@ -118,7 +118,16 @@ export function FoundationsOfWealthSection() {
           <div className="mt-6 pt-2">
             <Link
               href="#book-demo"
-              className="w-full inline-flex items-center justify-center py-3.5 px-6 rounded-xl bg-[#5B45F5] hover:bg-[#4E39E0] text-white font-extrabold text-sm sm:text-base shadow-md transition-all text-center"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById("book-demo") || document.getElementById("book-class");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  window.location.hash = "book-demo";
+                }
+              }}
+              className="w-full inline-flex items-center justify-center py-3.5 px-6 rounded-xl bg-[#5B45F5] hover:bg-[#4E39E0] text-white font-extrabold text-sm sm:text-base shadow-md transition-all text-center cursor-pointer"
             >
               Book a Free Demo
             </Link>

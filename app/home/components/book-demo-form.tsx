@@ -258,7 +258,8 @@ export function BookDemoFormSection() {
   }, []);
 
   return (
-    <section id="book-demo" className="w-full bg-gradient-to-b from-[#2E0B73] via-[#3B128E] to-[#250860] py-8 sm:py-10 relative overflow-hidden font-sans">
+    <section id="book-demo" className="w-full bg-gradient-to-b from-[#2E0B73] via-[#3B128E] to-[#250860] py-8 sm:py-10 relative overflow-hidden font-sans scroll-mt-16">
+      <div id="book-class" className="absolute -top-16 left-0 opacity-0 pointer-events-none" />
       {/* Background Decorative Mesh Blobs */}
       <div className="absolute top-0 left-1/4 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
@@ -365,12 +366,13 @@ export function BookDemoFormSection() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Parent Name Input */}
                 <div className="space-y-1">
-                  <label className="block text-[11px] font-bold text-gray-700 font-sans">
+                  <label htmlFor="parentName" className="block text-[11px] font-bold text-gray-700 font-sans">
                     Parent / Guardian Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <User className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
                     <input
+                      id="parentName"
                       type="text"
                       required
                       value={parentName}
@@ -383,12 +385,13 @@ export function BookDemoFormSection() {
 
                 {/* Child's Name Input */}
                 <div className="space-y-1">
-                  <label className="block text-[11px] font-bold text-gray-700 font-sans">
+                  <label htmlFor="childName" className="block text-[11px] font-bold text-gray-700 font-sans">
                     Child&apos;s Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <GraduationCap className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
                     <input
+                      id="childName"
                       type="text"
                       required
                       value={childName}
@@ -404,12 +407,14 @@ export function BookDemoFormSection() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Mobile Number with Country Selector */}
                 <div className="space-y-1">
-                  <label className="block text-[11px] font-bold text-gray-700 font-sans">
+                  <label htmlFor="phone" className="block text-[11px] font-bold text-gray-700 font-sans">
                     WhatsApp Number <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-12 gap-1.5">
                     <div className="col-span-4">
                       <select
+                        id="countryCode"
+                        aria-label="Country Code"
                         value={countryCode}
                         onChange={(e) => setCountryCode(e.target.value)}
                         className="w-full bg-white border border-gray-200 rounded-xl px-1.5 py-2 text-xs font-semibold text-gray-900 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
@@ -425,6 +430,7 @@ export function BookDemoFormSection() {
                     <div className="col-span-8 relative">
                       <Phone className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-3 pointer-events-none" />
                       <input
+                        id="phone"
                         type="tel"
                         required
                         value={phone}
@@ -438,12 +444,13 @@ export function BookDemoFormSection() {
 
                 {/* Email Address */}
                 <div className="space-y-1">
-                  <label className="block text-[11px] font-bold text-gray-700 font-sans">
+                  <label htmlFor="email" className="block text-[11px] font-bold text-gray-700 font-sans">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <Mail className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
                     <input
+                      id="email"
                       type="email"
                       required
                       value={email}
@@ -457,12 +464,13 @@ export function BookDemoFormSection() {
 
               {/* Course Selection */}
               <div className="space-y-1">
-                <label className="block text-[11px] font-bold text-gray-700 font-sans">
+                <label htmlFor="courseTrack" className="block text-[11px] font-bold text-gray-700 font-sans">
                   Select Course Track
                 </label>
                 <div className="relative">
                   <BookOpen className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
                   <select
+                    id="courseTrack"
                     value={course}
                     onChange={(e) => setCourse(e.target.value)}
                     className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-3 py-2 text-xs text-gray-900 font-semibold focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"

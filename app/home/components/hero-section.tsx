@@ -49,8 +49,12 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-7">
               {/* Primary Action Button */}
               <Link
-                href="#book-class"
-                className="inline-flex items-center justify-center px-6 py-3.5 sm:px-7 sm:py-3.5 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-bold text-sm sm:text-base shadow-md shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
+                href="#book-demo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center justify-center px-6 py-3.5 sm:px-7 sm:py-3.5 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-bold text-sm sm:text-base shadow-md shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 Book a free Class
               </Link>

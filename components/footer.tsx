@@ -96,6 +96,10 @@ export function Footer() {
             </h3>
             <Link
               href="#book-demo"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
+              }}
               className="inline-flex items-center justify-center bg-white text-[#645CFF] hover:bg-gray-50 text-xs sm:text-[13px] font-extrabold px-7 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all mt-5 cursor-pointer active:scale-95"
             >
               Book a Free Demo

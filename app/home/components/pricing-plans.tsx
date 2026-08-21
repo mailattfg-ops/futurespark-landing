@@ -99,7 +99,11 @@ export function PricingPlansSection() {
               <div className="pt-2">
                 <Link
                   href="#book-demo"
-                  className="w-full inline-flex items-center justify-center py-3.5 px-6 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-indigo-500/25 transition-all text-center"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="w-full inline-flex items-center justify-center py-3.5 px-6 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-indigo-500/25 transition-all text-center cursor-pointer"
                 >
                   Book a Free Demo First
                 </Link>
