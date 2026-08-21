@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Video } from "lucide-react";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface StepItem {
   title: string;
@@ -36,14 +37,16 @@ export function HowItWorksSection() {
     <section id="how-it-works" className="w-full bg-white py-20 sm:py-24 lg:py-32 border-t border-gray-100">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 text-center tracking-tight mb-14 sm:mb-20 font-sans">
-          How It Works
-        </h2>
+        <ScrollReveal variant="fade-up" duration={600}>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 text-center tracking-tight mb-14 sm:mb-20 font-sans">
+            How It Works
+          </h2>
+        </ScrollReveal>
 
         {/* 2-Column Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: Enlarged Live 1-on-1 Class Video Call Mockup Card */}
-          <div className="lg:col-span-7 bg-white border border-gray-200/90 rounded-[32px] sm:rounded-[40px] p-6 sm:p-7 md:p-8 shadow-2xl shadow-gray-200/70">
+          <ScrollReveal variant="fade-right" duration={750} delay={150} className="lg:col-span-7 bg-white border border-gray-200/90 rounded-[32px] sm:rounded-[40px] p-6 sm:p-7 md:p-8 shadow-2xl shadow-gray-200/70 hover:shadow-indigo-500/10 transition-shadow duration-500">
             {/* Call Header Bar */}
             <div className="flex items-center justify-between gap-4 mb-6 pb-1">
               <div className="flex items-center gap-3.5 min-w-0">
@@ -117,14 +120,14 @@ export function HowItWorksSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: 4-Step List with line-height: 20px on step descriptions */}
-          <div className="lg:col-span-5 space-y-6 sm:space-y-8">
+          <ScrollReveal variant="fade-left" duration={750} delay={250} className="lg:col-span-5 space-y-6 sm:space-y-8">
             {steps.map((step, index) => (
-              <div key={index} className="flex items-start gap-4 sm:gap-4.5">
+              <div key={index} className="flex items-start gap-4 sm:gap-4.5 group">
                 {/* Yellow Sparkle Star Icon */}
-                <div className="flex-shrink-0 pt-0.5">
+                <div className="flex-shrink-0 pt-0.5 transform group-hover:scale-120 group-hover:rotate-12 transition-transform duration-300">
                   <Image
                     src="/star.png"
                     alt=""
@@ -137,7 +140,7 @@ export function HowItWorksSection() {
 
                 {/* Step Details with Exact line-height: 20px */}
                 <div className="flex flex-col">
-                  <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 leading-snug font-sans">
+                  <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 leading-snug font-sans group-hover:text-[#4F46E5] transition-colors">
                     {step.title}
                   </h3>
                   <p
@@ -149,7 +152,7 @@ export function HowItWorksSection() {
                 </div>
               </div>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

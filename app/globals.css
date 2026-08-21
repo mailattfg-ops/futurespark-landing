@@ -135,3 +135,21 @@
     letter-spacing: -0.01em;
   }
 }
+
+@keyframes starRotateCW {
+  0%, 100% { transform: rotate(-25deg) scale(1); }
+  50% { transform: rotate(25deg) scale(1.08); }
+}
+
+@keyframes starRotateCCW {
+  0%, 100% { transform: rotate(25deg) scale(1); }
+  50% { transform: rotate(-25deg) scale(1.08); }
+}
+
+.animate-star-cw {
+  animation: starRotateCW 3.5s ease-in-out infinite;
+}
+
+.animate-star-ccw {
+  animation: starRotateCCW 3.5s ease-in-out infinite;
+}

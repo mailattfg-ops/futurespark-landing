@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface ReviewItem {
   name: string;
@@ -38,45 +39,51 @@ export function ParentReviewsSection() {
     <section id="reviews" className="w-full bg-white py-16 sm:py-20 lg:py-24 border-t border-gray-100">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight font-sans text-center mb-12 sm:mb-16">
-          What parents and kids say
-        </h2>
+        <ScrollReveal variant="fade-up" duration={600}>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight font-sans text-center mb-12 sm:mb-16">
+            What parents and kids say
+          </h2>
+        </ScrollReveal>
 
         {/* 3 Review Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {reviews.map((rev, idx) => (
-            <div
-              key={idx}
-              className="rounded-[28px] border border-gray-200/90 bg-white p-6 sm:p-7 flex flex-col justify-start min-h-[210px] shadow-xs hover:shadow-md transition-all duration-300 select-none"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          {reviews.map((review, index) => (
+            <ScrollReveal
+              key={index}
+              variant="fade-up"
+              duration={650}
+              delay={index * 120}
             >
-              {/* Header: Avatar + Name & Role */}
-              <div className="flex items-center gap-4">
-                <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0 border border-gray-100 bg-gray-50">
-                  <Image
-                    src={rev.avatarSrc}
-                    alt={rev.name}
-                    fill
-                    priority
-                    unoptimized
-                    sizes="56px"
-                    className="object-cover object-center"
-                  />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-base sm:text-lg font-extrabold text-gray-900 font-sans leading-tight">
-                    {rev.name}
-                  </h3>
-                  <span className="text-xs sm:text-sm text-gray-500 font-medium font-sans block mt-0.5">
-                    {rev.role}
-                  </span>
+              <div
+                className="rounded-3xl border border-gray-200/90 bg-white p-6 sm:p-8 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full"
+              >
+                {/* Quote Text */}
+                <p className="text-sm sm:text-base text-gray-700 font-medium leading-relaxed font-sans italic mb-6">
+                  {review.quote}
+                </p>
+
+                {/* Author Info */}
+                <div className="flex items-center gap-3.5 pt-4 border-t border-gray-100">
+                  <div className="relative w-11 h-11 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+                    <Image
+                      src={review.avatarSrc}
+                      alt={review.name}
+                      fill
+                      sizes="44px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-sm sm:text-base font-extrabold text-gray-900 font-sans leading-snug">
+                      {review.name}
+                    </h3>
+                    <p className="text-xs text-gray-500 font-medium font-sans">
+                      {review.role}
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              {/* Quote Content */}
-              <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-sans mt-5 font-normal">
-                {rev.quote}
-              </p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

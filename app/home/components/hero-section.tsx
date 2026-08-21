@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export function HeroSection() {
   return (
     <section className="relative w-full overflow-hidden bg-white min-h-[100dvh] lg:h-[100dvh] lg:max-h-[820px] flex items-center justify-center pt-16">
       {/* Background Purple Sunburst (Desktop absolute positioning covering top-0 to bottom on the right) */}
       <div
-        className="hidden lg:block absolute top-0 right-0 h-full w-[54%] xl:w-[50%] pointer-events-none z-0 select-none"
+        className="hidden lg:block absolute top-0 right-0 h-full w-[54%] xl:w-[50%] pointer-events-none z-0 select-none opacity-90 transition-opacity duration-1000"
         aria-hidden="true"
       >
         <div className="relative w-full h-full">
@@ -26,7 +27,7 @@ export function HeroSection() {
       <div className="w-full h-full mx-2 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="h-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-4 items-center md:pl-6">
           {/* Left Column: Hero Content & CTAs */}
-          <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center text-left max-w-2xl lg:max-w-none pt-2 lg:pt-0 pb-4 sm:pb-6 lg:pb-8">
+          <ScrollReveal variant="fade-right" duration={700} className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center text-left max-w-2xl lg:max-w-none pt-2 lg:pt-0 pb-4 sm:pb-6 lg:pb-8">
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-4xl md:text-[44px] lg:text-[42px] xl:text-[50px] 2xl:text-[56px] font-extrabold text-[#4F46E5] tracking-tight leading-[1.10] mb-4 sm:mb-5 font-sans">
               The skills school{" "}
@@ -100,10 +101,10 @@ export function HeroSection() {
                 </span>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: Hero Visual (Sunburst, Large Prominent Girl, Stars) */}
-          <div className="h-full lg:col-span-6 xl:col-span-6 relative flex justify-center items-end mt-4 lg:mt-0">
+          <ScrollReveal variant="fade-left" duration={750} delay={150} className="h-full lg:col-span-6 xl:col-span-6 relative flex justify-center items-end mt-4 lg:mt-0">
             {/* Mobile / Tablet Purple Sunburst Background Container */}
             <div className="lg:hidden absolute inset-0 -m-3 sm:-m-4 rounded-3xl overflow-hidden pointer-events-none z-0">
               <Image
@@ -117,7 +118,7 @@ export function HeroSection() {
 
             {/* Graphic Group (Relative for Stars + Girl positioning) */}
             <div className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-none flex justify-center items-end z-10">
-              {/* Upper Decorative Yellow Star (sitting on diagonal slant line) */}
+              {/* Upper Decorative Yellow Star (Clockwise half-rotation loop) */}
               <div className="absolute top-[20%] right-[-4%] sm:top-[22%] sm:right-[-6%] lg:top-[22%] lg:right-[10%] xl:right-[80%] z-20 pointer-events-none select-none">
                 <Image
                   src="/star.png"
@@ -125,11 +126,11 @@ export function HeroSection() {
                   width={90}
                   height={100}
                   style={{ width: "auto", height: "auto" }}
-                  className="w-12 sm:w-16 lg:w-18 xl:w-22 drop-shadow-md transition-transform duration-700 hover:rotate-12"
+                  className="w-12 sm:w-16 lg:w-18 xl:w-22 drop-shadow-md animate-star-cw origin-center"
                 />
               </div>
 
-              {/* Lower Decorative Yellow Star (sitting on bottom curve) */}
+              {/* Lower Decorative Yellow Star (Counter-clockwise half-rotation loop) */}
               <div className="absolute bottom-[8%] right-[2%] sm:bottom-[10%] sm:right-[0%] lg:bottom-[10%] lg:right-[-10%] xl:right-[90%] z-20 pointer-events-none select-none">
                 <Image
                   src="/star.png"
@@ -137,11 +138,11 @@ export function HeroSection() {
                   width={100}
                   height={100}
                   style={{ width: "auto", height: "auto" }}
-                  className="w-12 sm:w-16 lg:w-18 xl:w-22 drop-shadow-md transition-transform duration-700 hover:rotate-12"
+                  className="w-12 sm:w-16 lg:w-18 xl:w-22 drop-shadow-md animate-star-ccw origin-center"
                 />
               </div>
 
-              {/* Hero Girl Cutout (Enlarged and prominent, filling height like Image 2) */}
+              {/* Hero Girl Cutout (Stationary - no floating animation) */}
               <div className="relative w-full h-[380px] sm:h-[360px] md:h-[420px] lg:h-[460px] xl:h-[530px] 2xl:h-[580px] flex items-end justify-center overflow-visible">
                 <Image
                   src="/hero-girl.png"
@@ -153,7 +154,7 @@ export function HeroSection() {
                 />
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

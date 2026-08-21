@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, Award, Folder, Calendar } from "lucide-react";
 
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+
 export function FoundationsOfWealthSection() {
   const [activeLevel, setActiveLevel] = useState<string>("LEVEL 1");
 
@@ -19,12 +21,14 @@ export function FoundationsOfWealthSection() {
     <section id="course-details" className="w-full bg-white py-16 sm:py-20 lg:py-24">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-10 sm:mb-12 font-sans">
-          Course Details
-        </h2>
+        <ScrollReveal variant="fade-up" duration={600}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-10 sm:mb-12 font-sans">
+            Course Details
+          </h2>
+        </ScrollReveal>
 
         {/* Main Card */}
-        <div className="bg-white border border-gray-200 rounded-3xl p-5 sm:p-7 md:p-8 shadow-xl">
+        <ScrollReveal variant="zoom-in" duration={700} delay={150} className="bg-white border border-gray-200 rounded-3xl p-5 sm:p-7 md:p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start">
             {/* Left Column: Course Graphic & Price */}
             <div className="md:col-span-7 flex flex-col justify-between h-full">
@@ -132,7 +136,7 @@ export function FoundationsOfWealthSection() {
               Book a Free Demo
             </Link>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

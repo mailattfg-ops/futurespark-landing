@@ -6,7 +6,7 @@ import { Apple } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-[#645CFF] text-white pt-16 sm:pt-20 pb-10 sm:pb-12 relative overflow-hidden">
+    <footer className="w-full bg-[#371085] text-white pt-16 sm:pt-20 pb-10 sm:pb-12 relative overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top 4-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12">
@@ -100,7 +100,7 @@ export function Footer() {
                 e.preventDefault();
                 document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="inline-flex items-center justify-center bg-white text-[#645CFF] hover:bg-gray-50 text-xs sm:text-[13px] font-extrabold px-7 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all mt-5 cursor-pointer active:scale-95"
+              className="inline-flex items-center justify-center bg-white text-[#371085] hover:bg-gray-100 text-xs sm:text-[13px] font-extrabold px-7 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all mt-5 cursor-pointer active:scale-95"
             >
               Book a Free Demo
             </Link>

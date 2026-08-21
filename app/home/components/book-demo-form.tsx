@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import {
   ChevronLeft,
   Calendar as CalendarIcon,
@@ -264,7 +265,7 @@ export function BookDemoFormSection() {
       <div className="absolute top-0 left-1/4 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 relative z-10 space-y-4">
+      <ScrollReveal variant="zoom-in" duration={650} className="w-full max-w-xl mx-auto px-4 sm:px-6 relative z-10 space-y-4">
         {/* Compact Section Header */}
         <div className="text-center space-y-1.5">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
@@ -684,7 +685,7 @@ export function BookDemoFormSection() {
             <span className="text-xs font-bold">Live 1-on-1 Virtual Lab</span>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }
