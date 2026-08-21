@@ -59,20 +59,8 @@ export function Navbar() {
             </nav>
           </div>
 
-          {/* Right: Actions (Login, Admin & Book a Free Demo) */}
+          {/* Right: Actions (Book a Free Demo) */}
           <div className="hidden md:flex items-center gap-4 lg:gap-6">
-            <Link
-              href="/admin"
-              className="text-sm lg:text-[15px] font-bold text-gray-800 hover:text-[#4F46E5] transition-colors"
-            >
-              Admin
-            </Link>
-            <Link
-              href="/login"
-              className="text-sm lg:text-[15px] font-bold text-gray-800 hover:text-[#4F46E5] transition-colors"
-            >
-              Login
-            </Link>
             <Link
               href="#book-demo"
               className="inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
@@ -128,20 +116,6 @@ export function Navbar() {
                 className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
               >
                 About Us
-              </Link>
-              <Link
-                href="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
-              >
-                Login
-              </Link>
-              <Link
-                href="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
-              >
-                Admin Panel
               </Link>
             </nav>
             <div className="pt-2 border-t border-gray-100">

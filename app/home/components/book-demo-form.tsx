@@ -44,6 +44,7 @@ export function BookDemoFormSection() {
   const [step, setStep] = useState<1 | 2>(1);
 
   // Step 1 Form Fields
+  const [parentName, setParentName] = useState("");
   const [countryCode, setCountryCode] = useState("+91");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -91,7 +92,7 @@ export function BookDemoFormSection() {
 
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone.trim() || !email.trim() || !childName.trim()) {
+    if (!parentName.trim() || !phone.trim() || !email.trim() || !childName.trim()) {
       setSubmitError("Please fill in all required fields.");
       return;
     }
@@ -104,21 +105,27 @@ export function BookDemoFormSection() {
     setSubmitError(null);
 
     const fullPhone = `${countryCode} ${phone.trim()}`;
-    const nameParts = childName.trim().split(" ");
-    const firstName = nameParts[0] || childName.trim();
-    const lastName = nameParts.slice(1).join(" ") || "Student";
+    const parentParts = parentName.trim().split(" ");
+    const firstName = parentParts[0] || parentName.trim();
+    const lastName = parentParts.slice(1).join(" ") || "Parent";
+
+    const childParts = childName.trim().split(" ");
+    const studentFirstName = childParts[0] || childName.trim();
+    const studentLastName = childParts.slice(1).join(" ") || lastName || "Student";
 
     const payload = {
       firstName,
       lastName,
-      studentFirstName: firstName,
-      studentLastName: lastName,
+      studentFirstName,
+      studentLastName,
       email: email.trim(),
       phone: fullPhone,
       demoClass: true,
       preferredDays: [selectedDateObj.weekdayName],
       preferredTime: selectedSlotTime,
       notes: [
+        `Parent: ${parentName}`,
+        `Child: ${childName}`,
         `Course: ${course}`,
         `Demo Slot: ${selectedDateObj.fullDateStr} (${selectedDateObj.weekdayName}) @ ${selectedSlotTime}`,
       ].join(" | "),
@@ -178,6 +185,10 @@ export function BookDemoFormSection() {
               </h3>
               <div className="bg-[#FBF9FE] border border-purple-100 rounded-2xl p-5 text-left space-y-2.5 max-w-md mx-auto text-sm">
                 <div className="flex justify-between items-center text-gray-600">
+                  <span>Parent Name:</span>
+                  <span className="font-bold text-gray-900">{parentName}</span>
+                </div>
+                <div className="flex justify-between items-center text-gray-600">
                   <span>Student Name:</span>
                   <span className="font-bold text-gray-900">{childName}</span>
                 </div>
@@ -204,6 +215,7 @@ export function BookDemoFormSection() {
                 onClick={() => {
                   setIsSubmitted(false);
                   setStep(1);
+                  setParentName("");
                   setPhone("");
                   setEmail("");
                   setChildName("");
@@ -215,11 +227,41 @@ export function BookDemoFormSection() {
             </div>
           ) : step === 1 ? (
             /* STEP 1: Book Now & Get Certified */
-            <form onSubmit={handleStep1Submit} className="space-y-5">
+            <form onSubmit={handleStep1Submit} className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-black text-gray-900 tracking-tight font-sans">
                   Book Now & Get Certified
                 </h3>
+              </div>
+
+              {/* Parent Name */}
+              <div className="space-y-1">
+                <label className="block text-xs font-bold text-gray-700">
+                  Parent / Guardian Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={parentName}
+                  onChange={(e) => setParentName(e.target.value)}
+                  placeholder="Enter parent full name"
+                  className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-[#7C3AED] focus:outline-none transition-colors font-sans"
+                />
+              </div>
+
+              {/* Child's Name */}
+              <div className="space-y-1">
+                <label className="block text-xs font-bold text-gray-700">
+                  Child&apos;s Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={childName}
+                  onChange={(e) => setChildName(e.target.value)}
+                  placeholder="Enter child name"
+                  className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-[#7C3AED] focus:outline-none transition-colors font-sans"
+                />
               </div>
 
               {/* Mobile Number with Country Code */}
@@ -278,20 +320,7 @@ export function BookDemoFormSection() {
                 />
               </div>
 
-              {/* Child's Name */}
-              <div className="space-y-1">
-                <label className="block text-xs font-bold text-gray-700">
-                  Child&apos;s Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={childName}
-                  onChange={(e) => setChildName(e.target.value)}
-                  placeholder="Enter child name"
-                  className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-[#7C3AED] focus:outline-none transition-colors font-sans"
-                />
-              </div>
+
 
               {/* Course Selector */}
               <div className="space-y-1">
