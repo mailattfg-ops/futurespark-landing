@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Apple } from "lucide-react";
+import { Apple, Mail, Phone } from "lucide-react";
 
 export function Footer() {
   return (
@@ -29,6 +29,28 @@ export function Footer() {
             <p className="text-xs sm:text-[13px] text-white/85 max-w-sm leading-relaxed font-normal font-sans pt-1">
               Raising a financially secure generation through curated, ISO-grade weekly 1-on-1 mentorship sessions for ages 8 to 18.
             </p>
+
+            {/* Contact Details */}
+            <div className="flex flex-col gap-2.5 pt-1">
+              <a
+                href="mailto:info@finquo.ai"
+                className="inline-flex items-center gap-2.5 w-fit text-xs sm:text-[13px] text-white/85 hover:text-white font-medium font-sans transition-colors"
+              >
+                <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-3.5 h-3.5" />
+                </span>
+                info@finquo.ai
+              </a>
+              <a
+                href="tel:+919745001121"
+                className="inline-flex items-center gap-2.5 w-fit text-xs sm:text-[13px] text-white/85 hover:text-white font-medium font-sans transition-colors"
+              >
+                <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-3.5 h-3.5" />
+                </span>
+                +91 97450 01121
+              </a>
+            </div>
           </div>
 
           {/* Column 2: EXPLORE (span 2) */}
