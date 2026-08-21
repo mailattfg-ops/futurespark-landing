@@ -83,7 +83,7 @@ export function HowItWorksSection() {
 
                 {/* Video Snapshot */}
                 <Image
-                  src="/call-mentor.png"
+                  src="/call-mentor.jpg"
                   alt="Miss Divya S - Mentor"
                   fill
                   priority
