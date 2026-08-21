@@ -39,17 +39,20 @@ export async function POST(req: Request) {
       notes: notes || undefined,
     };
 
+    const isVercel = process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+
     // Endpoints to persist lead into PostgreSQL database
     const candidateEndpoints = [
-      process.env.BACKEND_URL ? `${process.env.BACKEND_URL}/api/leads` : null,
-      process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/leads` : null,
-      process.env.NEXT_PUBLIC_APP_API_URL ? `${process.env.NEXT_PUBLIC_APP_API_URL}/api/leads` : null,
+      process.env.BACKEND_URL ? `${process.env.BACKEND_URL.replace(/\/$/, "")}/api/leads` : null,
+      process.env.NEXT_PUBLIC_BACKEND_URL ? `${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/\/$/, "")}/api/leads` : null,
+      process.env.NEXT_PUBLIC_APP_API_URL ? `${process.env.NEXT_PUBLIC_APP_API_URL.replace(/\/$/, "")}/api/leads` : null,
       "https://api.finquo.ai/api/leads",
       "https://app.finquo.ai/api/leads",
-      "http://127.0.0.1:3002/courses/leads",
-      "http://127.0.0.1:3000/api/leads",
-      "http://localhost:3002/courses/leads",
-      "http://localhost:3000/api/leads",
+      // Local development fallbacks (only attempted when NOT in Vercel cloud)
+      !isVercel ? "http://127.0.0.1:3002/courses/leads" : null,
+      !isVercel ? "http://127.0.0.1:3000/api/leads" : null,
+      !isVercel ? "http://localhost:3002/courses/leads" : null,
+      !isVercel ? "http://localhost:3000/api/leads" : null,
     ].filter(Boolean) as string[];
 
     let lastErrorDetails = "";
@@ -82,10 +85,14 @@ export async function POST(req: Request) {
       }
     }
 
+    const helpMsg = isVercel
+      ? "Please add BACKEND_URL in Vercel Settings -> Environment Variables pointing to your backend gateway URL."
+      : "Ensure backend microservices (gateway on 3000 or learning-service on 3002) are running locally.";
+
     return NextResponse.json(
       {
         success: false,
-        message: `Failed to save lead to backend database. Details: ${lastErrorDetails}`,
+        message: `Failed to save lead to backend database. ${helpMsg} Details: ${lastErrorDetails}`,
       },
       { status: 502 }
     );
