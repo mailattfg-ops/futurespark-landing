@@ -10,6 +10,7 @@ import { HowItWorksSection } from "@/app/home/components/how-it-works";
 import { AwardsPartnersSection } from "@/app/home/components/awards-partners";
 import { TeamOfTeachersSection } from "@/app/home/components/team-of-teachers";
 import { BookDemoFormSection } from "@/app/home/components/book-demo-form";
+import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { FoundationsOfWealthSection } from "@/app/home/components/foundations-of-wealth";
 import { BoxUnboxingSection } from "@/app/home/components/box-unboxing";
 import { CourseFlowSection } from "@/app/home/components/course-flow";
@@ -25,6 +26,7 @@ import { Footer } from "@/components/footer";
 
 export default function HomePage() {
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   const loadConfig = async () => {
     try {
@@ -69,11 +71,14 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen flex flex-col bg-white">
+      {/* Global Demo Modal */}
+      <BookDemoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
+
       {/* 1. Header / Navigation */}
-      <Navbar />
+      <Navbar onOpenDemoModal={() => setIsDemoModalOpen(true)} />
 
       {/* 2. Hero Section */}
-      {isEnabled("hero") && <HeroSection />}
+      {isEnabled("hero") && <HeroSection onOpenDemoModal={() => setIsDemoModalOpen(true)} />}
 
       {/* 3. Why Financial Literacy */}
       {isEnabled("whyFinancialLiteracy") && <WhyFinancialLiteracySection />}

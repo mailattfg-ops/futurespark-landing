@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  onOpenDemoModal?: () => void;
+}
+
+export function HeroSection({ onOpenDemoModal }: HeroSectionProps) {
   return (
     <section className="relative w-full overflow-hidden bg-white min-h-[100dvh] lg:h-[100dvh] lg:max-h-[820px] flex items-center justify-center pt-16">
       {/* Background Purple Sunburst (Desktop absolute positioning covering top-0 to bottom on the right) */}
@@ -49,16 +53,13 @@ export function HeroSection() {
             {/* CTA Button & Trustpilot Social Proof */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-7">
               {/* Primary Action Button */}
-              <Link
-                href="#book-demo"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
-                }}
+              <button
+                type="button"
+                onClick={onOpenDemoModal}
                 className="inline-flex items-center justify-center px-6 py-3.5 sm:px-7 sm:py-3.5 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-bold text-sm sm:text-base shadow-md shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 Book a free Class
-              </Link>
+              </button>
 
               {/* Trustpilot Review Badge */}
               <div className="flex flex-col gap-1 select-none">

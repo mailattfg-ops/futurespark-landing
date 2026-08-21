@@ -13,7 +13,6 @@ import {
   GraduationCap,
   Phone,
   Mail,
-  BookOpen,
   Sparkles,
   ArrowRight,
   ShieldCheck,
@@ -38,17 +37,24 @@ const countryCodes = [
   { code: "+61", flag: "🇦🇺", label: "Australia (+61)" },
 ];
 
-const courseOptions = [
-  "Financial Literacy & Money Sense (Ages 8-12)",
-  "Junior Enterprise & Leadership (Ages 13-18)",
-  "FinTech, Investing & Critical Thinking",
+const gradeOptions = [
+  "Grade 1", "Grade 2", "Grade 3", "Grade 4",
+  "Grade 5", "Grade 6", "Grade 7", "Grade 8",
+  "Grade 9", "Grade 10", "Grade 11", "Grade 12",
 ];
 
 const defaultTimeSlots: SlotOption[] = [
-  { id: "slot-1", time: "04:30 PM – 05:30 PM", mentor: "Emily Clark" },
-  { id: "slot-2", time: "06:00 PM – 07:00 PM", mentor: "Miss Divya S" },
-  { id: "slot-3", time: "10:00 AM – 11:00 AM", mentor: "James Kennedy" },
-  { id: "slot-4", time: "02:30 PM – 03:30 PM", mentor: "Samantha Liu" },
+  { id: "slot-1",  time: "10:00 AM – 11:00 AM", mentor: "" },
+  { id: "slot-2",  time: "11:00 AM – 12:00 PM", mentor: "" },
+  { id: "slot-3",  time: "12:00 PM – 01:00 PM", mentor: "" },
+  { id: "slot-4",  time: "01:00 PM – 02:00 PM", mentor: "" },
+  { id: "slot-5",  time: "02:00 PM – 03:00 PM", mentor: "" },
+  { id: "slot-6",  time: "03:00 PM – 04:00 PM", mentor: "" },
+  { id: "slot-7",  time: "04:00 PM – 05:00 PM", mentor: "" },
+  { id: "slot-8",  time: "05:00 PM – 06:00 PM", mentor: "" },
+  { id: "slot-9",  time: "06:00 PM – 07:00 PM", mentor: "" },
+  { id: "slot-10", time: "07:00 PM – 08:00 PM", mentor: "" },
+  { id: "slot-11", time: "08:00 PM – 09:00 PM", mentor: "" },
 ];
 
 interface DateOption {
@@ -61,6 +67,19 @@ interface DateOption {
   isCustom?: boolean;
 }
 
+const timezones = [
+  { value: "Asia/Kolkata", label: "🇮🇳 India (IST, UTC+5:30)" },
+  { value: "America/New_York", label: "🇺🇸 USA Eastern (EDT, UTC-4)" },
+  { value: "America/Los_Angeles", label: "🇺🇸 USA Pacific (PDT, UTC-7)" },
+  { value: "Europe/London", label: "🇬🇧 UK (BST, UTC+1)" },
+  { value: "Asia/Dubai", label: "🇦🇪 UAE (GST, UTC+4)" },
+  { value: "Asia/Singapore", label: "🇸🇬 Singapore (SGT, UTC+8)" },
+  { value: "Australia/Sydney", label: "🇦🇺 Australia Sydney (AEST, UTC+10)" },
+  { value: "Asia/Tokyo", label: "🇯🇵 Japan (JST, UTC+9)" },
+  { value: "Europe/Paris", label: "🇫🇷 Europe Central (CET, UTC+1)" },
+  { value: "Canada/Eastern", label: "🇨🇦 Canada Eastern (EDT, UTC-4)" },
+];
+
 export function BookDemoFormSection() {
   const [step, setStep] = useState<1 | 2>(1);
 
@@ -70,16 +89,17 @@ export function BookDemoFormSection() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [childName, setChildName] = useState("");
-  const [course, setCourse] = useState(courseOptions[0]);
+  const [studentGrade, setStudentGrade] = useState(gradeOptions[0]);
 
   // Step 2 Form Fields - Quick Dates + Custom Date
   const [selectedDateId, setSelectedDateId] = useState<string>("date-0");
   const [customDateVal, setCustomDateVal] = useState<string>("");
   const [showCalendarPicker, setShowCalendarPicker] = useState<boolean>(false);
+  const [timezone, setTimezone] = useState(timezones[0].value);
 
   // Live slots & selection state
   const [slotsList, setSlotsList] = useState<SlotOption[]>(defaultTimeSlots);
-  const [selectedSlotTime, setSelectedSlotTime] = useState<string>("04:30 PM – 05:30 PM");
+  const [selectedSlotTime, setSelectedSlotTime] = useState<string>("10:00 AM – 11:00 AM");
   const [isLoadingSlots, setIsLoadingSlots] = useState<boolean>(false);
 
   // Form Submission State
@@ -147,29 +167,11 @@ export function BookDemoFormSection() {
     return quickDateOptions[idx] || quickDateOptions[0];
   }, [selectedDateId, customDateOption, quickDateOptions]);
 
-  // Load real slots from /api/slots whenever active date changes
-  const loadSlotsForDate = useCallback(async (targetDate: Date) => {
-    setIsLoadingSlots(true);
-    const formattedDate = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, "0")}-${String(targetDate.getDate()).padStart(2, "0")}`;
-
-    try {
-      const res = await fetch(`/api/slots?date=${formattedDate}`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data.slots && data.slots.length > 0) {
-          setSlotsList(data.slots);
-          setSelectedSlotTime(data.slots[0].time);
-          setIsLoadingSlots(false);
-          return;
-        }
-      }
-    } catch {
-      // Fallback
-    }
-
+  // Slots are fixed — no API fetch needed
+  const loadSlotsForDate = useCallback(async (_targetDate: Date) => {
+    // Always use fixed slots
     setSlotsList(defaultTimeSlots);
     setSelectedSlotTime(defaultTimeSlots[0].time);
-    setIsLoadingSlots(false);
   }, []);
 
   useEffect(() => {
@@ -222,7 +224,7 @@ export function BookDemoFormSection() {
       notes: [
         `Parent: ${parentName}`,
         `Child: ${childName}`,
-        `Course: ${course}`,
+        `Student Grade: ${studentGrade}`,
         `Demo Slot: ${activeDateObj.fullDateStr} (${activeDateObj.weekdayName}) @ ${selectedSlotTime}`,
       ].join(" | "),
     };
@@ -328,8 +330,8 @@ export function BookDemoFormSection() {
                   <span className="font-bold text-gray-900">{childName}</span>
                 </div>
                 <div className="flex justify-between items-center text-gray-600">
-                  <span className="font-medium">Selected Track:</span>
-                  <span className="font-bold text-[#6366F1]">{course}</span>
+                  <span className="font-medium">Student Grade:</span>
+                  <span className="font-bold text-[#6366F1]">{studentGrade}</span>
                 </div>
                 <div className="flex justify-between items-center text-gray-600">
                   <span className="font-medium">WhatsApp Contact:</span>
@@ -404,42 +406,27 @@ export function BookDemoFormSection() {
                 </div>
               </div>
 
-              {/* Row 2: WhatsApp Number & Email Address Side-by-Side */}
+              {/* Row 2: Student Grade & Email Address Side-by-Side */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* Mobile Number with Country Selector */}
+                {/* Student Grade Selection */}
                 <div className="space-y-1">
-                  <label htmlFor="phone" className="block text-[11px] font-bold text-gray-700 font-sans">
-                    WhatsApp Number <span className="text-red-500">*</span>
+                  <label htmlFor="studentGrade" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    Student Grade <span className="text-red-500">*</span>
                   </label>
-                  <div className="grid grid-cols-12 gap-1.5">
-                    <div className="col-span-4">
-                      <select
-                        id="countryCode"
-                        aria-label="Country Code"
-                        value={countryCode}
-                        onChange={(e) => setCountryCode(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-xl px-1.5 py-2 text-xs font-semibold text-gray-900 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
-                      >
-                        {countryCodes.map((c) => (
-                          <option key={c.code} value={c.code}>
-                            {c.flag} {c.code}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="col-span-8 relative">
-                      <Phone className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-3 pointer-events-none" />
-                      <input
-                        id="phone"
-                        type="tel"
-                        required
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Mobile Number"
-                        className="w-full bg-white border border-gray-200 rounded-xl pl-8 pr-2 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium"
-                      />
-                    </div>
+                  <div className="relative">
+                    <GraduationCap className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
+                    <select
+                      id="studentGrade"
+                      value={studentGrade}
+                      onChange={(e) => setStudentGrade(e.target.value)}
+                      className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-3 py-2 text-xs text-gray-900 font-semibold focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
+                    >
+                      {gradeOptions.map((g) => (
+                        <option key={g} value={g}>
+                          {g}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
@@ -463,25 +450,40 @@ export function BookDemoFormSection() {
                 </div>
               </div>
 
-              {/* Course Selection */}
+              {/* WhatsApp Number */}
               <div className="space-y-1">
-                <label htmlFor="courseTrack" className="block text-[11px] font-bold text-gray-700 font-sans">
-                  Select Course Track
+                <label htmlFor="phone" className="block text-[11px] font-bold text-gray-700 font-sans">
+                  WhatsApp Number <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <BookOpen className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
-                  <select
-                    id="courseTrack"
-                    value={course}
-                    onChange={(e) => setCourse(e.target.value)}
-                    className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-3 py-2 text-xs text-gray-900 font-semibold focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
-                  >
-                    {courseOptions.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
+                <div className="grid grid-cols-12 gap-1.5">
+                  <div className="col-span-4">
+                    <select
+                      id="countryCode"
+                      aria-label="Country Code"
+                      value={countryCode}
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      className="w-full bg-white border border-gray-200 rounded-xl px-1.5 py-2 text-xs font-semibold text-gray-900 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
+                    >
+                      {countryCodes.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.flag} {c.code}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="col-span-8 relative">
+                    <Phone className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-3 pointer-events-none" />
+                    <input
+                      id="phone"
+                      type="tel"
+                      required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Mobile Number"
+                      className="w-full bg-white border border-gray-200 rounded-xl pl-8 pr-2 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -522,8 +524,18 @@ export function BookDemoFormSection() {
                   <ChevronLeft className="w-3.5 h-3.5 text-gray-600" /> Back
                 </button>
 
-                <div className="flex items-center gap-1 text-[11px] text-gray-600 font-semibold bg-gray-50 px-2.5 py-1 rounded-full border border-gray-200/80">
-                  <Globe className="w-3 h-3 text-indigo-600" /> Time Zone: Asia/Kolkata
+                <div className="flex items-center gap-2 bg-indigo-50 border border-indigo-200 rounded-xl px-3 py-2">
+                  <Globe className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+                  <select
+                    value={timezone}
+                    onChange={(e) => setTimezone(e.target.value)}
+                    aria-label="Select Timezone"
+                    className="bg-transparent text-xs font-bold text-indigo-700 focus:outline-none cursor-pointer"
+                  >
+                    {timezones.map((tz) => (
+                      <option key={tz.value} value={tz.value}>{tz.label}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -623,16 +635,13 @@ export function BookDemoFormSection() {
                           key={slot.id}
                           type="button"
                           onClick={() => setSelectedSlotTime(slot.time)}
-                          className={`p-2.5 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer ${
+                          className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
                             isSelected
                               ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30"
                               : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
                           }`}
                         >
                           <span className="text-xs font-bold">{slot.time}</span>
-                          <span className="text-[10px] text-gray-500 font-medium flex items-center gap-1">
-                            <User className="w-2.5 h-2.5 text-gray-400" /> {slot.mentor || "Mentor Demo"}
-                          </span>
                         </button>
                       );
                     })}
