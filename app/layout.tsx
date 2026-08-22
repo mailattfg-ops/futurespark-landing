@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { Preloader } from "@/components/preloader";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -26,6 +27,7 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} font-sans antialiased h-full text-[16px]`}
     >
       <body className="min-h-full flex flex-col bg-white text-gray-900 selection:bg-[#4F46E5]/20 selection:text-[#4F46E5] overflow-x-hidden font-sans">
+        <Preloader />
         {children}
       </body>
     </html>
