@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 interface LeadData {
-  id: string; firstName: string; lastName: string; email: string; phone: string;
+  id: string; firstName: string; lastName?: string; email: string; phone: string;
   studentFirstName?: string; studentLastName?: string; status: string;
   preferredDays?: string[]; preferredTime?: string; preferredTimezone?: string;
   notes?: string; telecallerNotes?: string; meetingUrl?: string; meetingLink?: string;

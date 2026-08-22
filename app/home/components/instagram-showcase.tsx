@@ -14,27 +14,17 @@ const reels: InstaReel[] = [
   {
     imageSrc: "/insta-photo-1.png",
     alt: "Parent and child high five moment - Finquo Junior",
-    offsetClass: "lg:-translate-y-5",
+    offsetClass: "lg:-translate-y-2",
   },
   {
     imageSrc: "/insta-photo-2.png",
-    alt: "The toy they won't be tired of by Dec 26 - Finquo Junior",
-    offsetClass: "lg:translate-y-8",
+    alt: "Interactive money activity with mentor - Finquo Junior",
+    offsetClass: "lg:translate-y-4",
   },
   {
     imageSrc: "/insta-photo-3.png",
-    alt: "Oddy cubes aren't just cubes - Finquo Junior",
-    offsetClass: "lg:-translate-y-4",
-  },
-  {
-    imageSrc: "/insta-photo-4.png",
-    alt: "Exploring and creating with colors outdoors - Finquo Junior",
-    offsetClass: "lg:-translate-y-10",
-  },
-  {
-    imageSrc: "/insta-photo-5.png",
-    alt: "Kids distracted by screens let's talk about it - Finquo Junior",
-    offsetClass: "lg:translate-y-6",
+    alt: "Practical financial literacy projects - Finquo Junior",
+    offsetClass: "lg:-translate-y-2",
   },
 ];
 
@@ -46,10 +36,10 @@ export function InstagramShowcaseSection() {
   };
 
   return (
-    <section className="w-full bg-[#EA8A17] py-16 sm:py-20 lg:py-28 text-gray-900 relative overflow-hidden">
-      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="w-full bg-[#EA8A17] py-16 sm:py-20 lg:py-24 text-gray-900 relative overflow-hidden">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight font-sans text-gray-900">
             Get Exclusive Access
           </h2>
@@ -58,15 +48,15 @@ export function InstagramShowcaseSection() {
           </p>
         </div>
 
-        {/* 5 Staggered Native Instagram Reel Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4.5 items-center pt-4 pb-6">
+        {/* 3 Native Instagram Reel Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 items-center max-w-4xl mx-auto pt-2 pb-6">
           {reels.map((reel, idx) => (
             <div
               key={idx}
-              className={`w-full rounded-[24px] sm:rounded-[28px] bg-white p-3 sm:p-3.5 shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 select-none flex flex-col justify-between ${reel.offsetClass} last:col-span-2 sm:last:col-span-1 last:w-full last:max-w-[220px] sm:last:max-w-none last:mx-auto`}
+              className={`w-full rounded-[24px] sm:rounded-[28px] bg-white p-3.5 sm:p-4 shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 select-none flex flex-col justify-between ${reel.offsetClass}`}
             >
               {/* Instagram Top Bar */}
-              <div className="flex items-center gap-2 pb-2 px-1">
+              <div className="flex items-center gap-2 pb-2.5 px-1">
                 {/* Red Circular Brand Avatar */}
                 <div className="w-7 h-7 rounded-full bg-[#EA3829] flex items-center justify-center text-white text-[9px] font-black shadow-xs flex-shrink-0">
                   ⚡
@@ -89,7 +79,7 @@ export function InstagramShowcaseSection() {
                   fill
                   priority
                   unoptimized
-                  sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
+                  sizes="(min-width: 640px) 33vw, 100vw"
                   className="object-cover object-center"
                 />
               </div>

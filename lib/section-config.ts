@@ -28,7 +28,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     name: "Student Spotlight",
     category: "Hero & Intro",
     description: "Showcase cards featuring student success stories.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "howItWorks",
@@ -42,14 +42,14 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     name: "Awards & Partners",
     category: "Curriculum & Value",
     description: "Logos and badges of recognized awards and institutional partners.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "teamOfTeachers",
     name: "Team of Teachers",
     category: "Curriculum & Value",
     description: "Mentor profile cards showcasing lead educators.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "bookDemoForm",
@@ -98,42 +98,42 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     name: "US On Media",
     category: "Social Proof & Media",
     description: "Press coverage, news articles, and media mentions.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "blogs",
     name: "Blogs & Articles",
     category: "Social Proof & Media",
     description: "Featured blog posts and educational reads.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "youtube",
     name: "YouTube Highlights",
     category: "Social Proof & Media",
     description: "Video thumbnails and sample class clips.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "joinThousands",
     name: "Join Thousands Community",
     category: "Social Proof & Media",
     description: "Community face cloud and parent community counter.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "certificationsTrust",
     name: "Certifications & Trust",
     category: "Social Proof & Media",
     description: "Trust badges, security icons, and certification seals.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "parentReviews",
     name: "Parent & Kid Reviews",
     category: "Social Proof & Media",
     description: "Testimonials and quote cards from parents and students.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "footer",
@@ -147,7 +147,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
 export function getDefaultSectionState(): SectionState {
   const state: SectionState = {};
   DEFAULT_SECTIONS.forEach((section) => {
-    state[section.id] = true;
+    state[section.id] = section.enabled;
   });
   return state;
 }

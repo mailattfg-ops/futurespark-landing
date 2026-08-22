@@ -2,7 +2,7 @@
 
 export function UsOnMediaSection() {
   return (
-    <section className="w-full bg-[#ECECEC] py-10 sm:py-12 lg:py-14 border-y border-gray-300/60">
+    <section className="w-full bg-white py-10 sm:py-12 lg:py-14 border-y border-gray-100">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Section Heading */}
         <h2 className="text-sm sm:text-base font-bold uppercase tracking-widest text-gray-800 mb-6 sm:mb-8 font-sans">

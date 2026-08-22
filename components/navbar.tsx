@@ -43,19 +43,19 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
             {/* Desktop Navigation Links */}
             <nav className="hidden md:flex items-center gap-5 lg:gap-7">
               <Link
-                href="#curriculum"
+                href="/curriculum"
                 className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
               >
                 Curriculum
               </Link>
               <Link
-                href="#teachers"
+                href="/teachers"
                 className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
               >
                 Teachers
               </Link>
               <Link
-                href="#about-us"
+                href="/about-us"
                 className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
               >
                 About Us
@@ -103,21 +103,21 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
           <div className="md:hidden py-4 px-4 bg-white/95 backdrop-blur-md border border-gray-100 rounded-2xl shadow-xl mt-2 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
             <nav className="flex flex-col space-y-2">
               <Link
-                href="#curriculum"
+                href="/curriculum"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
               >
                 Curriculum
               </Link>
               <Link
-                href="#teachers"
+                href="/teachers"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
               >
                 Teachers
               </Link>
               <Link
-                href="#about-us"
+                href="/about-us"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
               >

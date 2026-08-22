@@ -6,7 +6,8 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 interface CourseStep {
   number: string;
   title: string;
-  subtitle: string;
+  sessions: string;
+  description: string;
   bgColor: string;
   textColor: string;
   subtextColor: string;
@@ -15,59 +16,66 @@ interface CourseStep {
 const courseSteps: CourseStep[] = [
   {
     number: "01",
-    title: "Introduction to Value",
-    subtitle: "Trade-offs",
+    title: "Money Foundations",
+    sessions: "Sessions 1–4",
+    description: "What money is, how it evolved, how it loses value, and how it's earned honestly.",
     bgColor: "bg-[#0066FF]",
     textColor: "text-white",
-    subtextColor: "text-white/85",
+    subtextColor: "text-white/90",
   },
   {
     number: "02",
-    title: "Understanding Costs",
-    subtitle: "Fixed vs. Variable Costs",
-    bgColor: "bg-[#BD7BF8]",
+    title: "Budgeting & Banking",
+    sessions: "Sessions 5–10",
+    description: "Income vs expense, needs vs wants, the 50/30/20 rule, how banks work, accounts, cards, loans and interest.",
+    bgColor: "bg-[#8B5CF6]",
     textColor: "text-white",
-    subtextColor: "text-white/85",
+    subtextColor: "text-white/90",
   },
   {
     number: "03",
-    title: "Market Dynamics",
-    subtitle: "Supply and Demand",
-    bgColor: "bg-[#FACC15]",
+    title: "Smart Spending & Scam Safety",
+    sessions: "Sessions 11–15",
+    description: "Impulse buying, brand pressure, EMI & debt traps, plus ponzi schemes, phishing & safe banking habits.",
+    bgColor: "bg-[#F59E0B]",
     textColor: "text-white",
     subtextColor: "text-white/95",
   },
   {
     number: "04",
-    title: "Competition Analysis",
-    subtitle: "Competitor Strategies",
-    bgColor: "bg-[#E56A6A]",
+    title: "Economy & Tax",
+    sessions: "Sessions 16–19",
+    description: "GDP, inflation, RBI & SEBI, union budget, direct vs indirect tax, ITR basics, global economy links.",
+    bgColor: "bg-[#EF4444]",
     textColor: "text-white",
-    subtextColor: "text-white/85",
-  },
-  {
-    number: "06",
-    title: "Introduction to Value",
-    subtitle: "Trade-offs",
-    bgColor: "bg-[#0070F3]",
-    textColor: "text-white",
-    subtextColor: "text-white/85",
+    subtextColor: "text-white/90",
   },
   {
     number: "05",
-    title: "Customer Segmentation",
-    subtitle: "Target Markets",
-    bgColor: "bg-[#22C55E]",
+    title: "Earning & Investing",
+    sessions: "Sessions 20–24",
+    description: "Jobs, freelancing, compounding, SIPs, stocks & bonds, insurance, net worth & money psychology.",
+    bgColor: "bg-[#10B981]",
     textColor: "text-white",
-    subtextColor: "text-white/85",
+    subtextColor: "text-white/90",
   },
   {
     number: "06",
-    title: "Pricing Strategies",
-    subtitle: "Psychological Pricing",
-    bgColor: "bg-[#7C3AED]",
+    title: "Voice & Venture",
+    sessions: "Sessions 25–32",
+    description: "Public speaking, storytelling, professional comms — plus business basics, funding & pitching a real idea.",
+    bgColor: "bg-[#6366F1]",
     textColor: "text-white",
-    subtextColor: "text-white/85",
+    subtextColor: "text-white/90",
+  },
+  {
+    number: "07",
+    title: "Future Ready",
+    sessions: "Sessions 33–40",
+    description: "AI tools & prompting, cyber awareness, sustainable finance & capstone personal money plan.",
+    bgColor: "bg-[#06B6D4]",
+    textColor: "text-white",
+    subtextColor: "text-white/90",
   },
 ];
 
@@ -82,47 +90,52 @@ export function CourseFlowSection() {
           </h2>
         </ScrollReveal>
 
-        {/* 7-Card Grid Matching Figma Layout */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3.5 sm:gap-4">
+        {/* 7-Card Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
           {courseSteps.map((step, idx) => (
             <ScrollReveal
               key={idx}
               variant="zoom-in"
               duration={550}
-              delay={idx * 80}
-              className="last:col-span-2 sm:last:col-span-1 last:w-full last:max-w-[200px] sm:last:max-w-none last:mx-auto"
+              delay={idx * 70}
+              className="h-full"
             >
               <div
-                className={`${step.bgColor} ${step.textColor} rounded-2xl sm:rounded-[22px] p-4 sm:p-4.5 flex flex-col justify-between items-start text-left shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 min-h-[210px] sm:min-h-[240px] select-none group relative overflow-hidden h-full`}
+                className={`${step.bgColor} ${step.textColor} rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-start text-left shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 min-h-[260px] select-none group relative overflow-hidden h-full`}
               >
-                {/* Top-Left Stage Number */}
-                <span className="text-lg sm:text-xl font-black tracking-tight font-sans opacity-95">
-                  {step.number}
-                </span>
+                {/* Top Bar: Stage Number & Session Tag */}
+                <div className="w-full flex items-center justify-between gap-2 pb-2">
+                  <span className="text-lg font-black tracking-tight font-sans opacity-95">
+                    {step.number}
+                  </span>
+                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-xs tracking-wider">
+                    {step.sessions}
+                  </span>
+                </div>
 
                 {/* Center 3D Calculator Graphic */}
                 <div className="w-full flex items-center justify-center my-auto py-2">
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 group-hover:scale-110 transition-transform duration-300">
+                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 group-hover:scale-110 transition-transform duration-300">
                     <Image
                       src="/course-flow-calc.png"
                       alt={step.title}
                       fill
                       priority
                       unoptimized
-                      sizes="120px"
+                      sizes="100px"
                       className="object-contain drop-shadow-md"
                     />
                   </div>
                 </div>
 
-                {/* Bottom Title & Subtitle */}
-                <div className="w-full pt-1">
-                  <h3 className="text-sm sm:text-[14px] font-extrabold leading-tight font-sans block">
+                {/* Bottom Title & Description */}
+                <div className="w-full pt-2 border-t border-white/20">
+                  <h3 className="text-sm font-extrabold leading-snug font-sans block">
                     {step.title}
                   </h3>
-                  <span className={`text-xs font-medium leading-tight block mt-1 ${step.subtextColor}`}>
-                    {step.subtitle}
-                  </span>
+                  <p className={`text-[11px] font-normal leading-relaxed block mt-1 ${step.subtextColor}`}>
+                    {step.description}
+                  </p>
                 </div>
               </div>
             </ScrollReveal>

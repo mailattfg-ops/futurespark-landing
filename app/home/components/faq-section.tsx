@@ -56,14 +56,14 @@ export function FAQSection() {
           </p>
         </div>
 
-        {/* FAQ Accordion List with Increased Font Sizing */}
+        {/* FAQ Accordion List with Smooth Grid Height Expansion */}
         <div className="space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={index}
-                className="bg-white border border-gray-200/90 rounded-2xl overflow-hidden transition-all duration-200 shadow-xs hover:border-gray-300"
+                className="bg-white border border-gray-200/90 rounded-2xl overflow-hidden transition-all duration-300 shadow-xs hover:border-gray-300"
               >
                 <button
                   type="button"
@@ -74,7 +74,7 @@ export function FAQSection() {
                     {faq.question}
                   </span>
                   <div
-                    className={`w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${
+                    className={`w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 transition-all duration-300 ease-in-out ${
                       isOpen ? "rotate-180 bg-indigo-50 text-[#4F46E5]" : "text-gray-400"
                     }`}
                   >
@@ -82,11 +82,19 @@ export function FAQSection() {
                   </div>
                 </button>
 
-                {isOpen && (
-                  <div className="px-6 pb-5 pt-2 text-sm sm:text-base text-gray-600 leading-relaxed font-normal border-t border-gray-100 font-sans">
-                    {faq.answer}
+                <div
+                  className={`grid transition-all duration-300 ease-in-out ${
+                    isOpen
+                      ? "grid-rows-[1fr] opacity-100"
+                      : "grid-rows-[0fr] opacity-0"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="px-6 pb-5 pt-2 text-sm sm:text-base text-gray-600 leading-relaxed font-normal border-t border-gray-100 font-sans">
+                      {faq.answer}
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
