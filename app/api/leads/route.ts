@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     const payload = {
       firstName: firstName.trim(),
-      lastName: (lastName || "Smith").trim(),
+      lastName: (lastName || "").trim(),
       email: email.trim(),
       phone: phone.trim(),
       studentFirstName: studentFirstName ? studentFirstName.trim() : undefined,

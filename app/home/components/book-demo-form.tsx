@@ -44,17 +44,17 @@ const gradeOptions = [
 ];
 
 const defaultTimeSlots: SlotOption[] = [
-  { id: "slot-1",  time: "10:00 AM – 11:00 AM", mentor: "" },
-  { id: "slot-2",  time: "11:00 AM – 12:00 PM", mentor: "" },
-  { id: "slot-3",  time: "12:00 PM – 01:00 PM", mentor: "" },
-  { id: "slot-4",  time: "01:00 PM – 02:00 PM", mentor: "" },
-  { id: "slot-5",  time: "02:00 PM – 03:00 PM", mentor: "" },
-  { id: "slot-6",  time: "03:00 PM – 04:00 PM", mentor: "" },
-  { id: "slot-7",  time: "04:00 PM – 05:00 PM", mentor: "" },
-  { id: "slot-8",  time: "05:00 PM – 06:00 PM", mentor: "" },
-  { id: "slot-9",  time: "06:00 PM – 07:00 PM", mentor: "" },
-  { id: "slot-10", time: "07:00 PM – 08:00 PM", mentor: "" },
-  { id: "slot-11", time: "08:00 PM – 09:00 PM", mentor: "" },
+  { id: "slot-1",  time: "10:00 AM", mentor: "" },
+  { id: "slot-2",  time: "11:00 AM", mentor: "" },
+  { id: "slot-3",  time: "12:00 PM", mentor: "" },
+  { id: "slot-4",  time: "01:00 PM", mentor: "" },
+  { id: "slot-5",  time: "02:00 PM", mentor: "" },
+  { id: "slot-6",  time: "03:00 PM", mentor: "" },
+  { id: "slot-7",  time: "04:00 PM", mentor: "" },
+  { id: "slot-8",  time: "05:00 PM", mentor: "" },
+  { id: "slot-9",  time: "06:00 PM", mentor: "" },
+  { id: "slot-10", time: "07:00 PM", mentor: "" },
+  { id: "slot-11", time: "08:00 PM", mentor: "" },
 ];
 
 interface DateOption {
@@ -99,7 +99,7 @@ export function BookDemoFormSection() {
 
   // Live slots & selection state
   const [slotsList, setSlotsList] = useState<SlotOption[]>(defaultTimeSlots);
-  const [selectedSlotTime, setSelectedSlotTime] = useState<string>("10:00 AM – 11:00 AM");
+  const [selectedSlotTime, setSelectedSlotTime] = useState<string>("10:00 AM");
   const [isLoadingSlots, setIsLoadingSlots] = useState<boolean>(false);
 
   // Form Submission State
@@ -118,9 +118,8 @@ export function BookDemoFormSection() {
 
       const dayName = i === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", { weekday: "short" });
       const dayDate = `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`;
-      const fullDateStr = `${d.getDate() < 10 ? "0" + d.getDate() : d.getDate()}/${
-        d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1
-      }/${d.getFullYear()}`;
+      const fullDateStr = `${d.getDate() < 10 ? "0" + d.getDate() : d.getDate()}/${d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1
+        }/${d.getFullYear()}`;
       const weekdayName = d.toLocaleDateString("en-US", { weekday: "long" });
 
       dates.push({
@@ -205,11 +204,11 @@ export function BookDemoFormSection() {
     const fullPhone = `${countryCode} ${phone.trim()}`;
     const parentParts = parentName.trim().split(" ");
     const firstName = parentParts[0] || parentName.trim();
-    const lastName = parentParts.slice(1).join(" ") || "Parent";
+    const lastName = parentParts.slice(1).join(" ");
 
     const childParts = childName.trim().split(" ");
     const studentFirstName = childParts[0] || childName.trim();
-    const studentLastName = childParts.slice(1).join(" ") || lastName || "Student";
+    const studentLastName = childParts.slice(1).join(" ");
 
     const payload = {
       firstName,
@@ -300,14 +299,12 @@ export function BookDemoFormSection() {
           {/* Dual Progress Bar */}
           <div className="w-full flex items-center gap-2">
             <div
-              className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                step >= 1 ? "bg-gradient-to-r from-[#6366F1] to-[#8B5CF6]" : "bg-gray-200"
-              }`}
+              className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${step >= 1 ? "bg-gradient-to-r from-[#6366F1] to-[#8B5CF6]" : "bg-gray-200"
+                }`}
             />
             <div
-              className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                step === 2 ? "bg-gradient-to-r from-[#8B5CF6] to-[#EC4899]" : "bg-gray-200"
-              }`}
+              className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${step === 2 ? "bg-gradient-to-r from-[#8B5CF6] to-[#EC4899]" : "bg-gray-200"
+                }`}
             />
           </div>
 
@@ -554,11 +551,10 @@ export function BookDemoFormSection() {
                         key={opt.id}
                         type="button"
                         onClick={() => setSelectedDateId(opt.id)}
-                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
-                          isSelected
-                            ? "border-[#6366F1] bg-indigo-50/80 shadow-xs ring-2 ring-[#6366F1]/20 font-bold"
-                            : "border-gray-200 hover:border-gray-300 bg-white"
-                        }`}
+                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${isSelected
+                          ? "border-[#6366F1] bg-indigo-50/80 shadow-xs ring-2 ring-[#6366F1]/20 font-bold"
+                          : "border-gray-200 hover:border-gray-300 bg-white"
+                          }`}
                       >
                         <span className="block text-xs font-bold text-gray-900">
                           {opt.dayName}
@@ -591,11 +587,10 @@ export function BookDemoFormSection() {
                     <button
                       type="button"
                       onClick={() => setShowCalendarPicker(true)}
-                      className={`w-full py-1.5 px-2.5 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                        selectedDateId === "date-custom"
-                          ? "border-[#6366F1] bg-indigo-50 text-[#6366F1]"
-                          : "border-dashed border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
-                      }`}
+                      className={`w-full py-1.5 px-2.5 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${selectedDateId === "date-custom"
+                        ? "border-[#6366F1] bg-indigo-50 text-[#6366F1]"
+                        : "border-dashed border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
+                        }`}
                     >
                       <CalendarIcon className="w-3.5 h-3.5 text-[#6366F1]" />
                       {customDateOption
@@ -627,7 +622,7 @@ export function BookDemoFormSection() {
                     No demo slots published for this date. Please pick another date above.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-3 gap-2">
                     {slotsList.map((slot) => {
                       const isSelected = selectedSlotTime === slot.time;
                       return (
@@ -635,11 +630,10 @@ export function BookDemoFormSection() {
                           key={slot.id}
                           type="button"
                           onClick={() => setSelectedSlotTime(slot.time)}
-                          className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
-                            isSelected
-                              ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30"
-                              : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
-                          }`}
+                          className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${isSelected
+                            ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30"
+                            : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
+                            }`}
                         >
                           <span className="text-xs font-bold">{slot.time}</span>
                         </button>
@@ -685,10 +679,10 @@ export function BookDemoFormSection() {
             <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
             <span className="text-xs font-bold">4.9/5 Parent Rating</span>
           </div>
-          <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
+          {/* <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
             <GraduationCap className="w-3.5 h-3.5 text-purple-300 flex-shrink-0" />
             <span className="text-xs font-bold">Vetted IIM Curriculum</span>
-          </div>
+          </div> */}
           <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
             <Laptop className="w-3.5 h-3.5 text-indigo-300 flex-shrink-0" />
             <span className="text-xs font-bold">Live 1-on-1 Virtual Lab</span>

@@ -44,17 +44,17 @@ const gradeOptions = [
 ];
 
 const defaultTimeSlots: SlotOption[] = [
-  { id: "slot-1",  time: "10:00 AM – 11:00 AM", mentor: "" },
-  { id: "slot-2",  time: "11:00 AM – 12:00 PM", mentor: "" },
-  { id: "slot-3",  time: "12:00 PM – 01:00 PM", mentor: "" },
-  { id: "slot-4",  time: "01:00 PM – 02:00 PM", mentor: "" },
-  { id: "slot-5",  time: "02:00 PM – 03:00 PM", mentor: "" },
-  { id: "slot-6",  time: "03:00 PM – 04:00 PM", mentor: "" },
-  { id: "slot-7",  time: "04:00 PM – 05:00 PM", mentor: "" },
-  { id: "slot-8",  time: "05:00 PM – 06:00 PM", mentor: "" },
-  { id: "slot-9",  time: "06:00 PM – 07:00 PM", mentor: "" },
-  { id: "slot-10", time: "07:00 PM – 08:00 PM", mentor: "" },
-  { id: "slot-11", time: "08:00 PM – 09:00 PM", mentor: "" },
+  { id: "slot-1",  time: "10:00 AM", mentor: "" },
+  { id: "slot-2",  time: "11:00 AM", mentor: "" },
+  { id: "slot-3",  time: "12:00 PM", mentor: "" },
+  { id: "slot-4",  time: "01:00 PM", mentor: "" },
+  { id: "slot-5",  time: "02:00 PM", mentor: "" },
+  { id: "slot-6",  time: "03:00 PM", mentor: "" },
+  { id: "slot-7",  time: "04:00 PM", mentor: "" },
+  { id: "slot-8",  time: "05:00 PM", mentor: "" },
+  { id: "slot-9",  time: "06:00 PM", mentor: "" },
+  { id: "slot-10", time: "07:00 PM", mentor: "" },
+  { id: "slot-11", time: "08:00 PM", mentor: "" },
 ];
 
 interface DateOption {
@@ -104,7 +104,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
 
   // Live slots & selection state
   const [slotsList, setSlotsList] = useState<SlotOption[]>(defaultTimeSlots);
-  const [selectedSlotTime, setSelectedSlotTime] = useState<string>("10:00 AM – 11:00 AM");
+  const [selectedSlotTime, setSelectedSlotTime] = useState<string>("10:00 AM");
   const [isLoadingSlots, setIsLoadingSlots] = useState<boolean>(false);
 
   // Form Submission State
@@ -249,11 +249,11 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
     const fullPhone = `${countryCode} ${phone.trim()}`;
     const parentParts = parentName.trim().split(" ");
     const firstName = parentParts[0] || parentName.trim();
-    const lastName = parentParts.slice(1).join(" ") || "Parent";
+    const lastName = parentParts.slice(1).join(" ");
 
     const childParts = childName.trim().split(" ");
     const studentFirstName = childParts[0] || childName.trim();
-    const studentLastName = childParts.slice(1).join(" ") || lastName || "Student";
+    const studentLastName = childParts.slice(1).join(" ");
 
     const payload = {
       firstName,
@@ -701,7 +701,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                       No demo slots published for this date. Please pick another date above.
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       {slotsList.map((slot) => {
                         const isSelected = selectedSlotTime === slot.time;
                         return (
