@@ -6,7 +6,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export function BoxUnboxingSection() {
   return (
-    <section className="w-full bg-[#FAFAFA] py-16 sm:py-20 lg:py-24 border-t border-gray-100">
+    <section className="w-full bg-[#FAFAFA] py-10 sm:py-12 lg:py-14 border-t border-gray-100">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Section Header */}
         <ScrollReveal variant="zoom-in" duration={650} className="max-w-2xl mx-auto space-y-4">

@@ -27,7 +27,7 @@ const features: FeaturePoint[] = [
 
 export function WhyFinancialLiteracySection() {
   return (
-    <section className="w-full bg-white py-16 sm:py-20 lg:py-24">
+    <section className="w-full bg-white py-10 sm:py-12 lg:py-14">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <ScrollReveal variant="fade-up" duration={600}>

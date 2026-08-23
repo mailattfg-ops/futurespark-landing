@@ -15,7 +15,7 @@ export function FoundationsOfWealthSection() {
   ];
 
   return (
-    <section id="course-details" className="w-full bg-white py-16 sm:py-20 lg:py-24">
+    <section id="course-details" className="w-full bg-white py-10 sm:py-12 lg:py-14">
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <ScrollReveal variant="fade-up" duration={600}>

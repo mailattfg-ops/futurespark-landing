@@ -34,11 +34,11 @@ const steps: StepItem[] = [
 
 export function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="w-full bg-white py-20 sm:py-24 lg:py-32 border-t border-gray-100">
+    <section id="how-it-works" className="w-full bg-white py-10 sm:py-12 lg:py-14 border-t border-gray-100">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <ScrollReveal variant="fade-up" duration={600}>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 text-center tracking-tight mb-14 sm:mb-20 font-sans">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-8 sm:mb-10 font-sans">
             How It Works
           </h2>
         </ScrollReveal>

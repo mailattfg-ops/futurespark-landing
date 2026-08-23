@@ -36,11 +36,11 @@ const reviews: ReviewItem[] = [
 
 export function ParentReviewsSection() {
   return (
-    <section id="reviews" className="w-full bg-white py-16 sm:py-20 lg:py-24 border-t border-gray-100">
+    <section id="reviews" className="w-full bg-white py-10 sm:py-12 lg:py-14 border-t border-gray-100">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <ScrollReveal variant="fade-up" duration={600}>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight font-sans text-center mb-12 sm:mb-16">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight font-sans text-center mb-8 sm:mb-10">
             What parents and kids say
           </h2>
         </ScrollReveal>

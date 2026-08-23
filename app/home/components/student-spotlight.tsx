@@ -43,10 +43,10 @@ const spotlightCards: StudentSpotlightCard[] = [
 
 export function StudentSpotlightSection() {
   return (
-    <section className="w-full bg-[#4E1FE7] py-16 sm:py-20 lg:py-24 relative overflow-hidden">
+    <section className="w-full bg-[#4E1FE7] py-10 sm:py-12 lg:py-14 relative overflow-hidden">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Heading */}
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white text-center tracking-tight mb-12 sm:mb-16 font-sans">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white text-center tracking-tight mb-8 sm:mb-10 font-sans">
           Student Spotlight
         </h2>
 

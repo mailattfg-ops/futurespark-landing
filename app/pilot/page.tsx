@@ -32,9 +32,7 @@ interface SVGProps {
 
 const SparkSVG = ({ size = 32, color = COLORS.gold, style = {} }: SVGProps) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={style}>
-    <path
-      d="M50 5 C52 35 65 48 95 50 C65 52 52 65 50 95 C48 65 35 52 5 50 C35 48 48 35 50 5Z"
-      fill={color}
+    <circle cx="10" cy="10" r="10" fill={color}
     />
   </svg>
 );
@@ -306,46 +304,30 @@ export default function FinquoPilotPage() {
         }}
       >
         {/* Ambient Glowing Radial Orbs Background */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-70px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "1100px",
-            height: "480px",
-            background: "radial-gradient(ellipse at center, rgba(253, 174, 39, 0.22) 0%, rgba(113, 74, 222, 0.14) 45%, rgba(255, 255, 255, 0) 75%)",
-            pointerEvents: "none",
-            filter: "blur(50px)",
-            zIndex: 0,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: "15%",
-            left: "3%",
-            width: "320px",
-            height: "320px",
-            background: "radial-gradient(circle, rgba(9, 177, 187, 0.14) 0%, rgba(255, 255, 255, 0) 70%)",
-            pointerEvents: "none",
-            filter: "blur(45px)",
-            zIndex: 0,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: "20%",
-            right: "3%",
-            width: "340px",
-            height: "340px",
-            background: "radial-gradient(circle, rgba(113, 74, 222, 0.15) 0%, rgba(255, 255, 255, 0) 70%)",
-            pointerEvents: "none",
-            filter: "blur(45px)",
-            zIndex: 0,
-          }}
-        />
+        {/* Orb 1 — Large central top blended ellipse (gold → purple) */}
+        <div style={{ position: "absolute", top: "-70px", left: "50%", transform: "translateX(-50%)", width: "1200px", height: "520px", background: "radial-gradient(ellipse at center, rgba(253, 174, 39, 0.30) 0%, rgba(113, 74, 222, 0.18) 45%, rgba(255, 255, 255, 0) 72%)", pointerEvents: "none", filter: "blur(52px)", zIndex: 0 }} />
+        {/* Orb 2 — Teal left-side mid */}
+        <div style={{ position: "absolute", top: "15%", left: "3%", width: "360px", height: "360px", background: "radial-gradient(circle, rgba(9, 177, 187, 0.28) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(45px)", zIndex: 0 }} />
+        {/* Orb 3 — Purple right-side mid */}
+        <div style={{ position: "absolute", top: "20%", right: "3%", width: "380px", height: "380px", background: "radial-gradient(circle, rgba(113, 74, 222, 0.26) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(45px)", zIndex: 0 }} />
+        {/* Orb 4 — Orange bottom-left corner */}
+        <div style={{ position: "absolute", bottom: "0%", left: "5%", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(248, 114, 31, 0.28) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(48px)", zIndex: 0 }} />
+        {/* Orb 5 — Blue bottom-right corner */}
+        <div style={{ position: "absolute", bottom: "0%", right: "5%", width: "320px", height: "320px", background: "radial-gradient(circle, rgba(59, 104, 252, 0.24) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(46px)", zIndex: 0 }} />
+        {/* Orb 6 — Gold top-left corner accent */}
+        <div style={{ position: "absolute", top: "0%", left: "0%", width: "260px", height: "260px", background: "radial-gradient(circle, rgba(253, 174, 39, 0.32) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
+        {/* Orb 7 — Teal top-right corner accent */}
+        <div style={{ position: "absolute", top: "2%", right: "0%", width: "240px", height: "240px", background: "radial-gradient(circle, rgba(9, 177, 187, 0.26) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(38px)", zIndex: 0 }} />
+        {/* Orb 8 — Wide bottom-center warm ellipse */}
+        <div style={{ position: "absolute", bottom: "-40px", left: "50%", transform: "translateX(-50%)", width: "900px", height: "280px", background: "radial-gradient(ellipse at center, rgba(253, 174, 39, 0.18) 0%, rgba(248, 114, 31, 0.12) 50%, rgba(255, 255, 255, 0) 75%)", pointerEvents: "none", filter: "blur(50px)", zIndex: 0 }} />
+        {/* Orb 9 — Purple mid-left floating */}
+        <div style={{ position: "absolute", top: "50%", left: "8%", width: "200px", height: "200px", background: "radial-gradient(circle, rgba(113, 74, 222, 0.22) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(36px)", zIndex: 0 }} />
+        {/* Orb 10 — Orange mid-right floating */}
+        <div style={{ position: "absolute", top: "55%", right: "7%", width: "220px", height: "220px", background: "radial-gradient(circle, rgba(248, 114, 31, 0.26) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(38px)", zIndex: 0 }} />
+        {/* Orb 11 — Blue center-left mid-page */}
+        <div style={{ position: "absolute", top: "38%", left: "18%", width: "280px", height: "280px", background: "radial-gradient(circle, rgba(59, 104, 252, 0.18) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(42px)", zIndex: 0 }} />
+        {/* Orb 12 — Gold center-right mid-page */}
+        <div style={{ position: "absolute", top: "40%", right: "16%", width: "260px", height: "260px", background: "radial-gradient(circle, rgba(253, 174, 39, 0.22) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
 
         {/* Decorative Sparkles & Accents */}
         <SparkSVG size={26} style={{ position: "absolute", top: 40, left: "8%", opacity: 0.4 }} />
@@ -357,7 +339,7 @@ export default function FinquoPilotPage() {
         <div style={{ maxWidth: 920, margin: "0 auto", position: "relative", zIndex: 1 }}>
           {/* Top Badge */}
           <ScrollReveal variant="fade-down" delay={100}>
-            <p style={{ fontSize: 14, fontWeight: 700, color: COLORS.teal, textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 16px" }}>
+            <p style={{ fontSize: 14, fontWeight: 500, color: COLORS.teal, textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 16px" }}>
               Congratulations..! You Signed up to transform your child Future Ready..!
             </p>
           </ScrollReveal>
@@ -377,7 +359,7 @@ export default function FinquoPilotPage() {
               Preparing for Future{" "}
               <span
                 style={{
-                  background: `linear-gradient(135deg, ${COLORS.gold} 0%, ${COLORS.orange} 100%)`,
+                  background: `linear-gradient(135deg, ${COLORS.purple} 0%, ${COLORS.purple} 100%)`,
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   display: "inline-block",
@@ -438,7 +420,7 @@ export default function FinquoPilotPage() {
                   (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 8px 28px rgba(248, 114, 31, 0.35)`;
                 }}
               >
-                Confirm your seat →
+                Confirm Your Seat →
               </button>
             </div>
           </ScrollReveal>
@@ -566,11 +548,17 @@ export default function FinquoPilotPage() {
             position: "relative",
             overflow: "hidden",
             padding: "36px 0 40px",
-            background: "linear-gradient(180deg, #f8f9ff 0%, #ffffff 50%, #f4f5ff 100%)",
-            borderTop: "1px solid rgba(113, 74, 222, 0.12)",
-            borderBottom: "1px solid rgba(113, 74, 222, 0.12)",
+            background: "linear-gradient(135deg, rgba(113, 74, 222, 0.18) 0%, rgba(253, 174, 39, 0.14) 30%, rgba(9, 177, 187, 0.12) 65%, rgba(59, 104, 252, 0.15) 100%)",
+            // borderTop: "1px solid rgba(113, 74, 222, 0.25)",
+            // borderBottom: "1px solid rgba(253, 174, 39, 0.25)",
           }}
         >
+          {/* Marquee Ambient Orbs */}
+          <div style={{ position: "absolute", top: "-40px", left: "20%", width: "500px", height: "300px", background: "radial-gradient(ellipse at center, rgba(113, 74, 222, 0.55) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(38px)", zIndex: 0 }} />
+          <div style={{ position: "absolute", bottom: "-30px", right: "18%", width: "460px", height: "280px", background: "radial-gradient(ellipse at center, rgba(253, 174, 39, 0.58) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(36px)", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: "10%", right: "5%", width: "260px", height: "260px", background: "radial-gradient(circle, rgba(9, 177, 187, 0.48) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(32px)", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: "15%", left: "3%", width: "280px", height: "280px", background: "radial-gradient(circle, rgba(248, 114, 31, 0.45) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(34px)", zIndex: 0 }} />
+          <div style={{ position: "absolute", bottom: "5%", left: "40%", width: "420px", height: "200px", background: "radial-gradient(ellipse at center, rgba(59, 104, 252, 0.40) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
           <style>{`
             @keyframes marqueeLeft {
               0% { transform: translateX(0%); }
@@ -584,7 +572,7 @@ export default function FinquoPilotPage() {
               display: flex;
               gap: 16px;
               width: max-content;
-              animation: marqueeLeft 36s linear infinite;
+              animation: marqueeLeft 70s linear infinite;
             }
             .marquee-track-left:hover {
               animation-play-state: paused;
@@ -593,7 +581,7 @@ export default function FinquoPilotPage() {
               display: flex;
               gap: 16px;
               width: max-content;
-              animation: marqueeRight 30s linear infinite;
+              animation: marqueeRight 60s linear infinite;
             }
             .marquee-track-right:hover {
               animation-play-state: paused;
@@ -664,13 +652,12 @@ export default function FinquoPilotPage() {
                     alignItems: "center",
                     padding: "11px 24px",
                     borderRadius: 50,
-                    background: item.bg,
-                    border: `1.5px solid ${item.border}`,
-                    boxShadow: `0 4px 14px ${item.border}60`,
+                    background: "#ffffff",
+                    border: "1.5px solid #e5e7eb",
                     whiteSpace: "nowrap",
                     fontSize: 14.5,
                     fontWeight: 800,
-                    color: item.text,
+                    color: "#111111",
                     cursor: "default",
                   }}
                 >
@@ -688,25 +675,25 @@ export default function FinquoPilotPage() {
                 { label: "Communication", grad: "linear-gradient(135deg, #0d9488 0%, #0f766e 100%)", shadow: "rgba(13, 148, 136, 0.35)" },
                 { label: "Entrepreneurship", grad: "linear-gradient(135deg, #714ade 0%, #5b21b6 100%)", shadow: "rgba(113, 74, 222, 0.35)" },
                 { label: "AI", grad: "linear-gradient(135deg, #3b68fc 0%, #1d4ed8 100%)", shadow: "rgba(59, 104, 252, 0.35)" },
-                { label: "Cyberawareness", grad: "linear-gradient(135deg, #f8721f 0%, #c2410c 100%)", shadow: "rgba(248, 114, 31, 0.35)" },
+                { label: "Cyber Awareness", grad: "linear-gradient(135deg, #f8721f 0%, #c2410c 100%)", shadow: "rgba(248, 114, 31, 0.35)" },
               ].concat([
                 { label: "Finance", grad: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", shadow: "rgba(245, 158, 11, 0.35)" },
                 { label: "Communication", grad: "linear-gradient(135deg, #0d9488 0%, #0f766e 100%)", shadow: "rgba(13, 148, 136, 0.35)" },
                 { label: "Entrepreneurship", grad: "linear-gradient(135deg, #714ade 0%, #5b21b6 100%)", shadow: "rgba(113, 74, 222, 0.35)" },
                 { label: "AI", grad: "linear-gradient(135deg, #3b68fc 0%, #1d4ed8 100%)", shadow: "rgba(59, 104, 252, 0.35)" },
-                { label: "Cyberawareness", grad: "linear-gradient(135deg, #f8721f 0%, #c2410c 100%)", shadow: "rgba(248, 114, 31, 0.35)" },
+                { label: "Cyber Awareness", grad: "linear-gradient(135deg, #f8721f 0%, #c2410c 100%)", shadow: "rgba(248, 114, 31, 0.35)" },
               ], [
                 { label: "Finance", grad: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", shadow: "rgba(245, 158, 11, 0.35)" },
                 { label: "Communication", grad: "linear-gradient(135deg, #0d9488 0%, #0f766e 100%)", shadow: "rgba(13, 148, 136, 0.35)" },
                 { label: "Entrepreneurship", grad: "linear-gradient(135deg, #714ade 0%, #5b21b6 100%)", shadow: "rgba(113, 74, 222, 0.35)" },
                 { label: "AI", grad: "linear-gradient(135deg, #3b68fc 0%, #1d4ed8 100%)", shadow: "rgba(59, 104, 252, 0.35)" },
-                { label: "Cyberawareness", grad: "linear-gradient(135deg, #f8721f 0%, #c2410c 100%)", shadow: "rgba(248, 114, 31, 0.35)" },
+                { label: "Cyber Awareness", grad: "linear-gradient(135deg, #f8721f 0%, #c2410c 100%)", shadow: "rgba(248, 114, 31, 0.35)" },
               ], [
                 { label: "Finance", grad: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", shadow: "rgba(245, 158, 11, 0.35)" },
                 { label: "Communication", grad: "linear-gradient(135deg, #0d9488 0%, #0f766e 100%)", shadow: "rgba(13, 148, 136, 0.35)" },
                 { label: "Entrepreneurship", grad: "linear-gradient(135deg, #714ade 0%, #5b21b6 100%)", shadow: "rgba(113, 74, 222, 0.35)" },
                 { label: "AI", grad: "linear-gradient(135deg, #3b68fc 0%, #1d4ed8 100%)", shadow: "rgba(59, 104, 252, 0.35)" },
-                { label: "Cyberawareness", grad: "linear-gradient(135deg, #f8721f 0%, #c2410c 100%)", shadow: "rgba(248, 114, 31, 0.35)" },
+                { label: "Cyber Awareness", grad: "linear-gradient(135deg, #f8721f 0%, #c2410c 100%)", shadow: "rgba(248, 114, 31, 0.35)" },
               ]).map((item, idx) => (
                 <div
                   key={idx}
@@ -715,12 +702,12 @@ export default function FinquoPilotPage() {
                     alignItems: "center",
                     padding: "12px 28px",
                     borderRadius: 50,
-                    background: item.grad,
-                    boxShadow: `0 8px 22px ${item.shadow}`,
+                    background: "#ffffff",
+                    border: "1.5px solid #e5e7eb",
                     whiteSpace: "nowrap",
                     fontSize: 15.5,
                     fontWeight: 800,
-                    color: "#ffffff",
+                    color: "#111111",
                     letterSpacing: "0.02em",
                     cursor: "default",
                   }}
@@ -734,7 +721,12 @@ export default function FinquoPilotPage() {
       </ScrollReveal>
 
       {/* BENEFITS */}
-      <section style={{ padding: "64px 24px", background: COLORS.white }}>
+      <section style={{ padding: "64px 24px", background: COLORS.white, position: "relative", overflow: "hidden" }}>
+        {/* Benefits Ambient Orbs */}
+        <div style={{ position: "absolute", top: "-60px", left: "50%", transform: "translateX(-50%)", width: "900px", height: "320px", background: "radial-gradient(ellipse at center, rgba(253, 174, 39, 0.20) 0%, rgba(59, 104, 252, 0.10) 50%, rgba(255,255,255,0) 75%)", pointerEvents: "none", filter: "blur(55px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: "30%", left: "2%", width: "280px", height: "280px", background: "radial-gradient(circle, rgba(248, 114, 31, 0.22) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(42px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", bottom: "10%", right: "4%", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(9, 177, 187, 0.20) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(44px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", bottom: "-40px", left: "35%", width: "360px", height: "200px", background: "radial-gradient(ellipse at center, rgba(113, 74, 222, 0.18) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <ScrollReveal variant="fade-up">
             <h2 style={{ textAlign: "center", fontSize: 32, fontWeight: 900, margin: "0 0 12px", color: COLORS.dark }}>What Your Child Gets</h2>
@@ -804,6 +796,11 @@ export default function FinquoPilotPage() {
           overflow: "hidden",
         }}
       >
+        {/* How It Works Ambient Orbs */}
+        <div style={{ position: "absolute", top: "-80px", left: "50%", transform: "translateX(-50%)", width: "1000px", height: "400px", background: "radial-gradient(ellipse at center, rgba(59, 104, 252, 0.20) 0%, rgba(113, 74, 222, 0.12) 45%, rgba(255,255,255,0) 75%)", pointerEvents: "none", filter: "blur(60px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: "25%", left: "1%", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(253, 174, 39, 0.25) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(48px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: "15%", right: "2%", width: "320px", height: "320px", background: "radial-gradient(circle, rgba(248, 114, 31, 0.22) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(46px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", bottom: "-50px", left: "15%", width: "350px", height: "220px", background: "radial-gradient(ellipse at center, rgba(9, 177, 187, 0.20) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
         <div style={{ maxWidth: 1180, margin: "0 auto", textAlign: "center" }}>
           {/* Top Pill Badge & Heading */}
           <ScrollReveal variant="fade-down">
@@ -1160,6 +1157,12 @@ export default function FinquoPilotPage() {
           overflow: "hidden",
         }}
       >
+        {/* Finquo Junior Section Ambient Orbs */}
+        <div style={{ position: "absolute", top: "-60px", left: "50%", transform: "translateX(-50%)", width: "1100px", height: "420px", background: "radial-gradient(ellipse at center, rgba(113, 74, 222, 0.22) 0%, rgba(253, 174, 39, 0.12) 45%, rgba(255,255,255,0) 75%)", pointerEvents: "none", filter: "blur(55px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: "20%", left: "0%", width: "350px", height: "350px", background: "radial-gradient(circle, rgba(248, 114, 31, 0.24) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(50px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", top: "30%", right: "0%", width: "380px", height: "380px", background: "radial-gradient(circle, rgba(9, 177, 187, 0.22) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(52px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", bottom: "5%", left: "30%", width: "440px", height: "260px", background: "radial-gradient(ellipse at center, rgba(59, 104, 252, 0.18) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(45px)", zIndex: 0 }} />
+        <div style={{ position: "absolute", bottom: "20%", left: "5%", width: "220px", height: "220px", background: "radial-gradient(circle, rgba(253, 174, 39, 0.26) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(38px)", zIndex: 0 }} />
         <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           {/* Section Header */}
           <ScrollReveal variant="fade-up">
