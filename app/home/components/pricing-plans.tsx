@@ -38,22 +38,20 @@ export function PricingPlansSection() {
               <button
                 type="button"
                 onClick={() => setBillingCycle("annual")}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  billingCycle === "annual"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${billingCycle === "annual"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+                  }`}
               >
                 Annual Billing <span className="text-[#4F46E5] text-[11px] font-black ml-1">(Save 33%)</span>
               </button>
               <button
                 type="button"
                 onClick={() => setBillingCycle("monthly")}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  billingCycle === "monthly"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${billingCycle === "monthly"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+                  }`}
               >
                 Monthly Plan
               </button>
@@ -105,7 +103,7 @@ export function PricingPlansSection() {
                   }}
                   className="w-full inline-flex items-center justify-center py-3.5 px-6 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-indigo-500/25 transition-all text-center cursor-pointer"
                 >
-                  Book a Free Demo First
+                  Confirm your seat First
                 </Link>
               </div>
             </div>

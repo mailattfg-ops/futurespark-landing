@@ -18,6 +18,7 @@ import {
   Laptop,
   Star,
   X,
+  ChevronDown,
 } from "lucide-react";
 
 interface SlotOption {
@@ -44,15 +45,15 @@ const gradeOptions = [
 ];
 
 const defaultTimeSlots: SlotOption[] = [
-  { id: "slot-1",  time: "10:00 AM", mentor: "" },
-  { id: "slot-2",  time: "11:00 AM", mentor: "" },
-  { id: "slot-3",  time: "12:00 PM", mentor: "" },
-  { id: "slot-4",  time: "01:00 PM", mentor: "" },
-  { id: "slot-5",  time: "02:00 PM", mentor: "" },
-  { id: "slot-6",  time: "03:00 PM", mentor: "" },
-  { id: "slot-7",  time: "04:00 PM", mentor: "" },
-  { id: "slot-8",  time: "05:00 PM", mentor: "" },
-  { id: "slot-9",  time: "06:00 PM", mentor: "" },
+  { id: "slot-1", time: "10:00 AM", mentor: "" },
+  { id: "slot-2", time: "11:00 AM", mentor: "" },
+  { id: "slot-3", time: "12:00 PM", mentor: "" },
+  { id: "slot-4", time: "01:00 PM", mentor: "" },
+  { id: "slot-5", time: "02:00 PM", mentor: "" },
+  { id: "slot-6", time: "03:00 PM", mentor: "" },
+  { id: "slot-7", time: "04:00 PM", mentor: "" },
+  { id: "slot-8", time: "05:00 PM", mentor: "" },
+  { id: "slot-9", time: "06:00 PM", mentor: "" },
   { id: "slot-10", time: "07:00 PM", mentor: "" },
   { id: "slot-11", time: "08:00 PM", mentor: "" },
 ];
@@ -94,7 +95,10 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [childName, setChildName] = useState("");
-  const [studentGrade, setStudentGrade] = useState(gradeOptions[0]);
+  const [studentGrade, setStudentGrade] = useState("");
+  const [presentCountry, setPresentCountry] = useState("");
+  const [language, setLanguage] = useState("");
+  const [hearAbout, setHearAbout] = useState("");
 
   // Step 2 Form Fields
   const [selectedDateId, setSelectedDateId] = useState<string>("date-0");
@@ -144,6 +148,9 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
       setEmail("");
       setChildName("");
       setStudentGrade(gradeOptions[0]);
+      setPresentCountry("");
+      setLanguage("");
+      setHearAbout("");
       setSelectedDateId("date-0");
       setCustomDateVal("");
       setShowCalendarPicker(false);
@@ -226,7 +233,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
 
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!parentName.trim() || !phone.trim() || !email.trim() || !childName.trim()) {
+    if (!parentName.trim() || !phone.trim() || !email.trim() || !childName.trim() || !studentGrade.trim() || !presentCountry.trim() || !language) {
       setSubmitError("Please fill in all required fields.");
       return;
     }
@@ -247,34 +254,22 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
     setSubmitError(null);
 
     const fullPhone = `${countryCode} ${phone.trim()}`;
-    const parentParts = parentName.trim().split(" ");
-    const firstName = parentParts[0] || parentName.trim();
-    const lastName = parentParts.slice(1).join(" ");
-
-    const childParts = childName.trim().split(" ");
-    const studentFirstName = childParts[0] || childName.trim();
-    const studentLastName = childParts.slice(1).join(" ");
 
     const payload = {
-      firstName,
-      lastName,
-      studentFirstName,
-      studentLastName,
-      email: email.trim(),
-      phone: fullPhone,
-      demoClass: true,
-      preferredDays: [activeDateObj.weekdayName],
-      preferredTime: selectedSlotTime,
-      notes: [
-        `Parent: ${parentName}`,
-        `Child: ${childName}`,
-        `Student Grade: ${studentGrade}`,
-        `Demo Slot: ${activeDateObj.fullDateStr} (${activeDateObj.weekdayName}) @ ${selectedSlotTime}`,
-      ].join(" | "),
+      parentName: parentName.trim(),
+      studentName: childName.trim(),
+      studentGrade: studentGrade.trim(),
+      parentEmail: email.trim(),
+      parentPhone: fullPhone,
+      presentCountry: presentCountry.trim(),
+      preferredLanguage: language,
+      hearAbout: hearAbout || undefined,
+      preferredSlotDate: `${activeDateObj.fullDateStr} (${activeDateObj.weekdayName})`,
+      preferredSlotTime: selectedSlotTime,
     };
 
     try {
-      const response = await fetch("/api/leads", {
+      const response = await fetch("/api/pilot-leads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -342,10 +337,10 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
           <div className="text-center space-y-1.5 pr-6">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
               <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-              100% Free Live 1-on-1 Trial Class
+              100% Free Live 1-on-1 Mentorship
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight font-sans">
-              Book Your Child&apos;s Demo Class
+              Confirm your seat
             </h2>
           </div>
 
@@ -358,7 +353,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   {step}
                 </span>
                 <span className="text-xs font-bold text-gray-800 uppercase tracking-wider font-sans">
-                  {step === 1 ? "Step 1: Parent & Child Details" : "Step 2: Choose Slot & Schedule"}
+                  {step === 1 ? "Step 1: Parent & Student Details" : "Step 2: Choose Slot & Schedule"}
                 </span>
               </div>
               <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
@@ -385,7 +380,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   <CheckCircle2 className="w-7 h-7" />
                 </div>
                 <h3 className="text-xl font-black text-gray-900 font-sans tracking-tight">
-                  Trial Session Confirmed!
+                  Seat Reserved Successfully!
                 </h3>
                 <div className="bg-gradient-to-b from-[#FBF9FE] to-purple-50/50 border border-purple-100 rounded-xl p-4 text-left space-y-2 max-w-sm mx-auto text-xs shadow-xs">
                   <div className="flex justify-between items-center text-gray-600">
@@ -427,7 +422,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                     }}
                     className="px-5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 transition-colors cursor-pointer"
                   >
-                    Book Another Trial
+                    Reserve Another Seat
                   </button>
                   <button
                     type="button"
@@ -439,11 +434,11 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                 </div>
               </div>
             ) : step === 1 ? (
-              /* STEP 1: Parent & Student Info */
+              /* STEP 1: Parent & Student Info (8 Fields) */
               <form onSubmit={handleStep1Submit} className="space-y-3">
-                {/* Row 1: Parent Name & Child Name Side-by-Side */}
+                {/* 1. Parent Name & 2. Student Name */}
+                {/* Parent Name & Student Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {/* Parent Name Input */}
                   <div className="space-y-1">
                     <label htmlFor="modal-parentName" className="block text-[11px] font-bold text-gray-700 font-sans">
                       Parent / Guardian Name <span className="text-red-500">*</span>
@@ -462,10 +457,9 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                     </div>
                   </div>
 
-                  {/* Child's Name Input */}
                   <div className="space-y-1">
                     <label htmlFor="modal-childName" className="block text-[11px] font-bold text-gray-700 font-sans">
-                      Child&apos;s Name <span className="text-red-500">*</span>
+                      Student&apos;s Name <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <GraduationCap className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
@@ -475,41 +469,45 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                         required
                         value={childName}
                         onChange={(e) => setChildName(e.target.value)}
-                        placeholder="Enter child name"
+                        placeholder="Enter student name"
                         className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium"
                       />
                     </div>
                   </div>
                 </div>
 
-                {/* Row 2: Student Grade & Email Address Side-by-Side */}
+                {/* Student Grade & Email Address */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {/* Student Grade Selection */}
                   <div className="space-y-1">
                     <label htmlFor="modal-studentGrade" className="block text-[11px] font-bold text-gray-700 font-sans">
-                      Student Grade <span className="text-red-500">*</span>
+                      Student&apos;s Grade <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <GraduationCap className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
+                      <GraduationCap className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none z-10" />
                       <select
                         id="modal-studentGrade"
+                        required
                         value={studentGrade}
                         onChange={(e) => setStudentGrade(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-3 py-2 text-xs text-gray-900 font-semibold focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
+                        className={`w-full bg-white border border-gray-200 rounded-xl pl-9 pr-8 py-2 text-xs focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium appearance-none cursor-pointer ${!studentGrade ? "text-gray-400" : "text-gray-900"
+                          }`}
                       >
+                        <option value="" disabled className="text-gray-400">
+                          Select Grade (1 to 12)
+                        </option>
                         {gradeOptions.map((g) => (
-                          <option key={g} value={g}>
+                          <option key={g} value={g} className="text-gray-900 py-1 font-medium">
                             {g}
                           </option>
                         ))}
                       </select>
+                      <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-3 pointer-events-none" />
                     </div>
                   </div>
 
-                  {/* Email Address */}
                   <div className="space-y-1">
                     <label htmlFor="modal-email" className="block text-[11px] font-bold text-gray-700 font-sans">
-                      Email Address <span className="text-red-500">*</span>
+                      Parent&apos;s Email Address <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <Mail className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
@@ -526,40 +524,99 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
-                {/* WhatsApp Number */}
-                <div className="space-y-1">
-                  <label htmlFor="modal-phone" className="block text-[11px] font-bold text-gray-700 font-sans">
-                    WhatsApp Number <span className="text-red-500">*</span>
-                  </label>
-                  <div className="grid grid-cols-12 gap-1.5">
-                    <div className="col-span-4">
-                      <select
-                        id="modal-countryCode"
-                        aria-label="Country Code"
-                        value={countryCode}
-                        onChange={(e) => setCountryCode(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-xl px-1.5 py-2 text-xs font-semibold text-gray-900 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
-                      >
-                        {countryCodes.map((c) => (
-                          <option key={c.code} value={c.code}>
-                            {c.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                {/* WhatsApp Number & Present Country */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label htmlFor="modal-phone" className="block text-[11px] font-bold text-gray-700 font-sans">
+                      Parent&apos;s WhatsApp Number <span className="text-red-500">*</span>
+                    </label>
+                    <div className="grid grid-cols-12 gap-1.5">
+                      <div className="col-span-4">
+                        <select
+                          id="modal-countryCode"
+                          aria-label="Country Code"
+                          value={countryCode}
+                          onChange={(e) => setCountryCode(e.target.value)}
+                          className="w-full bg-white border border-gray-200 rounded-xl px-1.5 py-2 text-xs font-semibold text-gray-900 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
+                        >
+                          {countryCodes.map((c) => (
+                            <option key={c.code} value={c.code}>
+                              {c.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-                    <div className="col-span-8 relative">
-                      <Phone className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-3 pointer-events-none" />
+                      <div className="col-span-8 relative">
+                        <Phone className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-3 pointer-events-none" />
+                        <input
+                          id="modal-phone"
+                          type="tel"
+                          required
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="Mobile Number"
+                          className="w-full bg-white border border-gray-200 rounded-xl pl-8 pr-2 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label htmlFor="modal-presentCountry" className="block text-[11px] font-bold text-gray-700 font-sans">
+                      Present Country <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <Globe className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
                       <input
-                        id="modal-phone"
-                        type="tel"
+                        id="modal-presentCountry"
+                        type="text"
                         required
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Mobile Number"
-                        className="w-full bg-white border border-gray-200 rounded-xl pl-8 pr-2 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium"
+                        value={presentCountry}
+                        onChange={(e) => setPresentCountry(e.target.value)}
+                        placeholder="e.g. India, UAE, Qatar"
+                        className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium"
                       />
                     </div>
+                  </div>
+                </div>
+
+                {/* Preferred Language & How did you hear */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label htmlFor="modal-language" className="block text-[11px] font-bold text-gray-700 font-sans">
+                      Preferred Language <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="modal-language"
+                      required
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
+                      className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 font-medium focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
+                    >
+                      <option value="">Select language</option>
+                      <option value="English">English</option>
+                      <option value="Malayalam + English">Malayalam + English</option>
+                      <option value="Hindi + English">Hindi + English</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label htmlFor="modal-hearAbout" className="block text-[11px] font-bold text-gray-700 font-sans">
+                      How did you hear? <span className="text-gray-400 font-normal">(Optional)</span>
+                    </label>
+                    <select
+                      id="modal-hearAbout"
+                      value={hearAbout}
+                      onChange={(e) => setHearAbout(e.target.value)}
+                      className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 font-medium focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none cursor-pointer"
+                    >
+                      <option value="">Select source</option>
+                      <option value="WhatsApp Invite">WhatsApp Invite</option>
+                      <option value="Friend or Family Invite">Friend or Family Invite</option>
+                      <option value="Social Media">Social Media</option>
+                      <option value="Other">Other</option>
+                    </select>
                   </div>
                 </div>
 
@@ -740,7 +797,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                         <span>Confirming Trial Session...</span>
                       </>
                     ) : (
-                      <span>Confirm Free Demo Class 🚀</span>
+                      <span>Confirm Seat Reservation 🚀</span>
                     )}
                   </button>
 

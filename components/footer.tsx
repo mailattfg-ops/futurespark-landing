@@ -49,16 +49,20 @@ export function Footer() {
             <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-4">
               OUR OFFICES
             </h4>
-            
+
             {/* Calicut Office */}
             <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-white/85">
               <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <MapPin className="w-3.5 h-3.5 text-amber-300" />
               </span>
               <div>
-                <strong className="text-white block font-bold">Calicut Office (India):</strong>
-                <span>Cyberpark, Kozhikode (Calicut), Kerala, India</span>
-                <a href="tel:+919745001121" className="flex items-center gap-1 mt-1 text-amber-300 hover:underline font-semibold">
+                <strong className="text-white block font-bold">India Office :</strong>
+                <span className="leading-relaxed block">
+                  Tower 2, 2nd Floor, 2/1149/I 94, 95, 96,<br />
+                  Hi Lite Business Park, Guruvayurappan College Road,<br />
+                  Olavanna, Kozhikode, Kerala - 673014
+                </span>
+                <a href="tel:+919745001121" className="flex items-center gap-1 mt-1.5 text-amber-300 hover:underline font-semibold">
                   <Phone className="w-3 h-3" /> +91 97450 01121
                 </a>
               </div>
@@ -70,7 +74,7 @@ export function Footer() {
                 <MapPin className="w-3.5 h-3.5 text-amber-300" />
               </span>
               <div>
-                <strong className="text-white block font-bold">Dubai Office (UAE):</strong>
+                <strong className="text-white block font-bold">UAE Office :</strong>
                 <span>Business Bay, Dubai, United Arab Emirates</span>
                 <a href="tel:+97143218899" className="flex items-center gap-1 mt-1 text-amber-300 hover:underline font-semibold">
                   <Phone className="w-3 h-3" /> +971 4 321 8899
@@ -124,7 +128,7 @@ export function Footer() {
                 }}
                 className="inline-flex items-center justify-center bg-white text-[#371085] hover:bg-gray-100 text-xs sm:text-[13px] font-extrabold px-6 py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95"
               >
-                Book a Free Demo
+                Confirm your seat
               </Link>
             </div>
           </div>

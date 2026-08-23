@@ -63,26 +63,24 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
             </nav>
           </div>
 
-          {/* Right: Actions (Book a Free Demo) */}
+          {/* Right: Actions (Reserve Your Seat) */}
           <div className="hidden md:flex items-center gap-4 lg:gap-6">
-            <button
-              type="button"
-              onClick={onOpenDemoModal}
+            <Link
+              href="/pilot"
               className="inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
-              Book a Free Demo
-            </button>
+              Reserve Your Seat
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle Button */}
           <div className="flex md:hidden items-center gap-2.5">
-            <button
-              type="button"
-              onClick={onOpenDemoModal}
+            <Link
+              href="/pilot"
               className="px-3 py-1.5 rounded-lg bg-[#F59E0B] text-white text-xs font-bold shadow-sm cursor-pointer"
             >
-              Book Demo
-            </button>
+              Reserve Your Seat
+            </Link>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -125,16 +123,13 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
               </Link>
             </nav>
             <div className="pt-2 border-t border-gray-100">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenDemoModal?.();
-                }}
+              <Link
+                href="/pilot"
+                onClick={() => setMobileMenuOpen(false)}
                 className="w-full flex items-center justify-center px-4 py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-white text-sm font-bold shadow-md transition-all text-center cursor-pointer"
               >
-                Book a Free Demo
-              </button>
+                Reserve Your Seat
+              </Link>
             </div>
           </div>
         )}

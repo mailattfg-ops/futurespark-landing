@@ -97,7 +97,7 @@ export function FoundationsOfWealthSection() {
               }}
               className="w-full inline-flex items-center justify-center py-4 px-6 rounded-xl bg-[#5B45F5] hover:bg-[#4E39E0] text-white font-extrabold text-sm sm:text-base shadow-md hover:shadow-lg transition-all text-center cursor-pointer active:scale-98"
             >
-              Book a Free Demo
+              Confirm your seat
             </Link>
           </div>
         </ScrollReveal>
