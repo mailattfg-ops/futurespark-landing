@@ -40,25 +40,17 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Left: Brand Logo & Main Nav */}
           <div className={`flex items-center gap-6 lg:gap-10 ${!isPilotPage ? "pl-12 sm:pl-16 md:pl-6" : ""}`}>
-            <Link href="/" className="flex items-center gap-2.5 group">
-              {/* Finquo Spark Icon & Wordmark */}
-              <div className="relative w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0">
+            <Link href="/" className="flex items-center group">
+              {/* Finquo Full Logo */}
+              <div className="relative w-32 h-8 sm:w-44 sm:h-11 flex-shrink-0">
                 <Image
-                  src="/finquo-logo.png"
+                  src="/finquo-logo-1.png"
                   alt="Finquo Junior Logo"
                   fill
-                  sizes="36px"
-                  className="object-contain"
+                  sizes="(min-width: 640px) 176px, 128px"
+                  className="object-contain object-left"
                   priority
                 />
-              </div>
-              <div className="flex flex-col leading-tight">
-                <span className="text-lg sm:text-xl font-black tracking-tight text-gray-900 font-sans">
-                  FINQUO
-                </span>
-                <span className="text-[11px] sm:text-xs font-bold text-gray-800 -mt-1 tracking-wide font-sans">
-                  Junior
-                </span>
               </div>
             </Link>
 

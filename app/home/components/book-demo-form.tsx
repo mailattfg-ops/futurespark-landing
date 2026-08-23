@@ -68,18 +68,7 @@ interface DateOption {
   isCustom?: boolean;
 }
 
-const timezones = [
-  { value: "Asia/Kolkata", label: "🇮🇳 India (IST, UTC+5:30)" },
-  { value: "America/New_York", label: "🇺🇸 USA Eastern (EDT, UTC-4)" },
-  { value: "America/Los_Angeles", label: "🇺🇸 USA Pacific (PDT, UTC-7)" },
-  { value: "Europe/London", label: "🇬🇧 UK (BST, UTC+1)" },
-  { value: "Asia/Dubai", label: "🇦🇪 UAE (GST, UTC+4)" },
-  { value: "Asia/Singapore", label: "🇸🇬 Singapore (SGT, UTC+8)" },
-  { value: "Australia/Sydney", label: "🇦🇺 Australia Sydney (AEST, UTC+10)" },
-  { value: "Asia/Tokyo", label: "🇯🇵 Japan (JST, UTC+9)" },
-  { value: "Europe/Paris", label: "🇫🇷 Europe Central (CET, UTC+1)" },
-  { value: "Canada/Eastern", label: "🇨🇦 Canada Eastern (EDT, UTC-4)" },
-];
+import { timezones, getMatchingTimezone, allCountriesList } from "@/lib/timezone-utils";
 
 function generateQuickDates(): DateOption[] {
   const dates: DateOption[] = [];
@@ -123,6 +112,12 @@ export function BookDemoFormSection() {
   const [customDateVal, setCustomDateVal] = useState<string>("");
   const [showCalendarPicker, setShowCalendarPicker] = useState<boolean>(false);
   const [timezone, setTimezone] = useState(timezones[0].value);
+
+  // Auto-sync Timezone with Present Country & Country Code
+  useEffect(() => {
+    const matched = getMatchingTimezone(presentCountry, countryCode);
+    setTimezone(matched);
+  }, [presentCountry, countryCode]);
 
   // Live slots & selection state
   const [slotsList, setSlotsList] = useState<SlotOption[]>(defaultTimeSlots);
@@ -484,16 +479,26 @@ export function BookDemoFormSection() {
                     Present Country <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <Globe className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
-                    <input
+                    <Globe className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none z-10" />
+                    <select
                       id="presentCountry"
-                      type="text"
                       required
                       value={presentCountry}
                       onChange={(e) => setPresentCountry(e.target.value)}
-                      placeholder="e.g. India, UAE, Qatar"
-                      className="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium"
-                    />
+                      className={`w-full bg-white border border-gray-200 rounded-xl pl-9 pr-8 py-2 text-xs focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium appearance-none cursor-pointer ${
+                        !presentCountry ? "text-gray-400" : "text-gray-900"
+                      }`}
+                    >
+                      <option value="" disabled className="text-gray-400">
+                        Select Present Country
+                      </option>
+                      {allCountriesList.map((c) => (
+                        <option key={c} value={c} className="text-gray-900 font-medium py-1">
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-3 pointer-events-none" />
                   </div>
                 </div>
               </div>

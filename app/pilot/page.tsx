@@ -331,10 +331,10 @@ export default function FinquoPilotPage() {
         <div style={{ position: "absolute", top: "40%", right: "16%", width: "260px", height: "260px", background: "radial-gradient(circle, rgba(253, 174, 39, 0.22) 0%, rgba(255, 255, 255, 0) 70%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
 
         {/* Decorative Sparkles & Accents */}
-        <SparkSVG size={26} style={{ position: "absolute", top: 40, left: "8%", opacity: 0.4 }} />
+        {/* <SparkSVG size={26} style={{ position: "absolute", top: 40, left: "8%", opacity: 0.4 }} />
         <DotSVG size={11} color={COLORS.orange} style={{ position: "absolute", top: 75, right: "10%", opacity: 0.5 }} />
         <DotSVG size={9} color={COLORS.blue} style={{ position: "absolute", bottom: 55, left: "12%", opacity: 0.4 }} />
-        <SparkSVG size={20} color={COLORS.teal} style={{ position: "absolute", bottom: 40, right: "6%", opacity: 0.35 }} />
+        <SparkSVG size={20} color={COLORS.teal} style={{ position: "absolute", bottom: 40, right: "6%", opacity: 0.35 }} /> */}
 
         {/* Hero Content Box */}
         <div style={{ maxWidth: 920, margin: "0 auto", position: "relative", zIndex: 1 }}>

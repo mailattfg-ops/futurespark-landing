@@ -22,7 +22,7 @@ export default function NotFoundPage() {
             <span className="text-lg sm:text-xl font-black tracking-tight text-gray-900">
               FINQUO
             </span>
-            <span className="text-[11px] sm:text-xs font-bold text-gray-800 -mt-1 tracking-wide">
+            <span className="text-[10px] sm:text-xs font-bold text-[#4F46E5] tracking-widest uppercase font-sans mt-0.5">
               Junior
             </span>
           </div>

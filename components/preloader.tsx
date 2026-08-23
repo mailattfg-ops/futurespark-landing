@@ -44,15 +44,7 @@ export function Preloader() {
           />
         </div>
 
-        {/* Brand Name */}
-        <div className="flex flex-col items-center leading-tight">
-          <span className="text-xl sm:text-2xl font-black tracking-tight text-gray-900 font-sans">
-            FINQUO
-          </span>
-          <span className="text-xs font-bold text-[#4F46E5] tracking-widest uppercase font-sans mt-0.5">
-            Junior
-          </span>
-        </div>
+
 
         {/* Animated Progress Bar */}
         <div className="w-36 h-1 bg-gray-100 rounded-full overflow-hidden relative mt-2">
