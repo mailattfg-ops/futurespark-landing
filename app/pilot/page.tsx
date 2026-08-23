@@ -297,7 +297,7 @@ export default function FinquoPilotPage() {
         style={{
           position: "relative",
           overflow: "hidden",
-          padding: "179px 24px 64px",
+          padding: "140px 24px 64px",
           textAlign: "center",
           background: "linear-gradient(180deg, #fef9ed 0%, #ffffff 40%, #f4f5ff 100%)",
           minHeight: "100vh",
@@ -405,7 +405,6 @@ export default function FinquoPilotPage() {
                 letterSpacing: "-0.015em",
               }}
             >
-              Preparing for Future{" "}
               <span
                 style={{
                   background: `linear-gradient(135deg, ${COLORS.purple} 0%, ${COLORS.purple} 100%)`,
@@ -415,8 +414,11 @@ export default function FinquoPilotPage() {
                   fontWeight: 900,
                 }}
               >
-                Today
+                FREE
               </span>
+
+              {" "}Pilot Program
+
             </p>
           </ScrollReveal>
 
@@ -468,7 +470,7 @@ export default function FinquoPilotPage() {
                   (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 8px 28px rgba(248, 114, 31, 0.35)`;
                 }}
               >
-                Confirm Your Seat →
+                Join Now →
               </button>
             </div>
           </ScrollReveal>

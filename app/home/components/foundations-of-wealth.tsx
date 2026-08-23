@@ -42,24 +42,15 @@ export function FoundationsOfWealthSection() {
                 />
               </div>
 
-              {/* Title & Price Row Under Image */}
-              <div className="pt-1 flex flex-col sm:flex-row items-start sm:items-start justify-between gap-3 border-t border-gray-100">
-                <div className="space-y-1 max-w-xs">
+              {/* Title & Info Row Under Image */}
+              <div className="pt-1 flex flex-col sm:flex-row items-start justify-between gap-3 border-t border-gray-100">
+                <div className="space-y-1">
                   <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 font-sans tracking-tight">
                     Foundations of Wealth
                   </h3>
                   <p className="text-[11px] sm:text-xs text-gray-500 font-normal leading-relaxed">
                     Inclusive of quarterly physical worksheets &amp; mentorship
                   </p>
-                </div>
-
-                <div className="flex sm:flex-col items-baseline sm:items-end justify-between sm:justify-start gap-1 flex-shrink-0">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl sm:text-2xl font-black text-[#5B45F5] font-sans">
-                      ₹1,250
-                    </span>
-                    <span className="text-xs text-gray-500 font-medium">/ session</span>
-                  </div>
                 </div>
               </div>
             </div>

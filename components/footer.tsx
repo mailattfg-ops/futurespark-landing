@@ -75,10 +75,14 @@ export function Footer() {
               </span>
               <div>
                 <strong className="text-white block font-bold">UAE Office :</strong>
-                <span>Business Bay, Dubai, United Arab Emirates</span>
-                <a href="tel:+97143218899" className="flex items-center gap-1 mt-1 text-amber-300 hover:underline font-semibold">
+                <span className="leading-relaxed block">
+                  World Trade Centre, Latifa Tower - Office<br />
+                  No 201 Sheikh Zayed Rd - Opposite Future<br />
+                  Museum - Dubai - United Arab Emirates
+                </span>
+                {/* <a href="tel:+97143218899" className="flex items-center gap-1 mt-1 text-amber-300 hover:underline font-semibold">
                   <Phone className="w-3 h-3" /> +971 4 321 8899
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
@@ -128,7 +132,7 @@ export function Footer() {
                 }}
                 className="inline-flex items-center justify-center bg-white text-[#371085] hover:bg-gray-100 text-xs sm:text-[13px] font-extrabold px-6 py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95"
               >
-                Confirm your seat
+                Join Now
               </Link>
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
-import Image from "next/image";
+import { ReactNode } from "react";
+import { Coins, PiggyBank, ShieldAlert, Receipt, TrendingUp, Megaphone, Cpu } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface CourseStep {
@@ -11,6 +12,7 @@ interface CourseStep {
   bgColor: string;
   textColor: string;
   subtextColor: string;
+  icon: ReactNode;
 }
 
 const courseSteps: CourseStep[] = [
@@ -22,6 +24,7 @@ const courseSteps: CourseStep[] = [
     bgColor: "bg-[#0066FF]",
     textColor: "text-white",
     subtextColor: "text-white/90",
+    icon: <Coins className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-xs" />,
   },
   {
     number: "02",
@@ -31,6 +34,7 @@ const courseSteps: CourseStep[] = [
     bgColor: "bg-[#8B5CF6]",
     textColor: "text-white",
     subtextColor: "text-white/90",
+    icon: <PiggyBank className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-xs" />,
   },
   {
     number: "03",
@@ -40,6 +44,7 @@ const courseSteps: CourseStep[] = [
     bgColor: "bg-[#F59E0B]",
     textColor: "text-white",
     subtextColor: "text-white/95",
+    icon: <ShieldAlert className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-xs" />,
   },
   {
     number: "04",
@@ -49,6 +54,7 @@ const courseSteps: CourseStep[] = [
     bgColor: "bg-[#EF4444]",
     textColor: "text-white",
     subtextColor: "text-white/90",
+    icon: <Receipt className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-xs" />,
   },
   {
     number: "05",
@@ -58,6 +64,7 @@ const courseSteps: CourseStep[] = [
     bgColor: "bg-[#10B981]",
     textColor: "text-white",
     subtextColor: "text-white/90",
+    icon: <TrendingUp className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-xs" />,
   },
   {
     number: "06",
@@ -67,6 +74,7 @@ const courseSteps: CourseStep[] = [
     bgColor: "bg-[#6366F1]",
     textColor: "text-white",
     subtextColor: "text-white/90",
+    icon: <Megaphone className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-xs" />,
   },
   {
     number: "07",
@@ -76,64 +84,57 @@ const courseSteps: CourseStep[] = [
     bgColor: "bg-[#06B6D4]",
     textColor: "text-white",
     subtextColor: "text-white/90",
+    icon: <Cpu className="w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-xs" />,
   },
 ];
 
 export function CourseFlowSection() {
   return (
-    <section className="w-full bg-[#FAFAFA] py-10 sm:py-12 lg:py-14 border-t border-gray-100">
+    <section className="w-full bg-[#FAFAFA] py-10 sm:py-12 lg:py-16 border-t border-gray-100">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <ScrollReveal variant="fade-up" duration={600}>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-8 sm:mb-10 font-sans">
-            Course Flow & Roadmap
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-8 sm:mb-12 font-sans">
+            Course Flow &amp; Roadmap
           </h2>
         </ScrollReveal>
 
-        {/* 7-Card Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
+        {/* Responsive 7-Card Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 sm:gap-5">
           {courseSteps.map((step, idx) => (
             <ScrollReveal
               key={idx}
               variant="zoom-in"
               duration={550}
-              delay={idx * 70}
+              delay={idx * 60}
               className="h-full"
             >
               <div
-                className={`${step.bgColor} ${step.textColor} rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-start text-left shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 min-h-[260px] select-none group relative overflow-hidden h-full`}
+                className={`${step.bgColor} ${step.textColor} rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-start text-left shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 min-h-[270px] select-none group relative overflow-hidden h-full border border-white/20`}
               >
-                {/* Top Bar: Stage Number & Session Tag */}
-                <div className="w-full flex items-center justify-between gap-2 pb-2">
-                  <span className="text-lg font-black tracking-tight font-sans opacity-95">
+                {/* Top Bar: Stage Number & Session Tag Stacked */}
+                <div className="w-full flex flex-col items-start gap-1.5 pb-1">
+                  <span className="text-xl sm:text-2xl font-black tracking-tight font-sans opacity-95">
                     {step.number}
                   </span>
-                  <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-xs tracking-wider">
+                  <span className="text-[10px] sm:text-[11px] font-black uppercase px-2.5 py-0.5 rounded-full bg-white/25 border border-white/20 whitespace-nowrap tracking-wider">
                     {step.sessions}
                   </span>
                 </div>
 
-                {/* Center 3D Calculator Graphic */}
-                <div className="w-full flex items-center justify-center my-auto py-2">
-                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 group-hover:scale-110 transition-transform duration-300">
-                    <Image
-                      src="/course-flow-calc.png"
-                      alt={step.title}
-                      fill
-                      priority
-                      unoptimized
-                      sizes="100px"
-                      className="object-contain drop-shadow-md"
-                    />
+                {/* Center Unique Glassmorphic Icon Badge */}
+                <div className="w-full flex items-center justify-center my-auto py-4">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/35 flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                    {step.icon}
                   </div>
                 </div>
 
                 {/* Bottom Title & Description */}
-                <div className="w-full pt-2 border-t border-white/20">
-                  <h3 className="text-sm font-extrabold leading-snug font-sans block">
+                <div className="w-full pt-3 border-t border-white/20">
+                  <h3 className="text-sm sm:text-[15px] font-extrabold leading-snug font-sans block">
                     {step.title}
                   </h3>
-                  <p className={`text-[11px] font-normal leading-relaxed block mt-1 ${step.subtextColor}`}>
+                  <p className={`text-[11px] font-normal leading-relaxed block mt-1.5 ${step.subtextColor}`}>
                     {step.description}
                   </p>
                 </div>
