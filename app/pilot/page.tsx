@@ -5,7 +5,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { BookDemoFormSection } from "@/app/home/components/book-demo-form";
-import { Video, Clock, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
+import { Video, Clock, ShieldCheck, Sparkles, ArrowRight, Calendar, BookOpen } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const COLORS = {
@@ -300,7 +300,8 @@ export default function FinquoPilotPage() {
           padding: "179px 24px 64px",
           textAlign: "center",
           background: "linear-gradient(180deg, #fef9ed 0%, #ffffff 40%, #f4f5ff 100%)",
-          height: "100vh",
+          minHeight: "100vh",
+          height: "auto",
         }}
       >
         {/* Ambient Glowing Radial Orbs Background */}
@@ -338,22 +339,70 @@ export default function FinquoPilotPage() {
         {/* Hero Content Box */}
         <div style={{ maxWidth: 920, margin: "0 auto", position: "relative", zIndex: 1 }}>
           {/* Top Badge */}
-          <ScrollReveal variant="fade-down" delay={100}>
-            <p style={{ fontSize: 14, fontWeight: 500, color: COLORS.teal, textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 16px" }}>
-              Congratulations..! You Signed up to transform your child Future Ready..!
-            </p>
-          </ScrollReveal>
+          {/* <ScrollReveal variant="fade-down" delay={100}>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "6px 18px",
+                borderRadius: 50,
+                background: "rgba(113, 74, 222, 0.08)",
+                border: "1px solid rgba(113, 74, 222, 0.2)",
+                marginBottom: 16,
+              }}
+            >
+              <Sparkles size={14} color={COLORS.purple} />
+              <span
+                style={{
+                  fontSize: 12.5,
+                  fontWeight: 800,
+                  color: COLORS.purple,
+                  letterSpacing: 1.5,
+                  textTransform: "uppercase",
+                }}
+              >
+                Finquo Junior Pilot Program
+              </span>
+            </div>
+          </ScrollReveal> */}
 
-          {/* Main Headline */}
+          {/* Primary Main Headline */}
           <ScrollReveal variant="fade-up" delay={200}>
             <h1
               style={{
-                fontSize: "clamp(32px, 4.5vw, 48px)",
-                fontWeight: 900,
-                lineHeight: 1.25,
-                margin: "0 0 18px",
+                fontSize: "clamp(42px, 6vw, 68px)",
+                fontWeight: 950,
+                lineHeight: 1.12,
+                margin: "0 0 14px",
                 color: COLORS.dark,
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.03em",
+              }}
+            >
+              Financial Literacy for{" "}
+              <span
+                style={{
+                  background: `linear-gradient(135deg, ${COLORS.purple} 0%, ${COLORS.purple} 100%)`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  display: "inline-block",
+                }}
+              >
+                Kids
+              </span>
+            </h1>
+          </ScrollReveal>
+
+          {/* Supporting Subheadline */}
+          <ScrollReveal variant="fade-up" delay={280}>
+            <p
+              style={{
+                fontSize: "clamp(22px, 3vw, 32px)",
+                fontWeight: 800,
+                lineHeight: 1.3,
+                margin: "0 0 20px",
+                color: "#374151",
+                letterSpacing: "-0.015em",
               }}
             >
               Preparing for Future{" "}
@@ -363,13 +412,12 @@ export default function FinquoPilotPage() {
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   display: "inline-block",
-                  paddingBottom: "8px",
-                  marginBottom: "-8px",
+                  fontWeight: 900,
                 }}
               >
                 Today
               </span>
-            </h1>
+            </p>
           </ScrollReveal>
 
           {/* Subtitle Paragraph */}
@@ -430,32 +478,30 @@ export default function FinquoPilotPage() {
         <ScrollReveal variant="fade-up" delay={500}>
           <div style={{ maxWidth: 1140, margin: "44px auto 0", position: "relative", zIndex: 1 }}>
             <div
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2"
               style={{
-                padding: "20px 24px",
+                padding: "12px 14px",
                 background: "rgba(255, 255, 255, 0.92)",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
                 borderRadius: 22,
                 border: "1.5px solid rgba(113, 74, 222, 0.16)",
                 boxShadow: "0 18px 44px -12px rgba(113, 74, 222, 0.14), 0 6px 16px rgba(0, 0, 0, 0.03)",
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))",
-                gap: 18,
                 alignItems: "center",
               }}
             >
               {[
                 {
-                  icon: <Video size={22} color="#714ade" />,
-                  num: "4",
-                  unit: "Live Sessions",
-                  label: "1-on-1 Mentorship",
+                  icon: <Video size={18} color="#714ade" />,
+                  num: "1-on-1",
+                  unit: "Mentorship",
+                  label: "4 Live Sessions",
                   gradient: "linear-gradient(135deg, #714ade 0%, #3b68fc 100%)",
                   bgColor: "rgba(113, 74, 222, 0.06)",
                   borderColor: "rgba(113, 74, 222, 0.18)",
                 },
                 {
-                  icon: <ShieldCheck size={22} color="#f8721f" />,
+                  icon: <ShieldCheck size={18} color="#f8721f" />,
                   num: "100%",
                   unit: "Scholarship",
                   label: "0 INR (Free Access)",
@@ -464,13 +510,31 @@ export default function FinquoPilotPage() {
                   borderColor: "rgba(248, 114, 31, 0.18)",
                 },
                 {
-                  icon: <Clock size={22} color="#09b1bb" />,
+                  icon: <Clock size={18} color="#09b1bb" />,
                   num: "60",
                   unit: "Mins",
                   label: "Each Session",
                   gradient: "linear-gradient(135deg, #09b1bb 0%, #3b68fc 100%)",
                   bgColor: "rgba(9, 177, 187, 0.06)",
                   borderColor: "rgba(9, 177, 187, 0.18)",
+                },
+                {
+                  icon: <Calendar size={18} color="#3b68fc" />,
+                  num: "Flexible",
+                  unit: "Schedule",
+                  label: "Convenient Timings",
+                  gradient: "linear-gradient(135deg, #3b68fc 0%, #714ade 100%)",
+                  bgColor: "rgba(59, 104, 252, 0.06)",
+                  borderColor: "rgba(59, 104, 252, 0.18)",
+                },
+                {
+                  icon: <BookOpen size={18} color="#fdae27" />,
+                  num: "Physical",
+                  unit: "Worksheet",
+                  label: "Deliver at Doorstep",
+                  gradient: "linear-gradient(135deg, #fdae27 0%, #f8721f 100%)",
+                  bgColor: "rgba(253, 174, 39, 0.06)",
+                  borderColor: "rgba(253, 174, 39, 0.18)",
                 },
               ].map((s, i) => (
                 <div
@@ -479,13 +543,14 @@ export default function FinquoPilotPage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "flex-start",
-                    gap: 16,
-                    padding: "16px 22px",
-                    borderRadius: 18,
+                    gap: 8,
+                    padding: "10px 10px",
+                    borderRadius: 14,
                     background: s.bgColor,
                     border: `1px solid ${s.borderColor}`,
                     transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                     cursor: "default",
+                    minWidth: 0,
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)";
@@ -498,9 +563,9 @@ export default function FinquoPilotPage() {
                 >
                   <div
                     style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: 14,
+                      width: 36,
+                      height: 36,
+                      borderRadius: 10,
                       background: "#ffffff",
                       display: "flex",
                       alignItems: "center",
@@ -511,26 +576,26 @@ export default function FinquoPilotPage() {
                   >
                     {s.icon}
                   </div>
-                  <div style={{ textAlign: "left" }}>
-                    <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                  <div style={{ textAlign: "left", minWidth: 0, flex: 1 }}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 3, whiteSpace: "nowrap" }}>
                       <span
                         style={{
-                          fontSize: 26,
+                          fontSize: 16,
                           fontWeight: 900,
                           background: s.gradient,
                           WebkitBackgroundClip: "text",
                           WebkitTextFillColor: "transparent",
                           display: "inline-block",
-                          lineHeight: 1.1,
+                          lineHeight: 1.15,
                         }}
                       >
                         {s.num}
                       </span>
-                      <span style={{ fontSize: 14, fontWeight: 800, color: COLORS.dark }}>
+                      <span style={{ fontSize: 12.5, fontWeight: 800, color: COLORS.dark }}>
                         {s.unit}
                       </span>
                     </div>
-                    <div style={{ fontSize: 12, color: COLORS.textMuted, fontWeight: 600, marginTop: 2 }}>
+                    <div style={{ fontSize: 11, color: COLORS.textMuted, fontWeight: 600, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {s.label}
                     </div>
                   </div>
@@ -652,11 +717,11 @@ export default function FinquoPilotPage() {
                     alignItems: "center",
                     padding: "11px 24px",
                     borderRadius: 50,
-                    background: "#ffffff",
+                    background: "#ffffff61",
                     border: "1.5px solid #e5e7eb",
                     whiteSpace: "nowrap",
                     fontSize: 14.5,
-                    fontWeight: 800,
+                    fontWeight: 500,
                     color: "#111111",
                     cursor: "default",
                   }}
@@ -702,11 +767,11 @@ export default function FinquoPilotPage() {
                     alignItems: "center",
                     padding: "12px 28px",
                     borderRadius: 50,
-                    background: "#ffffff",
+                    background: "#ffffff61",
                     border: "1.5px solid #e5e7eb",
                     whiteSpace: "nowrap",
                     fontSize: 15.5,
-                    fontWeight: 800,
+                    fontWeight: 500,
                     color: "#111111",
                     letterSpacing: "0.02em",
                     cursor: "default",
