@@ -24,7 +24,7 @@ export function PilotBenefitsSection() {
   const cards = [
     {
       icon: <SparkSVG size={36} />,
-      title: "Live 1‑on‑1 Mentorship",
+      title: "Live 1 on 1 Mentorship",
       desc: "Four 60‑minute sessions with a dedicated mentor not pre‑recorded, not group classes. Real conversations, real growth.",
       color: COLORS.gold,
     },
@@ -61,7 +61,7 @@ export function PilotBenefitsSection() {
       <div style={{ position: "absolute", top: "30%", left: "2%", width: "280px", height: "280px", background: "radial-gradient(circle, rgba(248, 114, 31, 0.22) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(42px)", zIndex: 0 }} />
       <div style={{ position: "absolute", bottom: "10%", right: "4%", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(9, 177, 187, 0.20) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(44px)", zIndex: 0 }} />
       <div style={{ position: "absolute", bottom: "-40px", left: "35%", width: "360px", height: "200px", background: "radial-gradient(ellipse at center, rgba(113, 74, 222, 0.18) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
-      
+
       <div style={{ maxWidth: 1140, margin: "0 auto", position: "relative", zIndex: 1 }}>
         <ScrollReveal variant="fade-up">
           <h2 style={{ textAlign: "center", fontSize: 32, fontWeight: 900, margin: "0 0 12px", color: COLORS.dark }}>What Your Child Gets</h2>
