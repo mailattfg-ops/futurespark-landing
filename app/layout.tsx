@@ -10,7 +10,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://finquo.ai";
+const siteUrl = "https://junior.finquo.ai";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

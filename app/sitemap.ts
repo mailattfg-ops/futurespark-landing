@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://junior.finquo.ai";
+  const baseUrl = "https://junior.finquo.ai";
   const currentDate = new Date();
 
   return [
