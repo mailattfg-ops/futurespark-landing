@@ -17,7 +17,7 @@ export const timezones: TimezoneOption[] = [
   { value: "Canada/Eastern", label: "🇨🇦 Canada Eastern (EDT, UTC-4:00)" },
 ];
 
-export const allCountriesList = [
+export const allCountriesList: string[] = [
   "India",
   "United Arab Emirates",
   "Qatar",
@@ -180,7 +180,6 @@ export function getMatchingTimezone(countryStr: string, countryCodeStr?: string)
   const c = (countryStr || "").trim().toLowerCase();
   const code = (countryCodeStr || "").trim();
 
-  // Match text in presentCountry first
   if (c) {
     if (c.includes("india") || c.includes("ind") || c === "in") return "Asia/Kolkata";
     if (c.includes("uae") || c.includes("dubai") || c.includes("emirates") || c.includes("abudhabi") || c.includes("abu dhabi")) return "Asia/Dubai";
@@ -199,7 +198,6 @@ export function getMatchingTimezone(countryStr: string, countryCodeStr?: string)
     if (c.includes("france") || c.includes("germany") || c.includes("europe") || c.includes("paris") || c.includes("berlin")) return "Europe/Paris";
   }
 
-  // Fallback to Country Phone Code match
   if (code === "+91") return "Asia/Kolkata";
   if (code === "+971") return "Asia/Dubai";
   if (code === "+1") return "America/New_York";

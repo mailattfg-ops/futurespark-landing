@@ -20,6 +20,7 @@ import {
   X,
   ChevronDown,
 } from "lucide-react";
+import { timezones, getMatchingTimezone, allCountriesList } from "@/lib/timezone-utils";
 
 interface SlotOption {
   id: string;
@@ -68,7 +69,28 @@ interface DateOption {
   isCustom?: boolean;
 }
 
-import { timezones, getMatchingTimezone, allCountriesList } from "@/lib/timezone-utils";
+function generateQuickDates(): DateOption[] {
+  const dates: DateOption[] = [];
+  const today = new Date();
+  for (let i = 1; i <= 3; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    const dayName = i === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", { weekday: "short" });
+    const dayDate = `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`;
+    const fullDateStr = `${d.getDate() < 10 ? "0" + d.getDate() : d.getDate()}/${d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1
+      }/${d.getFullYear()}`;
+    const weekdayName = d.toLocaleDateString("en-US", { weekday: "long" });
+    dates.push({
+      id: `date-${i - 1}`,
+      dayName,
+      dayDate,
+      fullDateStr,
+      weekdayName,
+      rawDate: d,
+    });
+  }
+  return dates;
+}
 
 interface BookDemoModalProps {
   isOpen: boolean;
@@ -142,7 +164,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
       setPhone("");
       setEmail("");
       setChildName("");
-      setStudentGrade(gradeOptions[0]);
+      setStudentGrade("");
       setPresentCountry("");
       setLanguage("");
       setHearAbout("");
@@ -154,52 +176,28 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
     }
   }, [isOpen]);
 
-  // Dynamic 3 Quick Date Cards (Tomorrow, Day 2, Day 3)
+  // Dynamic 3 Quick Date Cards
   const quickDateOptions = useMemo<DateOption[]>(() => {
-    const dates: DateOption[] = [];
-    const today = new Date();
-
-    for (let i = 1; i <= 3; i++) {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i);
-
-      const dayName = i === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", { weekday: "short" });
-      const dayDate = `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`;
-      const fullDateStr = `${d.getDate() < 10 ? "0" + d.getDate() : d.getDate()}/${d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1
-        }/${d.getFullYear()}`;
-      const weekdayName = d.toLocaleDateString("en-US", { weekday: "long" });
-
-      dates.push({
-        id: `date-${i - 1}`,
-        dayName,
-        dayDate,
-        fullDateStr,
-        weekdayName,
-        rawDate: d,
-      });
-    }
-
-    return dates;
+    return generateQuickDates();
   }, []);
 
-  // Custom date object if user picks a date from calendar input
   const customDateOption = useMemo<DateOption | null>(() => {
     if (!customDateVal) return null;
-    const [y, m, d] = customDateVal.split("-").map(Number);
-    if (!y || !m || !d) return null;
-
-    const dateObj = new Date(y, m - 1, d);
+    const dateObj = new Date(customDateVal);
     const dayName = dateObj.toLocaleDateString("en-US", { weekday: "short" });
-    const dayDate = `${d} ${dateObj.toLocaleDateString("en-US", { month: "short" })}`;
-    const fullDateStr = `${d < 10 ? "0" + d : d}/${m < 10 ? "0" + m : m}/${y}`;
-    const weekdayName = dateObj.toLocaleDateString("en-US", { weekday: "long" });
-
+    const monthName = dateObj.toLocaleDateString("en-US", { month: "short" });
+    const dateNum = dateObj.getDate();
     return {
       id: "date-custom",
       dayName,
-      dayDate,
-      fullDateStr,
-      weekdayName,
+      dayDate: `${monthName} ${dateNum}`,
+      fullDateStr: dateObj.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      weekdayName: dateObj.toLocaleDateString("en-US", { weekday: "long" }),
       rawDate: dateObj,
       isCustom: true,
     };
@@ -213,9 +211,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
     return quickDateOptions[idx] || quickDateOptions[0];
   }, [selectedDateId, customDateOption, quickDateOptions]);
 
-  // Slots are fixed — no API fetch needed
   const loadSlotsForDate = useCallback(async (_targetDate: Date) => {
-    // Always use fixed slots
     setSlotsList(defaultTimeSlots);
     setSelectedSlotTime(defaultTimeSlots[0].time);
   }, []);
@@ -287,7 +283,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
     }
   };
 
-  // Calculate min date string YYYY-MM-DD for date input
   const minDateStr = useMemo(() => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
@@ -299,48 +294,36 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[999] flex items-center justify-center p-4 sm:p-6"
-      aria-modal="true"
-      role="dialog"
-      aria-label="Book a Free Demo Class"
       onClick={(e) => {
         if (e.target === overlayRef.current) onClose();
       }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200"
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" />
-
-      {/* Modal Card */}
-      <div className="relative z-10 w-full max-w-xl max-h-[92dvh] overflow-y-auto bg-gradient-to-b from-[#2E0B73] via-[#3B128E] to-[#250860] rounded-2xl shadow-2xl animate-in zoom-in-95 fade-in duration-250 font-sans">
-
-        {/* Decorative blobs */}
-        <div className="absolute top-0 left-1/4 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="w-full max-w-xl bg-gradient-to-b from-[#2E0B73] via-[#3B128E] to-[#250860] rounded-3xl shadow-2xl overflow-hidden border border-white/20 relative animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 text-white transition-colors cursor-pointer"
+          className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-4 h-4" />
         </button>
 
-        <div className="relative z-10 p-5 sm:p-7 space-y-4">
-          {/* Compact Section Header */}
-          <div className="text-center space-y-1.5 pr-6">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
-              <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-              100% Free Live 1-on-1 Mentorship
-            </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight font-sans">
-              Confirm your seat
-            </h2>
+        {/* Modal Header */}
+        <div className="p-4 sm:p-6 pb-3 text-center space-y-1.5 flex-shrink-0">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
+            <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+            Financial Literacy FREE Pilot Program
           </div>
+          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-sans">
+            Confirm your seat
+          </h2>
+        </div>
 
-          {/* Glassmorphic Form Card */}
-          <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-xl text-gray-900 border border-white/40 relative space-y-4">
+        {/* Scrollable Form Body */}
+        <div className="sm:px-6 pt-0 pb-4 overflow-y-auto flex-1 ">
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-4 sm:p-5 shadow-xl text-gray-900 border border-white/40 space-y-4 mb-2">
             {/* Step Indicator Header */}
             <div className="flex items-center justify-between pb-2 border-b border-gray-100">
               <div className="flex items-center gap-2">
@@ -351,6 +334,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   {step === 1 ? "Step 1: Parent & Student Details" : "Step 2: Choose Slot & Schedule"}
                 </span>
               </div>
+
               <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
                 {step === 1 ? "1 of 2" : "2 of 2"}
               </span>
@@ -369,7 +353,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
             </div>
 
             {isSubmitted ? (
-              /* Confirmation State */
               <div className="py-6 text-center space-y-3 animate-in fade-in zoom-in-95 duration-300">
                 <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
                   <CheckCircle2 className="w-7 h-7" />
@@ -404,35 +387,16 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                 <p className="text-[11px] text-gray-500 leading-relaxed max-w-xs mx-auto">
                   Confirmation link sent to your WhatsApp. Your mentor will be waiting in the virtual classroom!
                 </p>
-                <div className="flex items-center justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsSubmitted(false);
-                      setStep(1);
-                      setParentName("");
-                      setPhone("");
-                      setEmail("");
-                      setChildName("");
-                    }}
-                    className="px-5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 transition-colors cursor-pointer"
-                  >
-                    Reserve Another Seat
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="px-5 py-2 rounded-lg bg-[#6366F1] hover:bg-[#4F46E5] text-white text-xs font-bold transition-colors cursor-pointer"
-                  >
-                    Close
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 transition-colors cursor-pointer"
+                >
+                  Done
+                </button>
               </div>
             ) : step === 1 ? (
-              /* STEP 1: Parent & Student Info (8 Fields) */
               <form onSubmit={handleStep1Submit} className="space-y-3">
-                {/* 1. Parent Name & 2. Student Name */}
-                {/* Parent Name & Student Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <label htmlFor="modal-parentName" className="block text-[11px] font-bold text-gray-700 font-sans">
@@ -471,7 +435,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
-                {/* Student Grade & Email Address */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <label htmlFor="modal-studentGrade" className="block text-[11px] font-bold text-gray-700 font-sans">
@@ -519,7 +482,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
-                {/* WhatsApp Number & Present Country */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <label htmlFor="modal-phone" className="block text-[11px] font-bold text-gray-700 font-sans">
@@ -536,7 +498,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                         >
                           {countryCodes.map((c) => (
                             <option key={c.code} value={c.code}>
-                              {c.label}
+                              {c.flag} {c.code}
                             </option>
                           ))}
                         </select>
@@ -568,9 +530,8 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                         required
                         value={presentCountry}
                         onChange={(e) => setPresentCountry(e.target.value)}
-                        className={`w-full bg-white border border-gray-200 rounded-xl pl-9 pr-8 py-2 text-xs focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium appearance-none cursor-pointer ${
-                          !presentCountry ? "text-gray-400" : "text-gray-900"
-                        }`}
+                        className={`w-full bg-white border border-gray-200 rounded-xl pl-9 pr-8 py-2 text-xs focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium appearance-none cursor-pointer ${!presentCountry ? "text-gray-400" : "text-gray-900"
+                          }`}
                       >
                         <option value="" disabled className="text-gray-400">
                           Select Present Country
@@ -586,7 +547,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
-                {/* Preferred Language & How did you hear */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <label htmlFor="modal-language" className="block text-[11px] font-bold text-gray-700 font-sans">
@@ -629,7 +589,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   <p className="text-xs text-red-500 font-medium pt-0.5">{submitError}</p>
                 )}
 
-                {/* Step 1 CTA Button */}
                 <div className="pt-1">
                   <button
                     type="submit"
@@ -650,9 +609,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                 </div>
               </form>
             ) : (
-              /* STEP 2: Choose Date & Time Slot */
               <div className="space-y-4">
-                {/* Top Navigation */}
                 <div className="flex items-center justify-between">
                   <button
                     type="button"
@@ -677,7 +634,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
-                {/* Quick Date Selection Cards + Calendar Date Picker */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-bold text-gray-900">Select Class Date</h4>
@@ -708,7 +664,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                     })}
                   </div>
 
-                  {/* Calendar Date Picker Toggle */}
                   <div>
                     {showCalendarPicker ? (
                       <div className="p-2.5 bg-indigo-50/60 border border-indigo-200/80 rounded-xl flex items-center justify-between gap-2 animate-in fade-in duration-200">
@@ -742,14 +697,13 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
-                {/* Time Slots Section */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="text-[11px] font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-[#6366F1]" /> Available Time Slots ({activeDateObj.fullDateStr})
                     </h4>
                     <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
-                      Live 1-on-1
+                      Live 1 on 1
                     </span>
                   </div>
 
@@ -788,7 +742,6 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   <p className="text-xs text-red-500 font-medium">{submitError}</p>
                 )}
 
-                {/* Step 2 CTA Button */}
                 <div className="pt-1">
                   <button
                     type="button"
@@ -814,19 +767,14 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
             )}
           </div>
 
-          {/* Trust Badges Row */}
-          <div className="grid grid-cols-3 gap-2">
-            <div className="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-              <Star className="w-3 h-3 text-amber-400 fill-amber-400 flex-shrink-0" />
-              <span className="text-[10px] font-bold">4.9/5 Rating</span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
+              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
+              <span className="text-xs font-bold">4.9/5 Parent Rating</span>
             </div>
-            {/* <div className="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-              <GraduationCap className="w-3 h-3 text-purple-300 flex-shrink-0" />
-              <span className="text-[10px] font-bold">IIM Curriculum</span>
-            </div> */}
-            <div className="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-              <Laptop className="w-3 h-3 text-indigo-300 flex-shrink-0" />
-              <span className="text-[10px] font-bold">Live 1-on-1</span>
+            <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
+              <Laptop className="w-3.5 h-3.5 text-indigo-300 flex-shrink-0" />
+              <span className="text-xs font-bold">Live 1 on 1 Virtual Lab</span>
             </div>
           </div>
         </div>

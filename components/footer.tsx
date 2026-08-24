@@ -27,7 +27,7 @@ export function Footer() {
             </Link>
 
             <p className="text-xs sm:text-[13px] text-white/85 max-w-sm leading-relaxed font-normal pt-1">
-              Raising a financially secure generation through curated, ISO-grade weekly 1-on-1 mentorship sessions for ages 8 to 18.
+              Raising a financially secure generation through curated, ISO-grade weekly 1 on 1 mentorship sessions for ages 8 to 18.
             </p>
 
             {/* Email Contact */}

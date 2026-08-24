@@ -20,7 +20,7 @@ const testimonials: Testimonial[] = [
     location: "Bengaluru",
     highlight: "Understands trade-offs now",
     quote:
-      "Kabir now calculates opportunity costs and trade-offs before asking for things in stores. The 1-on-1 mentor format kept him completely engaged for a full year.",
+      "Kabir now calculates opportunity costs and trade-offs before asking for things in stores. The 1 on 1 mentor format kept him completely engaged for a full year.",
     avatarBg: "bg-indigo-100 text-[#4F46E5]",
     initials: "LA",
   },

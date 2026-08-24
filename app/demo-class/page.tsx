@@ -384,7 +384,7 @@ function DemoClassPortalContent() {
               {/* Welcome */}
               <div className="relative z-10 text-center space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-semibold backdrop-blur-md border border-white/20">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" /> 1-on-1 Interactive Demo Session
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" /> 1 on 1 Interactive Demo Session
                 </div>
                 <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mt-2">
                   Welcome, {parentName} &amp; <span className="text-amber-300">{studentName}</span>!
@@ -459,7 +459,7 @@ function DemoClassPortalContent() {
                     <CalendarSync className="w-3.5 h-3.5 text-amber-600" /> Reschedule Session
                   </button>
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/60 text-indigo-700 text-xs font-bold">
-                    <Video className="w-4 h-4 text-indigo-600" /> Live 1-on-1 Class
+                    <Video className="w-4 h-4 text-indigo-600" /> Live 1 on 1 Class
                   </div>
                 </div>
               </div>

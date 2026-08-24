@@ -11,17 +11,17 @@ interface VideoItem {
 
 const videos: VideoItem[] = [
   {
-    title: "Live Mentorship Demo: 1-on-1 Class Tour",
+    title: "Live Mentorship Demo: 1 on 1 Class Tour",
     channel: "FINQUO JR. CHANNEL",
     imageSrc: "/youtube-group-thumb.png",
   },
   {
-    title: "Live Mentorship Demo: 1-on-1 Class Tour",
+    title: "Live Mentorship Demo: 1 on 1 Class Tour",
     channel: "FINQUO JR. CHANNEL",
     imageSrc: "/youtube-group-thumb.png",
   },
   {
-    title: "Live Mentorship Demo: 1-on-1 Class Tour",
+    title: "Live Mentorship Demo: 1 on 1 Class Tour",
     channel: "FINQUO JR. CHANNEL",
     imageSrc: "/youtube-group-thumb.png",
   },
@@ -37,7 +37,7 @@ export function YoutubeSection() {
             YouTube
           </h2>
           <p className="text-base sm:text-lg text-gray-600 font-medium max-w-md mx-auto mt-3 leading-relaxed font-sans">
-            Go behind the scenes of our 1-on-1 sessions, student success stories, and class highlights.
+            Go behind the scenes of our 1 on 1 sessions, student success stories, and class highlights.
           </p>
         </div>
 

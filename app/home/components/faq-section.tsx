@@ -15,7 +15,7 @@ const faqs: FAQItem[] = [
       "Our curriculum is designed for children ages 8 to 18. Students are paired with age-appropriate tracks (Junior 8–12 and Senior 13–18) ensuring lessons, simulations, and case studies match their developmental stage.",
   },
   {
-    question: "How does the 1-on-1 mentor matching work?",
+    question: "How does the 1 on 1 mentor matching work?",
     answer:
       "During the free 60-minute demo session, our academic director assesses your child's communication style, interests, and learning speed. We then assign a dedicated mentor who stays with your child for the entire journey.",
   },

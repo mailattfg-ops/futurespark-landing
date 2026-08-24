@@ -19,13 +19,13 @@ export const metadata: Metadata = {
     template: "%s | Finquo Junior",
   },
   description:
-    "A 1-year weekly 1-on-1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits taught by real mentors.",
+    "A 1-year weekly 1 on 1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits taught by real mentors.",
   keywords: [
     "Finquo Junior",
     "Financial literacy for kids",
     "Money management for teens",
     "Kids entrepreneurship course",
-    "1-on-1 mentorship for students",
+    "1 on 1 mentorship for students",
     "Public speaking for kids",
     "AI tools for students",
     "Smart spending for teenagers",
@@ -53,10 +53,10 @@ export const metadata: Metadata = {
     siteName: "Finquo Junior",
     title: "Finquo Junior | The Skills School Forgets to Teach",
     description:
-      "A 1-year weekly 1-on-1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits taught by real mentors.",
+      "A 1-year weekly 1 on 1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits taught by real mentors.",
     images: [
       {
-        url: "/finquo-brand-mark.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Finquo Junior - Financial Literacy & Essential Skills Mentorship",
@@ -67,8 +67,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Finquo Junior | The Skills School Forgets to Teach",
     description:
-      "A 1-year weekly 1-on-1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits.",
-    images: ["/finquo-brand-mark.png"],
+      "A 1-year weekly 1 on 1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits.",
+    images: ["/og-image.jpg"],
     creator: "@finquojunior",
   },
   alternates: {
@@ -85,7 +85,7 @@ const jsonLdData = {
       "name": "Finquo Junior",
       "url": siteUrl,
       "logo": `${siteUrl}/finquo-logo.png`,
-      "description": "ISO-grade weekly 1-on-1 mentorship sessions in financial literacy, business, speaking, and digital skills for ages 8 to 18.",
+      "description": "ISO-grade weekly 1 on 1 mentorship sessions in financial literacy, business, speaking, and digital skills for ages 8 to 18.",
       "sameAs": [
         "https://instagram.com/finquojunior",
         "https://youtube.com/@finquojunior"
@@ -104,7 +104,7 @@ const jsonLdData = {
       "@type": "Course",
       "@id": `${siteUrl}/#course`,
       "name": "Foundations of Wealth & Future Skills",
-      "description": "40 interactive 1-on-1 sessions covering money foundations, budgeting, scam safety, economy, investing, public speaking, and AI tools.",
+      "description": "40 interactive 1 on 1 sessions covering money foundations, budgeting, scam safety, economy, investing, public speaking, and AI tools.",
       "provider": {
         "@id": `${siteUrl}/#organization`
       }

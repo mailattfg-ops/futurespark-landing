@@ -20,6 +20,7 @@ import {
   Star,
   ChevronDown,
 } from "lucide-react";
+import { timezones, getMatchingTimezone, allCountriesList } from "@/lib/timezone-utils";
 
 interface SlotOption {
   id: string;
@@ -67,8 +68,6 @@ interface DateOption {
   rawDate: Date;
   isCustom?: boolean;
 }
-
-import { timezones, getMatchingTimezone, allCountriesList } from "@/lib/timezone-utils";
 
 function generateQuickDates(): DateOption[] {
   const dates: DateOption[] = [];
@@ -258,7 +257,7 @@ export function BookDemoFormSection() {
         <div className="text-center space-y-1.5">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
             <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-            100% Free Live 1-on-1 Mentorship
+            Financial Literacy FREE Pilot Program
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-sans">
             Confirm your seat
@@ -666,7 +665,7 @@ export function BookDemoFormSection() {
                     <Clock className="w-3.5 h-3.5 text-[#6366F1]" /> Available Time Slots ({activeDateObj.fullDateStr})
                   </h4>
                   <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
-                    Live 1-on-1
+                    Live 1 on 1
                   </span>
                 </div>
 
@@ -737,13 +736,9 @@ export function BookDemoFormSection() {
             <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
             <span className="text-xs font-bold">4.9/5 Parent Rating</span>
           </div>
-          {/* <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-            <GraduationCap className="w-3.5 h-3.5 text-purple-300 flex-shrink-0" />
-            <span className="text-xs font-bold">Vetted IIM Curriculum</span>
-          </div> */}
           <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
             <Laptop className="w-3.5 h-3.5 text-indigo-300 flex-shrink-0" />
-            <span className="text-xs font-bold">Live 1-on-1 Virtual Lab</span>
+            <span className="text-xs font-bold">Live 1 on 1 Virtual Lab</span>
           </div>
         </div>
       </ScrollReveal>

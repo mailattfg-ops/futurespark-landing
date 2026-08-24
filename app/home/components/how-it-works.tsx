@@ -45,7 +45,7 @@ export function HowItWorksSection() {
 
         {/* 2-Column Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          {/* Left Column: Enlarged Live 1-on-1 Class Video Call Mockup Card */}
+          {/* Left Column: Enlarged Live 1 on 1 Class Video Call Mockup Card */}
           <ScrollReveal variant="fade-right" duration={750} delay={150} className="lg:col-span-7 bg-white border border-gray-200/90 rounded-[32px] sm:rounded-[40px] p-6 sm:p-7 md:p-8 shadow-2xl shadow-gray-200/70 hover:shadow-indigo-500/10 transition-shadow duration-500">
             {/* Call Header Bar */}
             <div className="flex items-center justify-between gap-4 mb-6 pb-1">
