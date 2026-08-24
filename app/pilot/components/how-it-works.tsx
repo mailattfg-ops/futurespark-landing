@@ -218,22 +218,12 @@ export function HowItWorksSection() {
                     style={{
                       width: 28,
                       flexShrink: 0,
-                      position: "relative",
                       alignItems: "center",
                       justifyContent: "center",
                       marginLeft: 8,
                       marginRight: 8,
                     }}
                   >
-                    <div
-                      style={{
-                        position: "absolute",
-                        width: "100%",
-                        height: 0,
-                        borderTop: `2px dashed ${step.color}`,
-                        zIndex: 1,
-                      }}
-                    />
                     <div
                       style={{
                         width: 26,
@@ -244,7 +234,6 @@ export function HowItWorksSection() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        zIndex: 2,
                         boxShadow: `0 3px 10px ${step.color}40`,
                         flexShrink: 0,
                       }}

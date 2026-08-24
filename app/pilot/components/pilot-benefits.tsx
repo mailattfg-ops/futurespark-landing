@@ -1,5 +1,6 @@
 "use client";
 
+import { Video, FileText, Sparkles, GraduationCap, Globe } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const COLORS = {
@@ -14,40 +15,34 @@ const COLORS = {
   textMuted: "#6b7280",
 };
 
-const SparkSVG = ({ size = 36, color = COLORS.gold }) => (
-  <svg width={size} height={size} viewBox="0 0 100 100">
-    <circle cx="10" cy="10" r="10" fill={color} />
-  </svg>
-);
-
 export function PilotBenefitsSection() {
   const cards = [
     {
-      icon: <SparkSVG size={36} />,
+      icon: <Video size={36} color={COLORS.gold} strokeWidth={1.8} />,
       title: "Live 1 on 1 Mentorship",
       desc: "Four 60‑minute sessions with a dedicated mentor not pre‑recorded, not group classes. Real conversations, real growth.",
       color: COLORS.gold,
     },
     {
-      icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={COLORS.teal} strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="2" /><line x1="7" y1="8" x2="17" y2="8" /><line x1="7" y1="12" x2="14" y2="12" /><line x1="7" y1="16" x2="11" y2="16" /></svg>,
+      icon: <FileText size={36} color={COLORS.teal} strokeWidth={1.8} />,
       title: "Physical Worksheet Packet",
       desc: "A printed workbook delivered to your door. Kids learn by doing writing, sketching, solving not just watching a screen.",
       color: COLORS.teal,
     },
     {
-      icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={COLORS.purple} strokeWidth="1.8"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" /></svg>,
+      icon: <Sparkles size={36} color={COLORS.purple} strokeWidth={1.8} />,
       title: "Shape the Program",
       desc: "Your honest feedback after each session directly influences what Finquo Junior becomes. You're not just a participant you're a co‑creator.",
       color: COLORS.purple,
     },
     {
-      icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={COLORS.orange} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>,
+      icon: <GraduationCap size={36} color={COLORS.orange} strokeWidth={1.8} />,
       title: "Curated by Experts",
       desc: "Designed by leading educators and domain experts to build practical life skills, decision making, and financial intelligence early.",
       color: COLORS.orange,
     },
     {
-      icon: <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={COLORS.blue} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>,
+      icon: <Globe size={36} color={COLORS.blue} strokeWidth={1.8} />,
       title: "Realworld Training",
       desc: "Hands-on simulations, interactive scenarios, and real-life problem solving that bridge academic knowledge to real-world application.",
       color: COLORS.blue,

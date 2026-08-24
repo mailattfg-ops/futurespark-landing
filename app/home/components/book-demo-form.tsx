@@ -20,15 +20,18 @@ import {
   Star,
   ChevronDown,
 } from "lucide-react";
-import { timezones, getMatchingTimezone, allCountriesList } from "@/lib/timezone-utils";
-
-interface SlotOption {
-  id: string;
-  time: string;
-  mentor: string;
-  scheduleType?: "DEMO";
-  available?: boolean;
-}
+import {
+  timezones,
+  getMatchingTimezone,
+  allCountriesList,
+  isUSALocation,
+  generateQuickDates,
+  getAvailableSlotsForDate,
+  SlotOption,
+  DateOption,
+  defaultTimeSlots,
+} from "@/lib/timezone-utils";
+import { TimezoneSelect } from "@/components/ui/timezone-select";
 
 const countryCodes = [
   { code: "+91", flag: "🇮🇳", label: "India (+91)" },
@@ -45,52 +48,6 @@ const gradeOptions = [
   "Grade 9", "Grade 10", "Grade 11", "Grade 12",
 ];
 
-const defaultTimeSlots: SlotOption[] = [
-  { id: "slot-1", time: "10:00 AM", mentor: "" },
-  { id: "slot-2", time: "11:00 AM", mentor: "" },
-  { id: "slot-3", time: "12:00 PM", mentor: "" },
-  { id: "slot-4", time: "01:00 PM", mentor: "" },
-  { id: "slot-5", time: "02:00 PM", mentor: "" },
-  { id: "slot-6", time: "03:00 PM", mentor: "" },
-  { id: "slot-7", time: "04:00 PM", mentor: "" },
-  { id: "slot-8", time: "05:00 PM", mentor: "" },
-  { id: "slot-9", time: "06:00 PM", mentor: "" },
-  { id: "slot-10", time: "07:00 PM", mentor: "" },
-  { id: "slot-11", time: "08:00 PM", mentor: "" },
-];
-
-interface DateOption {
-  id: string;
-  dayName: string;
-  dayDate: string;
-  fullDateStr: string;
-  weekdayName: string;
-  rawDate: Date;
-  isCustom?: boolean;
-}
-
-function generateQuickDates(): DateOption[] {
-  const dates: DateOption[] = [];
-  const today = new Date();
-  for (let i = 1; i <= 3; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    const dayName = i === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", { weekday: "short" });
-    const dayDate = `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`;
-    const fullDateStr = `${d.getDate() < 10 ? "0" + d.getDate() : d.getDate()}/${d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1
-      }/${d.getFullYear()}`;
-    const weekdayName = d.toLocaleDateString("en-US", { weekday: "long" });
-    dates.push({
-      id: `date-${i - 1}`,
-      dayName,
-      dayDate,
-      fullDateStr,
-      weekdayName,
-      rawDate: d,
-    });
-  }
-  return dates;
-}
 
 export function BookDemoFormSection() {
   const [step, setStep] = useState<1 | 2>(1);
@@ -118,6 +75,11 @@ export function BookDemoFormSection() {
     setTimezone(matched);
   }, [presentCountry, countryCode]);
 
+  // Detect if selected location is USA
+  const isUSA = useMemo(() => {
+    return isUSALocation(presentCountry, countryCode, timezone);
+  }, [presentCountry, countryCode, timezone]);
+
   // Live slots & selection state
   const [slotsList, setSlotsList] = useState<SlotOption[]>(defaultTimeSlots);
   const [selectedSlotTime, setSelectedSlotTime] = useState<string>("10:00 AM");
@@ -128,10 +90,10 @@ export function BookDemoFormSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Dynamic 3 Quick Date Cards (Tomorrow, Day 2, Day 3)
+  // Dynamic 3 Quick Date Cards (Today/Tomorrow/Day 2 for non-USA; Tomorrow/Day 2/Day 3 for USA)
   const quickDateOptions = useMemo<DateOption[]>(() => {
-    return generateQuickDates();
-  }, []);
+    return generateQuickDates(isUSA);
+  }, [isUSA]);
 
   // Custom date object if user picks a date from calendar input
   const customDateOption = useMemo<DateOption | null>(() => {
@@ -164,12 +126,19 @@ export function BookDemoFormSection() {
     return quickDateOptions[idx] || quickDateOptions[0];
   }, [selectedDateId, customDateOption, quickDateOptions]);
 
-  // Slots are fixed — no API fetch needed
-  const loadSlotsForDate = useCallback(async (_targetDate: Date) => {
-    // Always use fixed slots
-    setSlotsList(defaultTimeSlots);
-    setSelectedSlotTime(defaultTimeSlots[0].time);
-  }, []);
+  // Slots calculation based on date, timezone, and USA exclusion
+  const loadSlotsForDate = useCallback(
+    (targetDate: Date) => {
+      const available = getAvailableSlotsForDate(targetDate, timezone, isUSA);
+      setSlotsList(available);
+      if (available.length > 0) {
+        setSelectedSlotTime(available[0].time);
+      } else {
+        setSelectedSlotTime("");
+      }
+    },
+    [timezone, isUSA]
+  );
 
   useEffect(() => {
     if (step === 2 && activeDateObj?.rawDate) {
@@ -241,9 +210,11 @@ export function BookDemoFormSection() {
   // Calculate min date string YYYY-MM-DD for date input
   const minDateStr = useMemo(() => {
     const d = new Date();
-    d.setDate(d.getDate() + 1);
+    if (isUSA) {
+      d.setDate(d.getDate() + 1);
+    }
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  }, []);
+  }, [isUSA]);
 
   return (
     <section id="book-demo" className="w-full bg-gradient-to-b from-[#2E0B73] via-[#3B128E] to-[#250860] py-8 sm:py-10 relative overflow-hidden font-sans scroll-mt-16">
@@ -577,19 +548,7 @@ export function BookDemoFormSection() {
                   <ChevronLeft className="w-3.5 h-3.5 text-gray-600" /> Back
                 </button>
 
-                <div className="flex items-center gap-2 bg-indigo-50 border border-indigo-200 rounded-xl px-3 py-2">
-                  <Globe className="w-4 h-4 text-indigo-600 flex-shrink-0" />
-                  <select
-                    value={timezone}
-                    onChange={(e) => setTimezone(e.target.value)}
-                    aria-label="Select Timezone"
-                    className="bg-transparent text-xs font-bold text-indigo-700 focus:outline-none cursor-pointer"
-                  >
-                    {timezones.map((tz) => (
-                      <option key={tz.value} value={tz.value}>{tz.label}</option>
-                    ))}
-                  </select>
-                </div>
+                <TimezoneSelect value={timezone} onChange={setTimezone} />
               </div>
 
               {/* Quick Date Selection Cards + Calendar Date Picker */}
@@ -675,7 +634,7 @@ export function BookDemoFormSection() {
                   </div>
                 ) : slotsList.length === 0 ? (
                   <div className="py-3 text-center text-xs text-gray-500 bg-amber-50 rounded-xl border border-amber-200 font-medium">
-                    No demo slots published for this date. Please pick another date above.
+                    No demo slots available for today. Please pick another date above.
                   </div>
                 ) : (
                   <div className="grid grid-cols-3 gap-2">
