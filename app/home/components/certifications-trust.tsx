@@ -60,7 +60,7 @@ export function CertificationsTrustSection() {
                 />
               </div>
               <span className="bg-[#00B67A] text-white text-xs sm:text-sm font-extrabold px-5 py-2 rounded-full font-sans shadow-xs mt-3">
-                4.9/5 ★ (2,400+ reviews)
+                5/5 ★
               </span>
             </div>
           </ScrollReveal>

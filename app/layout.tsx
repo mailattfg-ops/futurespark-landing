@@ -65,7 +65,9 @@ export const metadata: Metadata = {
       "A 1-year weekly 1 on 1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits taught by real mentors.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: `${siteUrl}/og-image.jpg`,
+        secureUrl: `${siteUrl}/og-image.jpg`,
+        type: "image/jpeg",
         width: 1200,
         height: 630,
         alt: "Finquo Junior - Financial Literacy & Essential Skills Mentorship",
@@ -77,7 +79,7 @@ export const metadata: Metadata = {
     title: "Finquo Junior | The Skills School Forgets to Teach",
     description:
       "A 1-year weekly 1 on 1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits.",
-    images: ["/og-image.jpg"],
+    images: [`${siteUrl}/og-image.jpg`],
     creator: "@finquojunior",
   },
   alternates: {

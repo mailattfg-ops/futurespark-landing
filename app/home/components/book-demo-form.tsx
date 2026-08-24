@@ -484,9 +484,8 @@ export function BookDemoFormSection() {
                       required
                       value={presentCountry}
                       onChange={(e) => setPresentCountry(e.target.value)}
-                      className={`w-full bg-white border border-gray-200 rounded-xl pl-9 pr-8 py-2 text-xs focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium appearance-none cursor-pointer ${
-                        !presentCountry ? "text-gray-400" : "text-gray-900"
-                      }`}
+                      className={`w-full bg-white border border-gray-200 rounded-xl pl-9 pr-8 py-2 text-xs focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium appearance-none cursor-pointer ${!presentCountry ? "text-gray-400" : "text-gray-900"
+                        }`}
                     >
                       <option value="" disabled className="text-gray-400">
                         Select Present Country
@@ -734,7 +733,7 @@ export function BookDemoFormSection() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
             <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
-            <span className="text-xs font-bold">4.9/5 Parent Rating</span>
+            <span className="text-xs font-bold">5/5 Parent Rating</span>
           </div>
           <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
             <Laptop className="w-3.5 h-3.5 text-indigo-300 flex-shrink-0" />

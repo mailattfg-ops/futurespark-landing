@@ -770,7 +770,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
-              <span className="text-xs font-bold">4.9/5 Parent Rating</span>
+              <span className="text-xs font-bold">5/5 Parent Rating</span>
             </div>
             <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
               <Laptop className="w-3.5 h-3.5 text-indigo-300 flex-shrink-0" />
