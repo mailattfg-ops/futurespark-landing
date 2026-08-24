@@ -34,6 +34,15 @@ export const metadata: Metadata = {
   authors: [{ name: "Finquo Junior", url: siteUrl }],
   creator: "Finquo Junior",
   publisher: "Finquo Junior",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
