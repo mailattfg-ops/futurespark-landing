@@ -151,7 +151,7 @@ export function HeroSection({ onOpenDemoModal }: HeroSectionProps) {
                   fill
                   priority
                   sizes="(min-width: 1536px) 700px, (min-width: 1280px) 630px, (min-width: 1024px) 560px, 100vw"
-                  className="object-contain object-bottom drop-shadow-2xl select-none pointer-events-none scale-115 sm:scale-120 lg:scale-120 xl:scale-125 origin-bottom"
+                  className="object-contain object-bottom drop-shadow-2xl select-none pointer-events-none scale-100 sm:scale-115 lg:scale-120 xl:scale-125 origin-bottom"
                 />
               </div>
             </div>

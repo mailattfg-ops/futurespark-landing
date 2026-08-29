@@ -8,7 +8,7 @@ export function PricingPlansSection() {
   const [billingCycle, setBillingCycle] = useState<"annual" | "monthly">("annual");
 
   const features = [
-    "48 Live 1 on 1 Mentorship Sessions (60 mins each)",
+    "48 Live 1 on 1 Mentorship Sessions (60 minutes each)",
     "Dedicated personal mentor for the entire year",
     "4 Quarterly Physical Learning Boxes delivered home",
     "Curriculum vetted by IIM Faculty",

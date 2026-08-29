@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,8 +8,18 @@ import {
   Calendar, Clock, Video, Laptop, Wifi, User, CheckCircle2,
   AlertCircle, Loader2, Sparkles, ArrowRight, Search,
   Globe, GraduationCap, Timer, BookOpen, CalendarSync, X,
-  Check
+  Check, ChevronLeft
 } from "lucide-react";
+
+import { CustomSelect } from "@/components/ui/custom-select";
+import { TimezoneSelect } from "@/components/ui/timezone-select";
+import {
+  generateQuickDates,
+  getAvailableSlotsForDate,
+  isUSALocation,
+  DateOption,
+  SlotOption,
+} from "@/lib/timezone-utils";
 
 interface LeadData {
   id: string; firstName: string; lastName?: string; email: string; phone: string;
@@ -154,7 +164,7 @@ function DemoClassPortalContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Reschedule state
+  // Reschedule state & 4-Day date selection matching Image 2
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState("");
   const [rescheduleSlot, setRescheduleSlot] = useState("");
@@ -162,6 +172,84 @@ function DemoClassPortalContent() {
   const [rescheduleReason, setRescheduleReason] = useState("");
   const [isSubmittingReschedule, setIsSubmittingReschedule] = useState(false);
   const [rescheduleSuccess, setRescheduleSuccess] = useState<string | null>(null);
+
+  const [selectedDateId, setSelectedDateId] = useState<string>("date-0");
+  const [customDateVal, setCustomDateVal] = useState<string>("");
+  const [showCalendarPicker, setShowCalendarPicker] = useState<boolean>(false);
+
+  // USA location detection for reschedule
+  const isUSA = useMemo(() => {
+    return isUSALocation(undefined, undefined, rescheduleTimezone);
+  }, [rescheduleTimezone]);
+
+  // Generate 4 Quick Dates
+  const quickDates = useMemo<DateOption[]>(() => {
+    return generateQuickDates(isUSA);
+  }, [isUSA]);
+
+  // Custom date picker option
+  const customDateOption = useMemo<DateOption | null>(() => {
+    if (!customDateVal) return null;
+    const dateObj = new Date(customDateVal);
+    const dayName = dateObj.toLocaleDateString("en-US", { weekday: "short" });
+    const monthName = dateObj.toLocaleDateString("en-US", { month: "short" });
+    const dateNum = dateObj.getDate();
+    return {
+      id: "date-custom",
+      dayName,
+      dayDate: `${monthName} ${dateNum}`,
+      fullDateStr: `${dateNum < 10 ? "0" + dateNum : dateNum}/${
+        dateObj.getMonth() + 1 < 10 ? "0" + (dateObj.getMonth() + 1) : dateObj.getMonth() + 1
+      }/${dateObj.getFullYear()}`,
+      weekdayName: dateObj.toLocaleDateString("en-US", { weekday: "long" }),
+      rawDate: dateObj,
+      isCustom: true,
+    };
+  }, [customDateVal]);
+
+  const activeDateObj: DateOption = useMemo(() => {
+    if (selectedDateId === "date-custom" && customDateOption) {
+      return customDateOption;
+    }
+    const idx = parseInt(selectedDateId.replace("date-", ""), 10);
+    return quickDates[idx] || quickDates[0];
+  }, [selectedDateId, customDateOption, quickDates]);
+
+  // Available slots dynamically filtered by 2-hr lead time & 4:00 PM cutoff for Today
+  const availableSlots = useMemo<SlotOption[]>(() => {
+    if (!activeDateObj || !activeDateObj.rawDate) return [];
+    return getAvailableSlotsForDate(activeDateObj.rawDate, rescheduleTimezone, isUSA);
+  }, [activeDateObj, rescheduleTimezone, isUSA]);
+
+  // Auto-sync rescheduleDate when activeDateObj changes
+  useEffect(() => {
+    if (activeDateObj) {
+      setRescheduleDate(activeDateObj.fullDateStr);
+    }
+  }, [activeDateObj]);
+
+  // Auto switch from Today to Tomorrow if Today has 0 available slots
+  useEffect(() => {
+    if (isRescheduleOpen) {
+      const todaySlots = getAvailableSlotsForDate(quickDates[0].rawDate, rescheduleTimezone, isUSA);
+      if (todaySlots.length === 0 && selectedDateId === "date-0") {
+        setSelectedDateId("date-1");
+      }
+    }
+  }, [isRescheduleOpen, rescheduleTimezone, isUSA, quickDates, selectedDateId]);
+
+  // Auto select first slot if available
+  useEffect(() => {
+    if (availableSlots.length > 0 && !availableSlots.some((s) => s.time === rescheduleSlot)) {
+      setRescheduleSlot(availableSlots[0].time);
+    }
+  }, [availableSlots, rescheduleSlot]);
+
+  const minDateStr = useMemo(() => {
+    const d = new Date();
+    if (isUSA) d.setDate(d.getDate() + 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }, [isUSA]);
 
   // Active session display date/time
   const [activeSessionDate, setActiveSessionDate] = useState("25/08/2026");
@@ -315,11 +403,16 @@ function DemoClassPortalContent() {
       {/* Header */}
       <header className="w-full bg-white border-b border-gray-100 py-4 px-4 sm:px-8">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="relative w-8 h-8 flex-shrink-0"><Image src="/finquo-logo.png" alt="FINQUO Junior" fill className="object-contain" /></div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-lg font-black tracking-tight text-gray-900 font-sans">FINQUO</span>
-              <span className="text-[10px] font-bold text-gray-500 -mt-1 tracking-wide">Junior</span>
+          <Link href="/" className="flex items-center group">
+            <div className="relative w-36 h-9 sm:w-44 sm:h-11 flex-shrink-0">
+              <Image
+                src="/finquo-logo-1.png"
+                alt="Finquo Junior Logo"
+                fill
+                sizes="(min-width: 640px) 176px, 144px"
+                className="object-contain object-left"
+                priority
+              />
             </div>
           </Link>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/60">
@@ -524,138 +617,187 @@ function DemoClassPortalContent() {
 
       {/* ── RESCHEDULE REQUEST MODAL ─────────────────────────────────────── */}
       {isRescheduleOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
-            {/* Modal Header */}
-            <div className="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-indigo-50/50 to-white">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                  <CalendarSync className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-extrabold text-gray-900 font-sans">Request Reschedule</h3>
-                  <p className="text-xs text-gray-500">Pick a new date and time for your demo class</p>
-                </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl w-full max-w-xl overflow-hidden flex flex-col max-h-[92vh]">
+            {/* Top Bar Header */}
+            <div className="p-4 sm:p-5 border-b border-gray-100 bg-white flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setIsRescheduleOpen(false)}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-700 transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4 text-gray-600" /> Back
+                </button>
+                <TimezoneSelect value={rescheduleTimezone} onChange={setRescheduleTimezone} />
               </div>
-              <button
-                onClick={() => setIsRescheduleOpen(false)}
-                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition-colors cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
             </div>
 
-            {/* Modal Body */}
-            <form onSubmit={handleRescheduleSubmit} className="p-5 sm:p-6 space-y-5 overflow-y-auto">
-              {/* Select New Date */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-600 flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-indigo-600" /> Select New Date
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {upcomingDates.map(({ dateStr, displayLabel }) => {
-                    const isSelected = rescheduleDate === dateStr;
+            {/* Modal Form Body */}
+            <form onSubmit={handleRescheduleSubmit} className="p-4 sm:p-6 space-y-5 overflow-y-auto flex-1">
+              {/* Select Class Date Section */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-extrabold text-gray-900 font-sans">
+                    Select Class Date
+                  </h4>
+                  <span className="text-[11px] font-medium text-gray-400">
+                    Duration: 60 Minutes
+                  </span>
+                </div>
+
+                {/* 4 Quick Date Cards Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {quickDates.map((d) => {
+                    const isSelected = selectedDateId === d.id;
+                    const daySlots = getAvailableSlotsForDate(d.rawDate, rescheduleTimezone, isUSA);
+                    const isDisabled = daySlots.length === 0;
+
                     return (
                       <button
-                        key={dateStr}
+                        key={d.id}
                         type="button"
-                        onClick={() => setRescheduleDate(dateStr)}
-                        className={`p-2.5 rounded-xl border text-xs font-bold text-left transition-all cursor-pointer ${
-                          isSelected
-                            ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
-                            : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-indigo-50 hover:border-indigo-200"
+                        disabled={isDisabled}
+                        onClick={() => {
+                          setSelectedDateId(d.id);
+                          setRescheduleDate(d.fullDateStr);
+                          if (daySlots.length > 0) {
+                            setRescheduleSlot(daySlots[0].time);
+                          }
+                        }}
+                        className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center min-h-[64px] ${
+                          isDisabled
+                            ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed opacity-60"
+                            : isSelected
+                            ? "bg-indigo-50/90 border-[#6366F1] shadow-xs"
+                            : "bg-white border-gray-200 hover:border-gray-300"
                         }`}
                       >
-                        <div>{displayLabel}</div>
-                        <div className={`text-[10px] font-normal ${isSelected ? "text-indigo-200" : "text-gray-400"}`}>{dateStr}</div>
+                        <span className={`text-xs font-bold ${isSelected ? "text-gray-900" : "text-gray-800"}`}>
+                          {d.dayName}
+                        </span>
+                        <span className={`text-[11px] font-medium mt-0.5 ${isSelected ? "text-indigo-600" : "text-gray-500"}`}>
+                          {d.dayDate}
+                        </span>
+                        {isDisabled && (
+                          <span className="text-[9px] text-red-400 font-bold mt-0.5">No Slots</span>
+                        )}
                       </button>
                     );
                   })}
                 </div>
-              </div>
 
-              {/* Select Time Slot */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-600 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-amber-600" /> Available Time Slots (10 AM – 9 PM)
-                </label>
-                <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1 bg-gray-50 rounded-2xl border border-gray-100">
-                  {TIME_SLOTS.map((slot) => {
-                    const isSelected = rescheduleSlot === slot;
-                    return (
-                      <button
-                        key={slot}
-                        type="button"
-                        onClick={() => setRescheduleSlot(slot)}
-                        className={`p-2.5 rounded-xl border text-[11px] font-extrabold text-center transition-all cursor-pointer ${
-                          isSelected
-                            ? "bg-[#4F46E5] text-white border-[#4F46E5] shadow-sm"
-                            : "bg-white border-gray-200 text-gray-700 hover:bg-indigo-50 hover:border-indigo-200"
-                        }`}
-                      >
-                        {slot}
-                      </button>
-                    );
-                  })}
+                {/* Custom Date Picker Input */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setShowCalendarPicker((prev) => !prev)}
+                    className={`w-full py-2.5 px-3 rounded-2xl border border-dashed text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      selectedDateId === "date-custom"
+                        ? "bg-indigo-50/90 border-[#6366F1] text-indigo-600"
+                        : "bg-gray-50/60 border-gray-300 hover:border-gray-400 text-gray-600"
+                    }`}
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>
+                      {customDateOption ? customDateOption.fullDateStr : "Pick Custom Date from Calendar"}
+                    </span>
+                  </button>
+                  {showCalendarPicker && (
+                    <input
+                      type="date"
+                      min={minDateStr}
+                      value={customDateVal}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val) {
+                          setCustomDateVal(val);
+                          setSelectedDateId("date-custom");
+                          const d = new Date(val);
+                          const formatted = `${d.getDate() < 10 ? "0" + d.getDate() : d.getDate()}/${
+                            d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1
+                          }/${d.getFullYear()}`;
+                          setRescheduleDate(formatted);
+                        }
+                      }}
+                      className="mt-2 w-full p-2 border border-gray-200 rounded-xl text-xs"
+                    />
+                  )}
                 </div>
               </div>
 
-              {/* Timezone */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-600 flex items-center gap-1.5">
-                  <Globe className="w-3.5 h-3.5 text-cyan-600" /> Timezone
-                </label>
-                <select
-                  value={rescheduleTimezone}
-                  onChange={(e) => setRescheduleTimezone(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 focus:outline-none focus:border-indigo-600 transition-all cursor-pointer"
-                >
-                  {TIMEZONE_OPTIONS.map((tz) => (
-                    <option key={tz.value} value={tz.value}>{tz.label}</option>
-                  ))}
-                </select>
+              {/* AVAILABLE TIME SLOTS Section */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs sm:text-sm font-extrabold text-gray-800 uppercase tracking-wide flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                    AVAILABLE TIME SLOTS ({activeDateObj ? activeDateObj.fullDateStr : ""})
+                  </h4>
+                  <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                    Live 1 on 1
+                  </span>
+                </div>
+
+                {availableSlots.length === 0 ? (
+                  <div className="p-4 text-center rounded-2xl bg-amber-50/60 border border-amber-100 text-amber-800 text-xs font-semibold">
+                    No available slots for this date. Please pick another date.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2.5">
+                    {availableSlots.map((slot) => {
+                      const isSelected = rescheduleSlot === slot.time;
+                      return (
+                        <button
+                          key={slot.id || slot.time}
+                          type="button"
+                          onClick={() => setRescheduleSlot(slot.time)}
+                          className={`py-3 px-2 rounded-2xl border text-xs font-extrabold text-center transition-all cursor-pointer ${
+                            isSelected
+                              ? "bg-indigo-50/90 border-[#6366F1] text-indigo-600 shadow-xs"
+                              : "bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          {slot.time}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Optional Reason */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-600">
-                  Reason for Rescheduling (Optional)
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-gray-700 font-sans">
+                  Reason for Rescheduling <span className="text-gray-400 font-normal">(Optional)</span>
                 </label>
                 <input
                   type="text"
                   value={rescheduleReason}
                   onChange={(e) => setRescheduleReason(e.target.value)}
                   placeholder="e.g. Schedule conflict, technical issue..."
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:border-indigo-600 transition-all font-sans"
+                  className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 transition-all font-sans font-medium"
                 />
               </div>
 
-              {/* Footer Actions */}
-              <div className="pt-3 flex items-center justify-end gap-3 border-t border-gray-100">
-                <button
-                  type="button"
-                  onClick={() => setIsRescheduleOpen(false)}
-                  className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-100 text-xs font-bold transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
+              {/* Submit CTA & Footer Note */}
+              <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={!rescheduleDate || !rescheduleSlot || isSubmittingReschedule}
-                  className="px-6 py-2.5 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] disabled:opacity-50 text-white text-xs font-bold shadow-md transition-all flex items-center gap-2 cursor-pointer"
+                  disabled={!rescheduleSlot || availableSlots.length === 0 || isSubmittingReschedule}
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:from-[#4F46E5] hover:to-[#7C3AED] text-white font-extrabold text-sm shadow-md shadow-indigo-500/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {isSubmittingReschedule ? (
                     <>
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      Submitting...
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Rescheduling Class...</span>
                     </>
                   ) : (
-                    <>
-                      <Check className="w-3.5 h-3.5" />
-                      Confirm Reschedule
-                    </>
+                    <span>Confirm Reschedule 🚀</span>
                   )}
                 </button>
+                <p className="text-[10px] text-gray-400 text-center font-medium mt-2">
+                  Note: Laptop or desktop is compulsory for this class
+                </p>
               </div>
             </form>
           </div>

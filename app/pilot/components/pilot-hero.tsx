@@ -193,7 +193,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
               {
                 icon: <Clock size={18} color="#09b1bb" />,
                 num: "60",
-                unit: "Mins",
+                unit: "Minutes",
                 label: "Each Session",
                 gradient: "linear-gradient(135deg, #09b1bb 0%, #3b68fc 100%)",
                 bgColor: "rgba(9, 177, 187, 0.06)",

@@ -169,7 +169,7 @@ export function HowItWorksSection() {
           {steps.map((step, idx) => {
             const isActive = activeStep === idx;
             return (
-              <ScrollReveal key={idx} variant="fade-up" delay={idx * 120} className="flex-1 min-w-[200px] max-w-[260px]">
+              <ScrollReveal key={idx} variant="fade-up" delay={idx * 120} className="flex-1 min-w-[220px] max-w-[250px] w-full">
                 <div style={{ display: "flex", alignItems: "center", width: "100%", height: "100%" }}>
                   <div
                     onClick={() => setActiveStep(idx)}
@@ -178,7 +178,7 @@ export function HowItWorksSection() {
                       background: step.bgColor,
                       borderRadius: 24,
                       padding: "44px 20px 28px",
-                      border: isActive ? `2px solid ${step.color}` : `1.5px solid ${step.borderColor}`,
+                      border: isActive ? `2px solid ${step.color}` : `2px solid ${step.borderColor}`,
                       boxShadow: isActive
                         ? `0 20px 42px -8px ${step.color}45, 0 0 20px ${step.color}20`
                         : "0 10px 30px -10px rgba(0, 0, 0, 0.04)",
@@ -186,7 +186,7 @@ export function HowItWorksSection() {
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      transform: isActive ? "translateY(-10px) scale(1.025)" : "translateY(0) scale(1)",
+                      transform: isActive ? "translateY(-10px)" : "translateY(0)",
                       transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
                       width: "100%",
                       height: "100%",
