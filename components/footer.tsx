@@ -27,7 +27,7 @@ export function Footer() {
             </Link>
 
             <p className="text-xs sm:text-[13px] text-white/85 max-w-full sm:max-w-sm leading-relaxed font-normal pt-1">
-              Raising a financially secure generation through curated, ISO-grade weekly 1 on 1 mentorship sessions for ages 8 to 18.
+              Raising a financially secure generation through curated, ISO-grade weekly 1-on-1 mentorship sessions for ages 8 to 18.
             </p>
 
             {/* Email Contact */}
@@ -56,9 +56,9 @@ export function Footer() {
                 <MapPin className="w-3.5 h-3.5 text-amber-300" />
               </span>
               <div className="space-y-1">
-                <strong className="text-white block font-bold">India Office :</strong>
+                <strong className="text-white block font-bold">India Office:</strong>
                 <p className="leading-relaxed text-white/85">
-                  Tower 2, 2nd Floor, 2/1149/I 94, 95, 96, Hi Lite Business Park, Guruvayurappan College Road, Olavanna, Kozhikode, Kerala - 673014
+                  Tower 2, 2nd Floor, 2/1149/I 94, 95, 96, HiLITE Business Park, Guruvayurappan College Road, Olavanna, Kozhikode, Kerala - 673014
                 </p>
                 <a
                   href="tel:+919745001121"
@@ -75,9 +75,9 @@ export function Footer() {
                 <MapPin className="w-3.5 h-3.5 text-amber-300" />
               </span>
               <div className="space-y-1">
-                <strong className="text-white block font-bold">UAE Office :</strong>
+                <strong className="text-white block font-bold">UAE Office:</strong>
                 <p className="leading-relaxed text-white/85">
-                  World Trade Centre, Latifa Tower - Office No 201 Sheikh Zayed Rd - Opposite Future Museum - Dubai - United Arab Emirates
+                  World Trade Centre, Latifa Tower, Office No. 201, Sheikh Zayed Rd (opposite Museum of the Future), Dubai, United Arab Emirates
                 </p>
               </div>
             </div>

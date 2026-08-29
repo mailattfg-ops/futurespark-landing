@@ -115,7 +115,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
               fontWeight: 450,
             }}
           >
-            You are the chosen one for our pilot program of Finquo Junior <b>Financial Literacy</b> Program. Finquo Junior is a 1 on 1 mentorship program focuses on future ready skills like finance, Communication, Entrepreneurship, AI and Cyberawareness
+            You have been selected for the pilot of the Finquo Junior <b>Financial Literacy</b> Program. Finquo Junior is a 1-on-1 mentorship program that focuses on future-ready skills like Finance, Communication, Entrepreneurship, AI, and Cyber Awareness.
           </p>
         </ScrollReveal>
 
@@ -174,7 +174,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
             {[
               {
                 icon: <Video size={18} color="#714ade" />,
-                num: "1 on 1",
+                num: "1-on-1",
                 unit: "Mentorship",
                 label: "4 Live Sessions",
                 gradient: "linear-gradient(135deg, #714ade 0%, #3b68fc 100%)",
@@ -212,7 +212,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
                 icon: <BookOpen size={18} color="#fdae27" />,
                 num: "Physical",
                 unit: "Worksheet",
-                label: "Deliver at Doorstep",
+                label: "Delivered to Your Doorstep",
                 gradient: "linear-gradient(135deg, #fdae27 0%, #f8721f 100%)",
                 bgColor: "rgba(253, 174, 39, 0.06)",
                 borderColor: "rgba(253, 174, 39, 0.18)",

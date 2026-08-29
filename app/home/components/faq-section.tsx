@@ -15,7 +15,7 @@ const faqs: FAQItem[] = [
       "Our curriculum is designed for children ages 8 to 18. Students are paired with age-appropriate tracks (Junior 8–12 and Senior 13–18) ensuring lessons, simulations, and case studies match their developmental stage.",
   },
   {
-    question: "How does the 1 on 1 mentor matching work?",
+    question: "How does the 1-on-1 mentor matching work?",
     answer:
       "During the free 60-minute demo session, our academic director assesses your child's communication style, interests, and learning speed. We then assign a dedicated mentor who stays with your child for the entire journey.",
   },
@@ -27,12 +27,12 @@ const faqs: FAQItem[] = [
   {
     question: "What if we need to reschedule a weekly session?",
     answer:
-      "You can reschedule any class with a 24-hour notice directly from your parent dashboard with zero penalty.",
+      "You can reschedule any class with 24 hours' notice directly from your parent dashboard, at zero penalty.",
   },
   {
     question: "Is there a free trial before enrolling?",
     answer:
-      "Yes! We offer a 100% free 60-minute diagnostic session with an expert mentor. No credit card or commitment is required.",
+      "Yes! We offer a 100% free 60-minute demo session with an expert mentor. No credit card or commitment is required.",
   },
 ];
 

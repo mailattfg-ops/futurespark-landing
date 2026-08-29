@@ -34,7 +34,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     id: "howItWorks",
     name: "How It Works",
     category: "Curriculum & Value",
-    description: "Live 1 on 1 video call mockup and 4-step learning roadmap.",
+    description: "Live 1-on-1 video call mockup and 4-step learning roadmap.",
     enabled: true,
   },
   {

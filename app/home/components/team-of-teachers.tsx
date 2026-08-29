@@ -15,31 +15,31 @@ const teachersList: TeacherProfile[] = [
   {
     name: "James Kennedy",
     role: "Operations Director",
-    experience: "15+ years of Experience",
+    experience: "15+ years of experience",
     imageSrc: "/teacher-avatar.png",
   },
   {
     name: "Samantha Liu",
     role: "China Relations Manager",
-    experience: "10 years of Experience",
+    experience: "10 years of experience",
     imageSrc: "/teacher-avatar.png",
   },
   {
     name: "Marcus Turing",
     role: "Sourcing Specialist",
-    experience: "8 years of Experience",
+    experience: "8 years of experience",
     imageSrc: "/teacher-avatar.png",
   },
   {
     name: "Emily Clark",
     role: "Logistics Coordinator",
-    experience: "12 years of Experience",
+    experience: "12 years of experience",
     imageSrc: "/teacher-avatar.png",
   },
   {
     name: "Rajesh Patel",
     role: "Marketing Manager",
-    experience: "9 years of Experience",
+    experience: "9 years of experience",
     imageSrc: "/teacher-avatar.png",
     applicantBadge: "26 applicant slot",
   },
@@ -52,7 +52,7 @@ export function TeamOfTeachersSection() {
         {/* Section Heading */}
         <ScrollReveal variant="fade-up" duration={600}>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-8 sm:mb-10 font-sans">
-            Team Of Teachers
+            Team of Teachers
           </h2>
         </ScrollReveal>
 
