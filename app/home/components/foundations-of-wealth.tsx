@@ -9,9 +9,10 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 export function FoundationsOfWealthSection() {
   const features = [
     { icon: <BookOpen className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "40 interactive sessions" },
-    { icon: <UserCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "1 on 1 year long mentorship program" },
-    { icon: <FolderCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "1 Capstone project" },
-    { icon: <PackageCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "Quarterly mailed physical worksheets" },
+    // { icon: <UserCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "1 on 1 year long mentorship program" },
+    { icon: <UserCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "a year long mentorship program" },
+    { icon: <FolderCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "1 capstone project" },
+    { icon: <PackageCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "quarterly mailed physical worksheets" },
   ];
 
   return (

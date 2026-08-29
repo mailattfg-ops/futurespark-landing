@@ -24,11 +24,11 @@ export function BoxUnboxingSection() {
 
           <div className="pt-2">
             <Link
-              href="#book-demo"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
-              }}
+              href=""
+              // onClick={(e) => {
+              //   e.preventDefault();
+              //   document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
+              // }}
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#4F46E5] hover:underline cursor-pointer"
             >
               See what&apos;s inside <ArrowRight className="w-4 h-4" />

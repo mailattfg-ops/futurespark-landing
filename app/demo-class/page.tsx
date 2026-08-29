@@ -198,9 +198,8 @@ function DemoClassPortalContent() {
       id: "date-custom",
       dayName,
       dayDate: `${monthName} ${dateNum}`,
-      fullDateStr: `${dateNum < 10 ? "0" + dateNum : dateNum}/${
-        dateObj.getMonth() + 1 < 10 ? "0" + (dateObj.getMonth() + 1) : dateObj.getMonth() + 1
-      }/${dateObj.getFullYear()}`,
+      fullDateStr: `${dateNum < 10 ? "0" + dateNum : dateNum}/${dateObj.getMonth() + 1 < 10 ? "0" + (dateObj.getMonth() + 1) : dateObj.getMonth() + 1
+        }/${dateObj.getFullYear()}`,
       weekdayName: dateObj.toLocaleDateString("en-US", { weekday: "long" }),
       rawDate: dateObj,
       isCustom: true,
@@ -378,7 +377,7 @@ function DemoClassPortalContent() {
           preferredTime: rescheduleSlot,
           notes: payload.notes,
         }),
-      }).catch(() => {});
+      }).catch(() => { });
 
       setActiveSessionDate(rescheduleDate);
       setActivePreferredTime(rescheduleSlot);
@@ -480,7 +479,7 @@ function DemoClassPortalContent() {
                   <Sparkles className="w-3.5 h-3.5 text-amber-300" /> 1 on 1 Interactive Demo Session
                 </div>
                 <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mt-2">
-                  Welcome, {parentName} &amp; <span className="text-amber-300">{studentName}</span>!
+                  Welcome, {parentName} &amp; <span className="text-amber-300">{studentName}</span> !
                 </h1>
                 <p className="text-sm text-indigo-100 max-w-lg mx-auto leading-relaxed">
                   Your child&apos;s live financial literacy demo class is confirmed. All details are below.
@@ -561,29 +560,29 @@ function DemoClassPortalContent() {
                 {/* Date */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1">
                   <div className="flex items-center gap-1.5 text-indigo-600"><Calendar className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Session Date</span></div>
-                  <p className="text-xl font-extrabold text-gray-900">{activeSessionDate}</p>
+                  <p className="text-md md:text-xl font-extrabold text-gray-900">{activeSessionDate}</p>
                 </div>
                 {/* Time */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1 min-w-0">
                   <div className="flex items-center gap-1.5 text-amber-600"><Clock className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Session Time</span></div>
-                  <p className="text-sm font-extrabold text-gray-900 leading-tight tracking-tight whitespace-nowrap">{activePreferredTime}</p>
+                  <p className="text-md md:text-xl font-extrabold text-gray-900">{activePreferredTime}</p>
                 </div>
                 {/* Student */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1">
                   <div className="flex items-center gap-1.5 text-emerald-600"><User className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Student</span></div>
-                  <p className="text-xl font-extrabold text-gray-900 capitalize">{studentName}</p>
+                  <p className="text-md md:text-xl font-extrabold text-gray-900 capitalize">{studentName}</p>
                 </div>
                 {/* Grade or Timezone */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1">
                   {studentGrade ? (
                     <>
                       <div className="flex items-center gap-1.5 text-purple-600"><GraduationCap className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Grade</span></div>
-                      <p className="text-xl font-extrabold text-gray-900">{studentGrade}</p>
+                      <p className="text-md md:text-xl font-extrabold text-gray-900">{studentGrade}</p>
                     </>
                   ) : (
                     <>
                       <div className="flex items-center gap-1.5 text-cyan-600"><Globe className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Timezone</span></div>
-                      <p className="text-lg font-extrabold text-gray-900">{timezone}</p>
+                      <p className="text-md md:text-lg font-extrabold text-gray-900">{timezone}</p>
                     </>
                   )}
                 </div>
@@ -665,13 +664,12 @@ function DemoClassPortalContent() {
                             setRescheduleSlot(daySlots[0].time);
                           }
                         }}
-                        className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center min-h-[64px] ${
-                          isDisabled
-                            ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed opacity-60"
-                            : isSelected
+                        className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center min-h-[64px] ${isDisabled
+                          ? "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed opacity-60"
+                          : isSelected
                             ? "bg-indigo-50/90 border-[#6366F1] shadow-xs"
                             : "bg-white border-gray-200 hover:border-gray-300"
-                        }`}
+                          }`}
                       >
                         <span className={`text-xs font-bold ${isSelected ? "text-gray-900" : "text-gray-800"}`}>
                           {d.dayName}
@@ -692,11 +690,10 @@ function DemoClassPortalContent() {
                   <button
                     type="button"
                     onClick={() => setShowCalendarPicker((prev) => !prev)}
-                    className={`w-full py-2.5 px-3 rounded-2xl border border-dashed text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
-                      selectedDateId === "date-custom"
-                        ? "bg-indigo-50/90 border-[#6366F1] text-indigo-600"
-                        : "bg-gray-50/60 border-gray-300 hover:border-gray-400 text-gray-600"
-                    }`}
+                    className={`w-full py-2.5 px-3 rounded-2xl border border-dashed text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${selectedDateId === "date-custom"
+                      ? "bg-indigo-50/90 border-[#6366F1] text-indigo-600"
+                      : "bg-gray-50/60 border-gray-300 hover:border-gray-400 text-gray-600"
+                      }`}
                   >
                     <Calendar className="w-3.5 h-3.5 text-indigo-600" />
                     <span>
@@ -714,9 +711,8 @@ function DemoClassPortalContent() {
                           setCustomDateVal(val);
                           setSelectedDateId("date-custom");
                           const d = new Date(val);
-                          const formatted = `${d.getDate() < 10 ? "0" + d.getDate() : d.getDate()}/${
-                            d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1
-                          }/${d.getFullYear()}`;
+                          const formatted = `${d.getDate() < 10 ? "0" + d.getDate() : d.getDate()}/${d.getMonth() + 1 < 10 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1
+                            }/${d.getFullYear()}`;
                           setRescheduleDate(formatted);
                         }
                       }}
@@ -751,11 +747,10 @@ function DemoClassPortalContent() {
                           key={slot.id || slot.time}
                           type="button"
                           onClick={() => setRescheduleSlot(slot.time)}
-                          className={`py-3 px-2 rounded-2xl border text-xs font-extrabold text-center transition-all cursor-pointer ${
-                            isSelected
-                              ? "bg-indigo-50/90 border-[#6366F1] text-indigo-600 shadow-xs"
-                              : "bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
-                          }`}
+                          className={`py-3 px-2 rounded-2xl border text-xs font-extrabold text-center transition-all cursor-pointer ${isSelected
+                            ? "bg-indigo-50/90 border-[#6366F1] text-indigo-600 shadow-xs"
+                            : "bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                            }`}
                         >
                           {slot.time}
                         </button>
@@ -768,13 +763,13 @@ function DemoClassPortalContent() {
               {/* Optional Reason */}
               <div className="space-y-1.5">
                 <label className="text-[11px] font-bold text-gray-700 font-sans">
-                  Reason for Rescheduling <span className="text-gray-400 font-normal">(Optional)</span>
+                  Reason for Rescheduling&nbsp;<span className="text-gray-400 font-normal">(Optional)</span>
                 </label>
                 <input
                   type="text"
                   value={rescheduleReason}
                   onChange={(e) => setRescheduleReason(e.target.value)}
-                  placeholder="e.g. Schedule conflict, technical issue..."
+                  placeholder="e.g. Schedule Conflict, Technical Issue..."
                   className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 transition-all font-sans font-medium"
                 />
               </div>
