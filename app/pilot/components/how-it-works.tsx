@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
@@ -14,6 +15,8 @@ const COLORS = {
 };
 
 export function HowItWorksSection() {
+  const [activeStep, setActiveStep] = useState(0);
+
   const steps = [
     {
       step: "1",
@@ -82,6 +85,14 @@ export function HowItWorksSection() {
     },
   ];
 
+  // Default continuous auto-play step cycling effect (2.8 seconds per step)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % steps.length);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, [steps.length]);
+
   return (
     <section
       style={{
@@ -91,6 +102,35 @@ export function HowItWorksSection() {
         overflow: "hidden",
       }}
     >
+      <style>{`
+        @keyframes stepRipple {
+          0% {
+            transform: translate(-50%, -50%) scale(0.85);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translate(-50%, -50%) scale(1.8);
+            opacity: 0;
+          }
+        }
+        @keyframes stepIconFloat {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+        @keyframes arrowFlowNudge {
+          0%, 100% {
+            transform: translateX(0) scale(1);
+          }
+          50% {
+            transform: translateX(4px) scale(1.12);
+          }
+        }
+      `}</style>
+
       {/* How It Works Ambient Orbs */}
       <div style={{ position: "absolute", top: "-80px", left: "50%", transform: "translateX(-50%)", width: "1000px", height: "400px", background: "radial-gradient(ellipse at center, rgba(59, 104, 252, 0.20) 0%, rgba(113, 74, 222, 0.12) 45%, rgba(255,255,255,0) 75%)", pointerEvents: "none", filter: "blur(60px)", zIndex: 0 }} />
       <div style={{ position: "absolute", top: "25%", left: "1%", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(253, 174, 39, 0.25) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(48px)", zIndex: 0 }} />
@@ -126,125 +166,169 @@ export function HowItWorksSection() {
             margin: "0 auto",
           }}
         >
-          {steps.map((step, idx) => (
-            <ScrollReveal key={idx} variant="fade-up" delay={idx * 120} className="flex-1 min-w-[200px] max-w-[260px]">
-              <div style={{ display: "flex", alignItems: "center", width: "100%", height: "100%" }}>
-                <div
-                  style={{
-                    position: "relative",
-                    background: step.bgColor,
-                    borderRadius: 24,
-                    padding: "44px 20px 28px",
-                    border: `1.5px solid ${step.borderColor}`,
-                    boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.04)",
-                    textAlign: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                    width: "100%",
-                    height: "100%",
-                    boxSizing: "border-box",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(-6px)";
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = `0 16px 36px -8px ${step.color}25`;
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = "0 10px 30px -10px rgba(0, 0, 0, 0.04)";
-                  }}
-                >
+          {steps.map((step, idx) => {
+            const isActive = activeStep === idx;
+            return (
+              <ScrollReveal key={idx} variant="fade-up" delay={idx * 120} className="flex-1 min-w-[200px] max-w-[260px]">
+                <div style={{ display: "flex", alignItems: "center", width: "100%", height: "100%" }}>
                   <div
+                    onClick={() => setActiveStep(idx)}
                     style={{
-                      position: "absolute",
-                      top: -20,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      width: 40,
-                      height: 40,
-                      borderRadius: "50%",
-                      background: step.color,
-                      color: "#ffffff",
-                      fontWeight: 900,
-                      fontSize: 18,
+                      position: "relative",
+                      background: step.bgColor,
+                      borderRadius: 24,
+                      padding: "44px 20px 28px",
+                      border: isActive ? `2px solid ${step.color}` : `1.5px solid ${step.borderColor}`,
+                      boxShadow: isActive
+                        ? `0 20px 42px -8px ${step.color}45, 0 0 20px ${step.color}20`
+                        : "0 10px 30px -10px rgba(0, 0, 0, 0.04)",
+                      textAlign: "center",
                       display: "flex",
+                      flexDirection: "column",
                       alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: `0 4px 14px ${step.color}40`,
-                      zIndex: 2,
+                      transform: isActive ? "translateY(-10px) scale(1.025)" : "translateY(0) scale(1)",
+                      transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                      width: "100%",
+                      height: "100%",
+                      boxSizing: "border-box",
+                      cursor: "pointer",
                     }}
                   >
-                    {step.step}
-                  </div>
+                    {/* Top Glow Accent Line for Active Step */}
+                    {isActive && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: "20%",
+                          right: "20%",
+                          height: 3,
+                          borderRadius: "0 0 4px 4px",
+                          background: `linear-gradient(90deg, transparent, ${step.color}, transparent)`,
+                          boxShadow: `0 2px 10px ${step.color}`,
+                        }}
+                      />
+                    )}
 
-                  <div
-                    style={{
-                      width: 68,
-                      height: 68,
-                      borderRadius: "50%",
-                      background: step.iconBg,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: 18,
-                    }}
-                  >
-                    {step.icon}
-                  </div>
+                    {/* Step Ripple Ring on Active */}
+                    {isActive && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: -20,
+                          left: "50%",
+                          width: 44,
+                          height: 44,
+                          borderRadius: "50%",
+                          border: `2px solid ${step.color}`,
+                          animation: "stepRipple 2s cubic-bezier(0, 0.2, 0.8, 1) infinite",
+                          pointerEvents: "none",
+                        }}
+                      />
+                    )}
 
-                  <h3 style={{ fontSize: 18, fontWeight: 800, color: COLORS.dark, margin: "0 0 8px" }}>
-                    {step.title}
-                  </h3>
-                  <div
-                    style={{
-                      width: 28,
-                      height: 3,
-                      borderRadius: 2,
-                      background: step.color,
-                      opacity: 0.6,
-                      marginBottom: 12,
-                    }}
-                  />
-
-                  <p style={{ fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.55, margin: 0 }}>
-                    {step.desc}
-                  </p>
-                </div>
-
-                {idx < 3 && (
-                  <div
-                    className="hidden xl:flex"
-                    style={{
-                      width: 28,
-                      flexShrink: 0,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginLeft: 8,
-                      marginRight: 8,
-                    }}
-                  >
+                    {/* Step Number Circle Badge */}
                     <div
                       style={{
-                        width: 26,
-                        height: 26,
+                        position: "absolute",
+                        top: -20,
+                        left: "50%",
+                        transform: isActive ? "translateX(-50%) scale(1.15)" : "translateX(-50%) scale(1)",
+                        width: 40,
+                        height: 40,
                         borderRadius: "50%",
                         background: step.color,
                         color: "#ffffff",
+                        fontWeight: 900,
+                        fontSize: 18,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        boxShadow: `0 3px 10px ${step.color}40`,
-                        flexShrink: 0,
+                        boxShadow: isActive ? `0 6px 20px ${step.color}70` : `0 4px 14px ${step.color}40`,
+                        zIndex: 2,
+                        transition: "transform 0.3s ease, box-shadow 0.3s ease",
                       }}
                     >
-                      <ArrowRight size={13} strokeWidth={3} />
+                      {step.step}
                     </div>
+
+                    {/* Icon Container with Float Animation when Active */}
+                    <div
+                      style={{
+                        width: 68,
+                        height: 68,
+                        borderRadius: "50%",
+                        background: step.iconBg,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginBottom: 18,
+                        animation: isActive ? "stepIconFloat 2.5s ease-in-out infinite" : "none",
+                        boxShadow: isActive ? `0 8px 20px ${step.color}25` : "none",
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      {step.icon}
+                    </div>
+
+                    <h3 style={{ fontSize: 18, fontWeight: 800, color: COLORS.dark, margin: "0 0 8px" }}>
+                      {step.title}
+                    </h3>
+                    <div
+                      style={{
+                        width: isActive ? 48 : 28,
+                        height: 3,
+                        borderRadius: 2,
+                        background: step.color,
+                        opacity: isActive ? 1 : 0.6,
+                        marginBottom: 12,
+                        transition: "all 0.3s ease",
+                        boxShadow: isActive ? `0 0 8px ${step.color}` : "none",
+                      }}
+                    />
+
+                    <p style={{ fontSize: 13.5, color: COLORS.textMuted, lineHeight: 1.55, margin: 0 }}>
+                      {step.desc}
+                    </p>
                   </div>
-                )}
-              </div>
-            </ScrollReveal>
-          ))}
+
+                  {/* Flow Arrow Connector between steps */}
+                  {idx < 3 && (
+                    <div
+                      className="hidden xl:flex"
+                      style={{
+                        width: 28,
+                        flexShrink: 0,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginLeft: 8,
+                        marginRight: 8,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 26,
+                          height: 26,
+                          borderRadius: "50%",
+                          background: (activeStep === idx || activeStep === idx + 1) ? step.color : "rgba(156, 163, 175, 0.3)",
+                          color: "#ffffff",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: (activeStep === idx || activeStep === idx + 1) ? `0 4px 14px ${step.color}60` : "none",
+                          flexShrink: 0,
+                          animation: activeStep === idx ? "arrowFlowNudge 1.5s ease-in-out infinite" : "none",
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        <ArrowRight size={13} strokeWidth={3} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </div>
 
         {/* Bottom Trust & Impact Banner */}
