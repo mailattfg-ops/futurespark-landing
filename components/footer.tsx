@@ -6,27 +6,27 @@ import { Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-[#371085] text-white pt-16 sm:pt-20 pb-10 sm:pb-12 relative overflow-hidden font-sans">
+    <footer className="w-full bg-[#371085] text-white pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 relative overflow-hidden font-sans">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top 4-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12">
+        {/* Top 3-Column Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-8 pb-8 sm:pb-12">
           {/* Column 1: Brand & Mission (span 4) */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="inline-block">
-              <div className="relative w-40 h-10">
+              <div className="relative w-36 h-9 sm:w-40 sm:h-10">
                 <Image
                   src="/finquo-footer-logo.png"
                   alt="Finquo Junior"
                   fill
                   priority
                   unoptimized
-                  sizes="160px"
+                  sizes="(max-width: 640px) 144px, 160px"
                   className="object-contain object-left"
                 />
               </div>
             </Link>
 
-            <p className="text-xs sm:text-[13px] text-white/85 max-w-sm leading-relaxed font-normal pt-1">
+            <p className="text-xs sm:text-[13px] text-white/85 max-w-full sm:max-w-sm leading-relaxed font-normal pt-1">
               Raising a financially secure generation through curated, ISO-grade weekly 1 on 1 mentorship sessions for ages 8 to 18.
             </p>
 
@@ -34,88 +34,84 @@ export function Footer() {
             <div className="pt-1">
               <a
                 href="mailto:info@finquo.ai"
-                className="inline-flex items-center gap-2.5 w-fit text-xs sm:text-[13px] text-white/85 hover:text-white font-medium transition-colors"
+                className="inline-flex items-center gap-2.5 text-xs sm:text-[13px] text-white/85 hover:text-white font-medium transition-colors group"
               >
-                <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-3.5 h-3.5" />
+                <span className="w-7 h-7 rounded-full bg-white/15 group-hover:bg-white/25 flex items-center justify-center flex-shrink-0 transition-colors">
+                  <Mail className="w-3.5 h-3.5 text-amber-300" />
                 </span>
-                info@finquo.ai
+                <span>info@finquo.ai</span>
               </a>
             </div>
           </div>
 
           {/* Column 2: OFFICE ADDRESSES (span 4) */}
-          <div className="lg:col-span-4 space-y-4">
-            <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-4">
+          <div className="lg:col-span-4 space-y-5">
+            <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-3 sm:mb-4">
               OUR OFFICES
-            </h4>
+            </h3>
 
-            {/* Calicut Office */}
-            <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-white/85">
+            {/* India Office */}
+            <div className="flex items-start gap-3 text-xs sm:text-[13px] text-white/85">
               <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <MapPin className="w-3.5 h-3.5 text-amber-300" />
               </span>
-              <div>
+              <div className="space-y-1">
                 <strong className="text-white block font-bold">India Office :</strong>
-                <span className="leading-relaxed block">
-                  Tower 2, 2nd Floor, 2/1149/I 94, 95, 96,<br />
-                  Hi Lite Business Park, Guruvayurappan College Road,<br />
-                  Olavanna, Kozhikode, Kerala - 673014
-                </span>
-                <a href="tel:+919745001121" className="flex items-center gap-1 mt-1.5 text-amber-300 hover:underline font-semibold">
-                  <Phone className="w-3 h-3" /> +91 97450 01121
+                <p className="leading-relaxed text-white/85">
+                  Tower 2, 2nd Floor, 2/1149/I 94, 95, 96, Hi Lite Business Park, Guruvayurappan College Road, Olavanna, Kozhikode, Kerala - 673014
+                </p>
+                <a
+                  href="tel:+919745001121"
+                  className="inline-flex items-center gap-1.5 pt-0.5 text-amber-300 hover:text-amber-200 hover:underline font-semibold transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5" /> +91 97450 01121
                 </a>
               </div>
             </div>
 
-            {/* Dubai Office */}
-            <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-white/85 pt-1">
+            {/* UAE Office */}
+            <div className="flex items-start gap-3 text-xs sm:text-[13px] text-white/85">
               <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <MapPin className="w-3.5 h-3.5 text-amber-300" />
               </span>
-              <div>
+              <div className="space-y-1">
                 <strong className="text-white block font-bold">UAE Office :</strong>
-                <span className="leading-relaxed block">
-                  World Trade Centre, Latifa Tower - Office<br />
-                  No 201 Sheikh Zayed Rd - Opposite Future<br />
-                  Museum - Dubai - United Arab Emirates
-                </span>
-                {/* <a href="tel:+97143218899" className="flex items-center gap-1 mt-1 text-amber-300 hover:underline font-semibold">
-                  <Phone className="w-3 h-3" /> +971 4 321 8899
-                </a> */}
+                <p className="leading-relaxed text-white/85">
+                  World Trade Centre, Latifa Tower - Office No 201 Sheikh Zayed Rd - Opposite Future Museum - Dubai - United Arab Emirates
+                </p>
               </div>
             </div>
           </div>
 
           {/* Column 3: NAVIGATION (span 4) */}
-          <div className="lg:col-span-4 flex flex-col justify-between">
+          <div className="lg:col-span-4 flex flex-col justify-between space-y-6 lg:space-y-0">
             <div>
-              <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-4">
+              <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-3 sm:mb-4">
                 EXPLORE & RESOURCES
-              </h4>
-              <ul className="grid grid-cols-2 gap-3 text-xs sm:text-[13px] text-white/80 font-medium">
+              </h3>
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 sm:gap-y-3 text-xs sm:text-[13px] text-white/80 font-medium">
                 <li>
-                  <Link href="/curriculum" className="hover:text-white transition-colors">
+                  <Link href="/curriculum" className="hover:text-white transition-colors block py-0.5">
                     Curriculum Details
                   </Link>
                 </li>
                 <li>
-                  <Link href="/teachers" className="hover:text-white transition-colors">
+                  <Link href="/teachers" className="hover:text-white transition-colors block py-0.5">
                     Our Teachers
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about-us" className="hover:text-white transition-colors">
+                  <Link href="/about-us" className="hover:text-white transition-colors block py-0.5">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="#book-demo" className="hover:text-white transition-colors">
+                  <Link href="#book-demo" className="hover:text-white transition-colors block py-0.5">
                     Schedule Demo
                   </Link>
                 </li>
-                <li>
-                  <Link href="#faq" className="hover:text-white transition-colors">
+                <li className="col-span-2 sm:col-span-1">
+                  <Link href="#faq" className="hover:text-white transition-colors block py-0.5">
                     Help Center / FAQ
                   </Link>
                 </li>
@@ -123,14 +119,14 @@ export function Footer() {
             </div>
 
             {/* CTA Button */}
-            <div className="pt-6">
+            <div className="pt-2 sm:pt-4">
               <Link
                 href="#book-demo"
                 onClick={(e) => {
                   e.preventDefault();
                   document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="inline-flex items-center justify-center bg-white text-[#371085] hover:bg-gray-100 text-xs sm:text-[13px] font-extrabold px-6 py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95"
+                className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-[#371085] hover:bg-amber-300 hover:text-[#280a66] text-xs sm:text-[13px] font-extrabold px-6 py-3 sm:py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95 text-center"
               >
                 Join Now
               </Link>
@@ -142,14 +138,14 @@ export function Footer() {
         <div className="border-t border-white/20 my-6 sm:my-8" />
 
         {/* Bottom Bar: Socials + Copyright */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-white/80">
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 text-xs text-white/80 text-center sm:text-left">
           {/* Copyright */}
-          <span className="text-[11px] text-white/70 font-normal">
+          <span className="text-[11px] sm:text-xs text-white/70 font-normal">
             © 2026 Finquo Junior. All rights reserved.
           </span>
 
           {/* Socials Icons */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-4">
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/90">
               SOCIALS
             </span>

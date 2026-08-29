@@ -297,7 +297,7 @@ export function generateQuickDates(isUSA = false): DateOption[] {
   const today = new Date();
   const startOffset = isUSA ? 1 : 0;
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     const offset = startOffset + i;
     const d = new Date(today);
     d.setDate(today.getDate() + offset);

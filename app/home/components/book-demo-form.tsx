@@ -558,7 +558,7 @@ export function BookDemoFormSection() {
                   <span className="text-[10px] text-gray-400">Duration: 60 Mins</span>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                   {quickDateOptions.map((opt) => {
                     const isSelected = selectedDateId === opt.id;
                     return (
@@ -566,15 +566,15 @@ export function BookDemoFormSection() {
                         key={opt.id}
                         type="button"
                         onClick={() => setSelectedDateId(opt.id)}
-                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${isSelected
+                        className={`py-1.5 px-1 sm:p-2 rounded-xl border text-center transition-all cursor-pointer ${isSelected
                           ? "border-[#6366F1] bg-indigo-50/80 shadow-xs ring-2 ring-[#6366F1]/20 font-bold"
                           : "border-gray-200 hover:border-gray-300 bg-white"
                           }`}
                       >
-                        <span className="block text-xs font-bold text-gray-900">
+                        <span className="block text-[11px] sm:text-xs font-bold text-gray-900 truncate">
                           {opt.dayName}
                         </span>
-                        <span className="block text-[10px] text-gray-500 font-medium mt-0.5">
+                        <span className="block text-[9px] sm:text-[10px] text-gray-500 font-medium mt-0.5 whitespace-nowrap">
                           {opt.dayDate}
                         </span>
                       </button>
@@ -689,7 +689,7 @@ export function BookDemoFormSection() {
         </div>
 
         {/* Compact Trust Badges Row Below Card */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
             <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
             <span className="text-xs font-bold">5/5 Parent Rating</span>

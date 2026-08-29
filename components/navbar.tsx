@@ -157,7 +157,7 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
 
       {/* Top Left Corner Red Ribbon - Pilot Version (Hidden on /pilot page) */}
       {!isPilotPage && (
-        <div className="fixed top-0 left-0 z-[60] w-24 h-24 sm:w-32 sm:h-32 overflow-hidden pointer-events-none">
+        <div className="fixed top-0 left-0 z-45 w-24 h-24 sm:w-32 sm:h-32 overflow-hidden pointer-events-none">
           <div className="absolute top-3.5 sm:top-5 -left-8 sm:-left-10 w-32 sm:w-40 py-0.5 sm:py-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-wider text-center -rotate-45 shadow-md border-y border-white/30 select-none">
             Pilot Version
           </div>
