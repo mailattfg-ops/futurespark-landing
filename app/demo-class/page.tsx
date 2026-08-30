@@ -383,7 +383,7 @@ function DemoClassPortalContent() {
           <Link href="/" className="flex items-center group">
             <div className="relative w-36 h-9 sm:w-44 sm:h-11 flex-shrink-0">
               <Image
-                src="/finquo-logo-1.png"
+                src="/newlogo.png"
                 alt="Finquo Junior Logo"
                 fill
                 sizes="(min-width: 640px) 176px, 144px"

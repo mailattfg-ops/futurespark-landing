@@ -44,7 +44,7 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
               {/* Finquo Full Logo */}
               <div className="relative w-32 h-8 sm:w-44 sm:h-11 flex-shrink-0">
                 <Image
-                  src="/finquo-logo-1.png"
+                  src="/newlogo.png"
                   alt="Finquo Junior Logo"
                   fill
                   sizes="(min-width: 640px) 176px, 128px"

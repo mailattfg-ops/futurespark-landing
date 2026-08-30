@@ -7,7 +7,7 @@ export default function NotFound() {
       <div className="space-y-6 max-w-md mx-auto">
         <Link href="/" className="inline-block">
           <Image
-            src="/finquo-logo-1.png"
+            src="/newlogo.png"
             alt="Finquo Junior Logo"
             width={180}
             height={44}
