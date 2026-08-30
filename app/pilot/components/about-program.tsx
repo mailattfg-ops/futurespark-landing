@@ -17,7 +17,7 @@ export function AboutProgramSection() {
     { title: "Physical worksheets", icon: "📚", color: "#3b68fc" },
     { title: "Interactive virtual activities", icon: "💻", color: "#f8721f" },
     { title: "Practical exercises and challenges", icon: "🎯", color: "#09b1bb" },
-    { title: "Personalized 1 on 1 mentor guidance", icon: "👤", color: "#714ade" },
+    { title: "Personalized 1-on-1 mentor guidance", icon: "👤", color: "#714ade" },
     { title: "Student progress report after every session", icon: "📊", color: "#3b68fc" },
   ];
 
@@ -131,7 +131,7 @@ export function AboutProgramSection() {
           </ScrollReveal>
         </div>
 
-        {/* 1 on 1 Dedicated Mentor Banner */}
+        {/* 1-on-1 Dedicated Mentor Banner */}
         <ScrollReveal variant="zoom-in" delay={250}>
           <div
             style={{
@@ -163,16 +163,16 @@ export function AboutProgramSection() {
               1:1
             </div>
             <p style={{ fontSize: 16, color: COLORS.dark, fontWeight: 700, margin: 0, lineHeight: 1.6, flex: 1 }}>
-              Each child is assigned a dedicated mentor for 1 on 1 mentoring, with every session lasting 60 minutes and designed around practical, engaging learning.
+              Each child is assigned a dedicated mentor for 1-on-1 mentoring, with every session lasting 60 minutes and designed around practical, engaging learning.
             </p>
           </div>
         </ScrollReveal>
 
-        {/* "Every session includes" Section */}
+        {/* "Every Session Includes" Section */}
         <div style={{ marginBottom: 56 }}>
           <ScrollReveal variant="fade-up">
             <h3 style={{ fontSize: 26, fontWeight: 900, color: COLORS.dark, margin: "0 0 28px", textAlign: "center" }}>
-              Every session includes
+              Every Session Includes
             </h3>
           </ScrollReveal>
 

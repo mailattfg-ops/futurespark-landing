@@ -47,7 +47,7 @@ export function HeroSection({ onOpenDemoModal }: HeroSectionProps) {
             <p className="text-gray-700 text-sm sm:text-base md:text-[16px] lg:text-[17px] font-normal leading-relaxed max-w-lg mb-6 sm:mb-8">
               A one-year mentorship for ages 8 to 18. Money, business, communication,
               tech, and the internet, taught weekly by mentors who actually teach
-              it well.
+              them well.
             </p>
 
             {/* CTA Button & Trustpilot Badge */}

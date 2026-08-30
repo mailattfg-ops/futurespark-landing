@@ -91,6 +91,13 @@ function parseTargetSessionTime(sessionDateStr: string, timeSlotStr: string): Da
   } catch { return null; }
 }
 
+// "29/08/2026" -> "Sat, Aug 29, 2026"; non-date strings pass through unchanged
+function formatSessionDate(ddmmyyyy: string): string {
+  const m = ddmmyyyy.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (!m) return ddmmyyyy;
+  return new Date(+m[3], +m[2] - 1, +m[1]).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+}
+
 function CountdownBlock({ sessionDate, preferredTime, scheduledClass }: {
   sessionDate: string; preferredTime: string; scheduledClass?: { startTime?: string };
 }) {
@@ -101,7 +108,7 @@ function CountdownBlock({ sessionDate, preferredTime, scheduledClass }: {
     function tick() {
       if (!target) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
       const diffMs = target.getTime() - Date.now();
-      if (diffMs <= 10 * 60 * 1000) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
+      if (diffMs <= 30 * 60 * 1000) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
       const s = Math.floor(diffMs / 1000);
       setTimeLeft({ days: Math.floor(s / 86400), hours: Math.floor((s % 86400) / 3600), minutes: Math.floor((s % 3600) / 60), seconds: s % 60, isReady: false });
     }
@@ -131,7 +138,7 @@ function JoinButton({ sessionDate, preferredTime, scheduledClass, meetUrl }: {
   useEffect(() => {
     let target = parseTargetSessionTime(sessionDate, preferredTime);
     if (!target && scheduledClass?.startTime) target = new Date(scheduledClass.startTime);
-    function check() { if (!target) { setIsReady(true); return; } setIsReady(target.getTime() - Date.now() <= 10 * 60 * 1000); }
+    function check() { if (!target) { setIsReady(true); return; } setIsReady(target.getTime() - Date.now() <= 30 * 60 * 1000); }
     check(); const id = setInterval(check, 5000); return () => clearInterval(id);
   }, [sessionDate, preferredTime, scheduledClass]);
   if (isReady && meetUrl) {
@@ -148,7 +155,7 @@ function JoinButton({ sessionDate, preferredTime, scheduledClass, meetUrl }: {
         <Video className="w-5 h-5" /> Join Meeting
       </button>
       <div className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 rounded-lg bg-gray-900/90 text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-lg z-50">
-        Unlocks 10 minutes before your session starts
+        Unlocks 30 minutes before your session starts
         <div className="absolute left-1/2 -translate-x-1/2 top-full border-4 border-transparent border-t-gray-900/90" />
       </div>
     </div>
@@ -172,6 +179,7 @@ function DemoClassPortalContent() {
   const [rescheduleReason, setRescheduleReason] = useState("");
   const [isSubmittingReschedule, setIsSubmittingReschedule] = useState(false);
   const [rescheduleSuccess, setRescheduleSuccess] = useState<string | null>(null);
+  const [rescheduleError, setRescheduleError] = useState<string | null>(null);
 
   const [selectedDateId, setSelectedDateId] = useState<string>("date-0");
   const [customDateVal, setCustomDateVal] = useState<string>("");
@@ -276,39 +284,12 @@ function DemoClassPortalContent() {
           if (data.data.preferredTime) setActivePreferredTime(data.data.preferredTime);
           if (data.data.preferredTimezone) setRescheduleTimezone(data.data.preferredTimezone);
         } else {
-          // Construct friendly fallback so portal demo session works for test IDs
-          const fallbackLead: LeadData = {
-            id: leadId,
-            firstName: "Parent",
-            studentFirstName: "Student",
-            email: "demo@finquo.ai",
-            phone: "+91 9876543210",
-            status: "CONFIRMED",
-            preferredDays: ["25/08/2026"],
-            preferredTime: "04:00 PM",
-            preferredTimezone: "Asia/Kolkata",
-            program: { title: "Financial Literacy Demo Class" },
-          };
-          setLead(fallbackLead);
-          setActiveSessionDate("25/08/2026");
-          setActivePreferredTime("04:00 PM");
+          setLead(null);
+          setError("We couldn't find a booking for this Lead ID. Please check the link sent to your WhatsApp and try again.");
         }
       } catch {
-        const fallbackLead: LeadData = {
-          id: leadId,
-          firstName: "Parent",
-          studentFirstName: "Student",
-          email: "demo@finquo.ai",
-          phone: "+91 9876543210",
-          status: "CONFIRMED",
-          preferredDays: ["25/08/2026"],
-          preferredTime: "04:00 PM",
-          preferredTimezone: "Asia/Kolkata",
-          program: { title: "Financial Literacy Demo Class" },
-        };
-        setLead(fallbackLead);
-        setActiveSessionDate("25/08/2026");
-        setActivePreferredTime("04:00 PM");
+        setLead(null);
+        setError("Something went wrong while loading your booking. Please try again.");
       } finally {
         setIsLoading(false);
       }
@@ -339,7 +320,7 @@ function DemoClassPortalContent() {
     if (!target && lead.scheduledClass?.startTime) target = new Date(lead.scheduledClass.startTime);
     function check() {
       if (!target) { setIsSessionReady(true); return; }
-      setIsSessionReady(target.getTime() - Date.now() <= 10 * 60 * 1000);
+      setIsSessionReady(target.getTime() - Date.now() <= 30 * 60 * 1000);
     }
     check();
     const id = setInterval(check, 5000);
@@ -353,6 +334,7 @@ function DemoClassPortalContent() {
     if (!rescheduleDate || !rescheduleSlot) return;
     setIsSubmittingReschedule(true);
     setRescheduleSuccess(null);
+    setRescheduleError(null);
 
     try {
       const payload = {
@@ -363,7 +345,7 @@ function DemoClassPortalContent() {
         notes: `[Reschedule Request] Requested for Date: ${rescheduleDate}, Time: ${rescheduleSlot}, Timezone: ${rescheduleTimezone}. Reason: ${rescheduleReason || "None"}`,
       };
 
-      await fetch(`/api/leads`, {
+      const res = await fetch(`/api/leads`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -377,21 +359,17 @@ function DemoClassPortalContent() {
           preferredTime: rescheduleSlot,
           notes: payload.notes,
         }),
-      }).catch(() => { });
+      });
+      if (!res.ok) throw new Error(`Reschedule request failed: ${res.status}`);
 
       setActiveSessionDate(rescheduleDate);
       setActivePreferredTime(rescheduleSlot);
-      setRescheduleSuccess(`Your reschedule request for ${rescheduleDate} at ${rescheduleSlot} has been submitted! Our academic coordinator will confirm your updated meeting link on WhatsApp.`);
+      setRescheduleSuccess(`Your reschedule request for ${formatSessionDate(rescheduleDate)} at ${rescheduleSlot} has been submitted! Our academic coordinator will confirm your updated meeting link on WhatsApp.`);
       setTimeout(() => {
         setIsRescheduleOpen(false);
       }, 2000);
     } catch {
-      setActiveSessionDate(rescheduleDate);
-      setActivePreferredTime(rescheduleSlot);
-      setRescheduleSuccess(`Your reschedule request for ${rescheduleDate} at ${rescheduleSlot} has been updated.`);
-      setTimeout(() => {
-        setIsRescheduleOpen(false);
-      }, 2000);
+      setRescheduleError("We couldn't submit your reschedule request. Please try again, or message us on WhatsApp.");
     } finally {
       setIsSubmittingReschedule(false);
     }
@@ -476,7 +454,7 @@ function DemoClassPortalContent() {
               {/* Welcome */}
               <div className="relative z-10 text-center space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-semibold backdrop-blur-md border border-white/20">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" /> 1 on 1 Interactive Demo Session
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" /> 1-on-1 Interactive Demo Session
                 </div>
                 <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mt-2">
                   Welcome, {parentName} &amp; <span className="text-amber-300">{studentName}</span> !
@@ -497,7 +475,7 @@ function DemoClassPortalContent() {
                   <div className="text-center px-4 py-3 rounded-2xl bg-red-500/25 border border-red-400/40">
                     <p className="text-xs sm:text-sm text-red-100 leading-relaxed">
                       The Zoom meeting link will be available{" "}
-                      <span className="font-bold text-amber-300">1 hour before the session</span>.
+                      <span className="font-bold text-amber-300">30 minutes before the session</span>.
                       {" "}Click the button below to join when it becomes active.
                     </p>
                   </div>
@@ -551,7 +529,7 @@ function DemoClassPortalContent() {
                     <CalendarSync className="w-3.5 h-3.5 text-amber-600" /> Reschedule Session
                   </button>
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/60 text-indigo-700 text-xs font-bold">
-                    <Video className="w-4 h-4 text-indigo-600" /> Live 1 on 1 Class
+                    <Video className="w-4 h-4 text-indigo-600" /> Live 1-on-1 Class
                   </div>
                 </div>
               </div>
@@ -560,7 +538,7 @@ function DemoClassPortalContent() {
                 {/* Date */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1">
                   <div className="flex items-center gap-1.5 text-indigo-600"><Calendar className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Session Date</span></div>
-                  <p className="text-md md:text-xl font-extrabold text-gray-900">{activeSessionDate}</p>
+                  <p className="text-md md:text-xl font-extrabold text-gray-900">{formatSessionDate(activeSessionDate)}</p>
                 </div>
                 {/* Time */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1 min-w-0">
@@ -641,7 +619,7 @@ function DemoClassPortalContent() {
                     Select Class Date
                   </h4>
                   <span className="text-[11px] font-medium text-gray-400">
-                    Duration: 60 Minutes
+                    Duration: 60 minutes
                   </span>
                 </div>
 
@@ -697,7 +675,7 @@ function DemoClassPortalContent() {
                   >
                     <Calendar className="w-3.5 h-3.5 text-indigo-600" />
                     <span>
-                      {customDateOption ? customDateOption.fullDateStr : "Pick Custom Date from Calendar"}
+                      {customDateOption ? formatSessionDate(customDateOption.fullDateStr) : "Pick Custom Date from Calendar"}
                     </span>
                   </button>
                   {showCalendarPicker && (
@@ -727,10 +705,10 @@ function DemoClassPortalContent() {
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs sm:text-sm font-extrabold text-gray-800 uppercase tracking-wide flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-indigo-600" />
-                    AVAILABLE TIME SLOTS ({activeDateObj ? activeDateObj.fullDateStr : ""})
+                    Choose a Time Slot ({activeDateObj ? formatSessionDate(activeDateObj.fullDateStr) : ""})
                   </h4>
                   <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-                    Live 1 on 1
+                    Live 1-on-1
                   </span>
                 </div>
 
@@ -776,6 +754,9 @@ function DemoClassPortalContent() {
 
               {/* Submit CTA & Footer Note */}
               <div className="pt-2">
+                {rescheduleError && (
+                  <p className="text-xs text-red-500 font-medium mb-2 flex items-center gap-1.5"><AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />{rescheduleError}</p>
+                )}
                 <button
                   type="submit"
                   disabled={!rescheduleSlot || availableSlots.length === 0 || isSubmittingReschedule}
@@ -791,7 +772,7 @@ function DemoClassPortalContent() {
                   )}
                 </button>
                 <p className="text-[10px] text-gray-400 text-center font-medium mt-2">
-                  Note: Laptop or desktop is compulsory for this class
+                  Note: Laptop or desktop is recommended for this class
                 </p>
               </div>
             </form>

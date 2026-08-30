@@ -153,7 +153,7 @@ export default function AdminDashboardPage() {
       <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
         <div className="flex items-center gap-3 text-slate-400 font-sans">
           <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
-          <span>Verifying Admin Session...</span>
+          <span>Verifying admin session...</span>
         </div>
       </div>
     );
@@ -214,7 +214,7 @@ export default function AdminDashboardPage() {
                 </>
               ) : saveSuccess ? (
                 <>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" /> Saved Live!
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" /> Saved!
                 </>
               ) : (
                 <>

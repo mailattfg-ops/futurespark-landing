@@ -20,7 +20,7 @@ const baseBlogs: BlogPost[] = [
     id: 1,
     category: "CHILDRENS PSYCHOLOGY",
     categoryColor: "text-[#16A34A]",
-    title: "Taking a leap into understanding kids",
+    title: "Taking a Leap Into Understanding Kids",
     snippet:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
     readTime: "5 MIN READ",

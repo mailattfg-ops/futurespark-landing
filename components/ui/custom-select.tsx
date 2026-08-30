@@ -206,7 +206,7 @@ export function CustomSelect({
           <div className="max-h-48 overflow-y-auto p-1.5 space-y-0.5">
             {filteredOptions.length === 0 ? (
               <div className="py-3 px-3 text-center text-xs text-gray-400 font-medium">
-                No matching options
+                No matching options found.
               </div>
             ) : (
               filteredOptions.map((opt) => {

@@ -19,7 +19,7 @@ export function PilotBenefitsSection() {
   const cards = [
     {
       icon: <Video size={36} color={COLORS.gold} strokeWidth={1.8} />,
-      title: "Live 1 on 1 Mentorship",
+      title: "Live 1-on-1 Mentorship",
       desc: "Four 60‑minute sessions with a dedicated mentor not pre‑recorded, not group classes. Real conversations, real growth.",
       color: COLORS.gold,
     },

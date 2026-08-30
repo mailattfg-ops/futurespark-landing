@@ -76,7 +76,7 @@ export function TimezoneSelect({ value, onChange, className = "" }: TimezoneSele
                 <Clock className="w-3 h-3 text-indigo-600" /> Select Timezone
               </span>
               <span className="text-[10px] font-semibold text-gray-400">
-                {filteredTimezones.length} zones
+                {filteredTimezones.length} {filteredTimezones.length === 1 ? "zone" : "zones"}
               </span>
             </div>
 

@@ -8,13 +8,13 @@ export function PricingPlansSection() {
   const [billingCycle, setBillingCycle] = useState<"annual" | "monthly">("annual");
 
   const features = [
-    "48 Live 1 on 1 Mentorship Sessions (60 minutes each)",
+    "40 live 1-on-1 mentorship sessions (60 minutes each)",
     "Dedicated personal mentor for the entire year",
-    "4 Quarterly Physical Learning Boxes delivered home",
-    "Curriculum vetted by IIM Faculty",
+    "4 quarterly physical learning boxes delivered home",
+    "Curriculum vetted by IIM faculty",
     "Weekly parent progress reports & session summaries",
-    "Final Month Capstone Project & Presentation",
-    "Certificate of Completion in Financial Intelligence",
+    "Final-month capstone project & presentation",
+    "Certificate of completion in Financial Intelligence",
   ];
 
   return (
@@ -74,7 +74,7 @@ export function PricingPlansSection() {
                 Full 1-Year Mentorship
               </h3>
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
-                48 weekly sessions designed to build deep confidence in money, trade-offs, and critical life skills.
+                40 weekly sessions designed to build deep confidence in money, trade-offs, and critical life skills.
               </p>
 
               {/* Price Tag */}
@@ -103,7 +103,7 @@ export function PricingPlansSection() {
                   }}
                   className="w-full inline-flex items-center justify-center py-3.5 px-6 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-indigo-500/25 transition-all text-center cursor-pointer"
                 >
-                  Confirm your seat First
+                  Confirm your seat
                 </Link>
               </div>
             </div>

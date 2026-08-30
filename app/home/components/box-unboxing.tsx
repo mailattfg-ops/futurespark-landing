@@ -15,7 +15,7 @@ export function BoxUnboxingSection() {
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight font-sans">
-            Every Quarter, A Physical Box
+            Every Quarter, a Physical Box
           </h2>
 
           <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl mx-auto font-normal">

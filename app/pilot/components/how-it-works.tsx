@@ -141,12 +141,12 @@ export function HowItWorksSection() {
         <ScrollReveal variant="fade-down">
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
             <span style={{ color: COLORS.teal, fontSize: 13, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1.5 }}>
-              ✦ HOW DOES IT WORK ✦
+              ✦ HOW IT WORKS ✦
             </span>
           </div>
 
           <h2 style={{ fontSize: "clamp(30px, 4vw, 42px)", fontWeight: 900, color: COLORS.dark, margin: "0 0 12px", letterSpacing: "-0.02em" }}>
-            How does it work
+            How It Works
           </h2>
           <p style={{ fontSize: 16, color: COLORS.textMuted, margin: "0 0 54px", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}>
             From sign up to success – we make it easy for your child to learn, grow, and shine.
@@ -417,7 +417,7 @@ export function HowItWorksSection() {
                 flex: "1 1 280px",
               }}
             >
-              Every feedback helps us personalize the experience
+              Every piece of feedback helps us personalize the experience
               <br className="hidden sm:inline" />
               {" "}and create a lasting impact on your child&apos;s future.
             </p>

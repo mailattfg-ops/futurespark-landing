@@ -427,7 +427,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                       value={studentGrade}
                       onChange={setStudentGrade}
                       options={gradeOptions}
-                      placeholder="Select Grade (1 to 12)"
+                      placeholder="Select grade (1 to 12)"
                       leftIcon={<GraduationCap className="w-3.5 h-3.5" />}
                     />
                   </div>
@@ -479,7 +479,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                           required
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          placeholder="Mobile Number"
+                          placeholder="WhatsApp number"
                           className="w-full bg-white border border-gray-200 rounded-xl pl-8 pr-2 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium"
                         />
                       </div>
@@ -488,14 +488,14 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
 
                   <div className="space-y-1">
                     <label htmlFor="modal-presentCountry" className="block text-[11px] font-bold text-gray-700 font-sans">
-                      Present Country <span className="text-red-500">*</span>
+                      Country of Residence <span className="text-red-500">*</span>
                     </label>
                     <CustomSelect
                       id="modal-presentCountry"
                       value={presentCountry}
                       onChange={setPresentCountry}
                       options={allCountriesList}
-                      placeholder="Select Present Country"
+                      placeholder="Select country"
                       leftIcon={<Globe className="w-3.5 h-3.5" />}
                       searchable
                       placement="top"
@@ -584,7 +584,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-bold text-gray-900">Select Class Date</h4>
-                    <span className="text-[10px] text-gray-400">Duration: 60 Minutes</span>
+                    <span className="text-[10px] text-gray-400">Duration: 60 minutes</span>
                   </div>
 
                   <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
@@ -647,10 +647,10 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="text-[11px] font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-[#6366F1]" /> Available Time Slots ({activeDateObj.fullDateStr})
+                      <Clock className="w-3.5 h-3.5 text-[#6366F1]" /> Choose a Time Slot ({activeDateObj.fullDateStr})
                     </h4>
                     <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
-                      Live 1 on 1
+                      Live 1-on-1
                     </span>
                   </div>
 
@@ -661,7 +661,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                     </div>
                   ) : slotsList.length === 0 ? (
                     <div className="py-3 text-center text-xs text-gray-500 bg-amber-50 rounded-xl border border-amber-200 font-medium">
-                      No demo slots available for today. Please pick another date above.
+                      No demo slots available for this date. Please pick another date above.
                     </div>
                   ) : (
                     <div className="grid grid-cols-3 gap-2">
@@ -707,7 +707,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </button>
 
                   <p className="text-[10px] text-gray-400 text-center font-medium mt-2">
-                    Note: Laptop or desktop is compulsory for this class
+                    Note: Laptop or desktop is recommended for this class
                   </p>
                 </div>
               </div>
@@ -721,7 +721,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
             </div>
             <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
               <Laptop className="w-3.5 h-3.5 text-indigo-300 flex-shrink-0" />
-              <span className="text-xs font-bold">Live 1 on 1 Virtual Lab</span>
+              <span className="text-xs font-bold">Live 1-on-1 Virtual Lab</span>
             </div>
           </div>
         </div>

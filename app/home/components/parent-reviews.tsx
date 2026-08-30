@@ -41,7 +41,7 @@ export function ParentReviewsSection() {
         {/* Section Header */}
         <ScrollReveal variant="fade-up" duration={600}>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight font-sans text-center mb-8 sm:mb-10">
-            What parents and kids say
+            What Parents and Kids Say
           </h2>
         </ScrollReveal>
 
