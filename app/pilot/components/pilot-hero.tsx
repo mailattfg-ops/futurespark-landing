@@ -115,7 +115,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
               fontWeight: 450,
             }}
           >
-            You have been selected for the pilot of the Finquo Junior <b>Financial Literacy</b> Program. Finquo Junior is a 1-on-1 mentorship program that focuses on future-ready skills like Finance, Communication, Entrepreneurship, AI, and Cyber Awareness.
+            You have been selected for the pilot of the Finquo Junior <b>Financial Literacy</b> Program. Finquo Junior is a 1 on 1 mentorship program that focuses on future-ready skills like Finance, Communication, Entrepreneurship, AI, and Cyber Awareness.
           </p>
         </ScrollReveal>
 
@@ -188,8 +188,8 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
                 </div>
                 <div style={{ textAlign: "left", minWidth: 0 }}>
                   <div style={{ fontSize: 9.5, color: COLORS.textMuted, fontWeight: 500 }}>Open for</div>
-                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.25, whiteSpace: "nowrap" }}>
-                    School Students
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.25 }}>
+                    School <br className="md:hidden" />Students
                   </div>
                 </div>
               </div>
@@ -214,9 +214,9 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
                 >
                   <School size={14} color="#ffffff" />
                 </div>
-                <div style={{ textAlign: "left" }}>
+                <div style={{ textAlign: "left", flexShrink: 0 }}>
                   <div style={{ fontSize: 9.5, color: COLORS.textMuted, fontWeight: 500 }}>Grade</div>
-                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.1 }}>4–10</div>
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.1, whiteSpace: "nowrap" }}>4–10</div>
                 </div>
               </div>
 
@@ -240,9 +240,9 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
                 >
                   <User size={14} color="#ffffff" />
                 </div>
-                <div style={{ textAlign: "left" }}>
+                <div style={{ textAlign: "left", flexShrink: 0 }}>
                   <div style={{ fontSize: 9.5, color: COLORS.textMuted, fontWeight: 500 }}>Age</div>
-                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.1 }}>10–16</div>
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.1, whiteSpace: "nowrap" }}>10–16</div>
                 </div>
               </div>
             </div>
@@ -304,7 +304,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
             {[
               {
                 icon: <Video size={18} color="#714ade" />,
-                num: "1-on-1",
+                num: "1 on 1",
                 unit: "Mentorship",
                 label: "4 Live Sessions",
                 gradient: "linear-gradient(135deg, #714ade 0%, #3b68fc 100%)",
