@@ -1,6 +1,6 @@
 "use client";
 
-import { Video, ShieldCheck, Clock, Calendar, BookOpen } from "lucide-react";
+import { Video, ShieldCheck, Clock, Calendar, BookOpen, GraduationCap, BookCopy, CalendarRange } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface PilotHeroProps {
@@ -23,7 +23,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
       style={{
         position: "relative",
         overflow: "hidden",
-        padding: "140px 24px 64px",
+        padding: "125px 24px 64px",
         textAlign: "center",
         background: "linear-gradient(180deg, #fef9ed 0%, #ffffff 40%, #f4f5ff 100%)",
         minHeight: "100vh",
@@ -119,6 +119,136 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
           </p>
         </ScrollReveal>
 
+        {/* Who Can Attend Card */}
+        <ScrollReveal variant="fade-up" delay={360}>
+          <div
+            style={{
+              display: "inline-block",
+              width: "100%",
+              maxWidth: 480,
+              margin: "0 auto 24px",
+              borderRadius: 14,
+              overflow: "hidden",
+              background: "rgba(255, 255, 255, 0.72)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: "1.5px solid rgba(113, 74, 222, 0.14)",
+              boxShadow: "0 8px 32px -6px rgba(113, 74, 222, 0.12), 0 2px 8px rgba(0,0,0,0.04)",
+            }}
+          >
+            {/* Card Header */}
+            <div
+              style={{
+                padding: "6px 14px",
+                borderBottom: "1px solid rgba(113, 74, 222, 0.10)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 5,
+                background: "rgba(113, 74, 222, 0.05)",
+              }}
+            >
+              <span style={{ color: COLORS.gold, fontSize: 10, lineHeight: 1 }}>✦</span>
+              <span
+                style={{
+                  color: COLORS.purple,
+                  fontWeight: 700,
+                  fontSize: 11.5,
+                  letterSpacing: 0.3,
+                }}
+              >
+                Who can attend
+              </span>
+            </div>
+
+            {/* Card Body — 3 columns */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "10px 10px",
+              }}
+            >
+              {/* School Students */}
+              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, justifyContent: "center", padding: "0 10px" }}>
+                <div
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
+                    background: "linear-gradient(135deg, #714ade 0%, #3b68fc 100%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    boxShadow: "0 3px 10px rgba(113, 74, 222, 0.28)",
+                  }}
+                >
+                  <GraduationCap size={14} color="#ffffff" />
+                </div>
+                <div style={{ textAlign: "left", minWidth: 0 }}>
+                  <div style={{ fontSize: 9.5, color: COLORS.textMuted, fontWeight: 500 }}>Open for</div>
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.25, whiteSpace: "nowrap" }}>
+                    School Students
+                  </div>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div style={{ width: 1, height: 38, background: "rgba(113, 74, 222, 0.12)", flexShrink: 0 }} />
+
+              {/* Grade */}
+              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, justifyContent: "center", padding: "0 10px" }}>
+                <div
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
+                    background: "linear-gradient(135deg, #09b1bb 0%, #0d8f97 100%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    boxShadow: "0 3px 10px rgba(9, 177, 187, 0.28)",
+                  }}
+                >
+                  <BookCopy size={14} color="#ffffff" />
+                </div>
+                <div style={{ textAlign: "left" }}>
+                  <div style={{ fontSize: 9.5, color: COLORS.textMuted, fontWeight: 500 }}>Grade</div>
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.1 }}>4–10</div>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div style={{ width: 1, height: 38, background: "rgba(113, 74, 222, 0.12)", flexShrink: 0 }} />
+
+              {/* Age */}
+              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, justifyContent: "center", padding: "0 10px" }}>
+                <div
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
+                    background: "linear-gradient(135deg, #fdae27 0%, #fdae27 100%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    boxShadow: "0 3px 10px rgba(248, 114, 31, 0.28)",
+                  }}
+                >
+                  <CalendarRange size={14} color="#ffffff" />
+                </div>
+                <div style={{ textAlign: "left" }}>
+                  <div style={{ fontSize: 9.5, color: COLORS.textMuted, fontWeight: 500 }}>Age</div>
+                  <div style={{ fontSize: 11.5, fontWeight: 800, color: COLORS.dark, lineHeight: 1.1 }}>10–16</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
         {/* Primary CTA Button */}
         <ScrollReveal variant="zoom-in" delay={400}>
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
@@ -157,7 +287,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
 
       {/* Hero Stats Card Grid Section */}
       <ScrollReveal variant="fade-up" delay={500}>
-        <div style={{ maxWidth: 1140, margin: "44px auto 0", position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: 1140, margin: "24px auto 0", position: "relative", zIndex: 1 }}>
           <div
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2"
             style={{
