@@ -1,6 +1,6 @@
 "use client";
 
-import { Video, ShieldCheck, Clock, Calendar, BookOpen, GraduationCap, BookCopy, CalendarRange } from "lucide-react";
+import { Video, ShieldCheck, Clock, Calendar, BookOpen, GraduationCap, School, User } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface PilotHeroProps {
@@ -148,16 +148,16 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
                 background: "rgba(113, 74, 222, 0.05)",
               }}
             >
-              <span style={{ color: COLORS.gold, fontSize: 10, lineHeight: 1 }}>✦</span>
+              {/* <span style={{ color: COLORS.gold, fontSize: 10, lineHeight: 1 }}>✦</span> */}
               <span
                 style={{
                   color: COLORS.purple,
                   fontWeight: 700,
-                  fontSize: 11.5,
+                  fontSize: 17,
                   letterSpacing: 0.3,
                 }}
               >
-                Who can attend
+                Who Can Attend
               </span>
             </div>
 
@@ -212,7 +212,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
                     boxShadow: "0 3px 10px rgba(9, 177, 187, 0.28)",
                   }}
                 >
-                  <BookCopy size={14} color="#ffffff" />
+                  <School size={14} color="#ffffff" />
                 </div>
                 <div style={{ textAlign: "left" }}>
                   <div style={{ fontSize: 9.5, color: COLORS.textMuted, fontWeight: 500 }}>Grade</div>
@@ -238,7 +238,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
                     boxShadow: "0 3px 10px rgba(248, 114, 31, 0.28)",
                   }}
                 >
-                  <CalendarRange size={14} color="#ffffff" />
+                  <User size={14} color="#ffffff" />
                 </div>
                 <div style={{ textAlign: "left" }}>
                   <div style={{ fontSize: 9.5, color: COLORS.textMuted, fontWeight: 500 }}>Age</div>
