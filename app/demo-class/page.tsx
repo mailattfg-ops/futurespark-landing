@@ -16,6 +16,7 @@ import { TimezoneSelect } from "@/components/ui/timezone-select";
 import {
   generateQuickDates,
   getAvailableSlotsForDate,
+  istSlotToLocalLabel,
   isUSALocation,
   DateOption,
   SlotOption,
@@ -364,7 +365,7 @@ function DemoClassPortalContent() {
 
       setActiveSessionDate(rescheduleDate);
       setActivePreferredTime(rescheduleSlot);
-      setRescheduleSuccess(`Your reschedule request for ${formatSessionDate(rescheduleDate)} at ${rescheduleSlot} has been submitted! Our academic coordinator will confirm your updated meeting link on WhatsApp.`);
+      setRescheduleSuccess(`Your reschedule request for ${formatSessionDate(rescheduleDate)} at ${isUSA ? rescheduleSlot : istSlotToLocalLabel(rescheduleSlot, rescheduleTimezone)} has been submitted! Our academic coordinator will confirm your updated meeting link on WhatsApp.`);
       setTimeout(() => {
         setIsRescheduleOpen(false);
       }, 2000);
@@ -730,7 +731,7 @@ function DemoClassPortalContent() {
                             : "bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
                             }`}
                         >
-                          {slot.time}
+                          {isUSA ? slot.time : istSlotToLocalLabel(slot.time, rescheduleTimezone, activeDateObj?.rawDate)}
                         </button>
                       );
                     })}

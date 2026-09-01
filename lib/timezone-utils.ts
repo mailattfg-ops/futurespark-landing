@@ -380,14 +380,17 @@ export function getAvailableSlotsForDate(
   timezone: string,
   isUSA = false
 ): SlotOption[] {
-  const nowInTz = getCurrentDateTimeInTimezone(timezone);
+  // ponytail: cutoff clock runs on IST for everyone except USA (USA keeps its original viewer-clock behavior)
+  const nowInTz = getCurrentDateTimeInTimezone(isUSA ? timezone : "Asia/Kolkata");
   const isToday =
     targetDate.getFullYear() === nowInTz.getFullYear() &&
     targetDate.getMonth() === nowInTz.getMonth() &&
     targetDate.getDate() === nowInTz.getDate();
 
   if (!isToday) {
-    return defaultTimeSlots;
+    const t = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()).getTime();
+    const n = new Date(nowInTz.getFullYear(), nowInTz.getMonth(), nowInTz.getDate()).getTime();
+    return t < n ? [] : defaultTimeSlots; // past IST dates: nothing; future: all
   }
 
   if (isUSA) {
@@ -410,3 +413,19 @@ export function getAvailableSlotsForDate(
   });
 }
 
+
+// Slot times are canonical IST everywhere (state, capacity keys, submitted payloads) — mentors are India-side.
+// This converts an IST slot label to the viewer's local wall time for DISPLAY only.
+const IST_UTC_OFFSET_MIN = 330; // IST is UTC+5:30, no DST
+
+export function istSlotToLocalLabel(istTime: string, timezone: string, onDate?: Date): string {
+  if (!timezone || timezone === "Asia/Kolkata") return istTime;
+  try {
+    const d = onDate ?? new Date();
+    const utcMs = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, parseTimeToMinutes(istTime) - IST_UTC_OFFSET_MIN);
+    // ponytail: zones at UTC-4:30 or lower (non-US Americas) can land on the previous local day; add a day marker if those markets matter
+    return new Intl.DateTimeFormat("en-US", { timeZone: timezone, hour: "2-digit", minute: "2-digit", hour12: true }).format(new Date(utcMs));
+  } catch {
+    return istTime;
+  }
+}

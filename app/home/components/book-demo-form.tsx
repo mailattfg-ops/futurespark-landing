@@ -27,6 +27,7 @@ import {
   isUSALocation,
   generateQuickDates,
   getAvailableSlotsForDate,
+  istSlotToLocalLabel,
   SlotOption,
   DateOption,
   defaultTimeSlots,
@@ -342,7 +343,7 @@ export function BookDemoFormSection() {
                 <div className="flex justify-between items-center text-gray-600 pt-1.5 border-t border-purple-100">
                   <span className="font-medium">Confirmed Slot:</span>
                   <span className="font-extrabold text-[#6366F1]">
-                    {activeDateObj.dayName} ({activeDateObj.dayDate}) @ {selectedSlotTime}
+                    {activeDateObj.dayName} ({activeDateObj.dayDate}) @ {isUSA ? selectedSlotTime : istSlotToLocalLabel(selectedSlotTime, timezone, activeDateObj.rawDate)}
                   </span>
                 </div>
               </div>
@@ -682,7 +683,7 @@ export function BookDemoFormSection() {
                             }`}
                         >
                           <span className={`text-xs font-bold ${isBookedOut ? "line-through text-gray-400" : ""}`}>
-                            {slot.time}
+                            {isUSA ? slot.time : istSlotToLocalLabel(slot.time, timezone, activeDateObj.rawDate)}
                           </span>
                           {isBookedOut ? (
                             <span className="text-[9px] font-extrabold text-red-500 bg-red-50 px-1.5 py-0.5 rounded mt-0.5 border border-red-200">
