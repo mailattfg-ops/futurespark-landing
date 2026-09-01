@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { Preloader } from "@/components/preloader";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { MetaPixel } from "@/components/MetaPixel";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -142,6 +143,7 @@ export default function RootLayout({
         <Preloader />
         {children}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
+        <MetaPixel />
       </body>
     </html>
   );
