@@ -399,12 +399,10 @@ export function getAvailableSlotsForDate(
     return [];
   }
 
-  const currentMinute = nowInTz.getMinutes();
-  const gapMinutes = currentHour * 60 + currentMinute + 120;
-
-  // Round off to next full hour (:00)
-  const rem = gapMinutes % 60;
-  const earliestSlotMinute = rem === 0 ? gapMinutes : gapMinutes + (60 - rem);
+  // Earliest slot calculation:
+  // For any time in hour H (e.g. 9:00 AM - 9:59 AM), the earliest slot shown is (H + 2):00 (e.g. 11:00 AM).
+  // Only when time reaches H + 1 (10:00 AM) does the earliest slot change to 12:00 PM.
+  const earliestSlotMinute = (currentHour + 2) * 60;
 
   return defaultTimeSlots.filter((slot) => {
     const slotMinutes = parseTimeToMinutes(slot.time);
