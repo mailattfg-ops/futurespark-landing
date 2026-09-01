@@ -230,6 +230,7 @@ export function BookDemoFormSection() {
       hearAbout: hearAbout || undefined,
       preferredSlotDate: `${activeDateObj.fullDateStr} (${activeDateObj.weekdayName})`,
       preferredSlotTime: selectedSlotTime,
+      preferredTimezone: timezone,
     };
 
     try {

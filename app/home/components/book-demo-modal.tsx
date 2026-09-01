@@ -285,6 +285,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
       hearAbout: hearAbout || undefined,
       preferredSlotDate: `${activeDateObj.fullDateStr} (${activeDateObj.weekdayName})`,
       preferredSlotTime: selectedSlotTime,
+      preferredTimezone: timezone,
     };
 
     try {

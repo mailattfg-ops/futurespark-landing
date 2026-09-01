@@ -15,6 +15,7 @@ import { CustomSelect } from "@/components/ui/custom-select";
 import { TimezoneSelect } from "@/components/ui/timezone-select";
 import {
   generateQuickDates,
+  getMatchingTimezone,
   getAvailableSlotsForDate,
   istSlotToLocalLabel,
   isUSALocation,
@@ -74,7 +75,7 @@ function getUpcomingDates(count = 7): { dateStr: string; displayLabel: string; i
   return dates;
 }
 
-function parseTargetSessionTime(sessionDateStr: string, timeSlotStr: string): Date | null {
+function parseTargetSessionTime(sessionDateStr: string, timeSlotStr: string, asIST = false): Date | null {
   try {
     const dateMatch = sessionDateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
     if (!dateMatch) return null;
@@ -88,6 +89,7 @@ function parseTargetSessionTime(sessionDateStr: string, timeSlotStr: string): Da
       if (ampm.toUpperCase() === "AM" && h === 12) h = 0;
       hours = h;
     }
+    if (asIST) return new Date(Date.UTC(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10), 0, hours * 60 + minutes - 330)); // stored slot times are IST (UTC+5:30)
     return new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10), hours, minutes, 0);
   } catch { return null; }
 }
@@ -99,12 +101,12 @@ function formatSessionDate(ddmmyyyy: string): string {
   return new Date(+m[3], +m[2] - 1, +m[1]).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
 }
 
-function CountdownBlock({ sessionDate, preferredTime, scheduledClass }: {
-  sessionDate: string; preferredTime: string; scheduledClass?: { startTime?: string };
+function CountdownBlock({ sessionDate, preferredTime, scheduledClass, asIST = false }: {
+  sessionDate: string; preferredTime: string; scheduledClass?: { startTime?: string }; asIST?: boolean;
 }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: false });
   useEffect(() => {
-    let target = parseTargetSessionTime(sessionDate, preferredTime);
+    let target = parseTargetSessionTime(sessionDate, preferredTime, asIST);
     if (!target && scheduledClass?.startTime) target = new Date(scheduledClass.startTime);
     function tick() {
       if (!target) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
@@ -114,7 +116,7 @@ function CountdownBlock({ sessionDate, preferredTime, scheduledClass }: {
       setTimeLeft({ days: Math.floor(s / 86400), hours: Math.floor((s % 86400) / 3600), minutes: Math.floor((s % 3600) / 60), seconds: s % 60, isReady: false });
     }
     tick(); const id = setInterval(tick, 1000); return () => clearInterval(id);
-  }, [sessionDate, preferredTime, scheduledClass]);
+  }, [sessionDate, preferredTime, scheduledClass, asIST]);
   const p = (n: number) => String(n).padStart(2, "0");
   if (timeLeft.isReady) return null;
   return (
@@ -132,16 +134,16 @@ function CountdownBlock({ sessionDate, preferredTime, scheduledClass }: {
   );
 }
 
-function JoinButton({ sessionDate, preferredTime, scheduledClass, meetUrl }: {
-  sessionDate: string; preferredTime: string; scheduledClass?: { startTime?: string }; meetUrl: string | null;
+function JoinButton({ sessionDate, preferredTime, scheduledClass, meetUrl, asIST = false }: {
+  sessionDate: string; preferredTime: string; scheduledClass?: { startTime?: string }; meetUrl: string | null; asIST?: boolean;
 }) {
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
-    let target = parseTargetSessionTime(sessionDate, preferredTime);
+    let target = parseTargetSessionTime(sessionDate, preferredTime, asIST);
     if (!target && scheduledClass?.startTime) target = new Date(scheduledClass.startTime);
     function check() { if (!target) { setIsReady(true); return; } setIsReady(target.getTime() - Date.now() <= 30 * 60 * 1000); }
     check(); const id = setInterval(check, 5000); return () => clearInterval(id);
-  }, [sessionDate, preferredTime, scheduledClass]);
+  }, [sessionDate, preferredTime, scheduledClass, asIST]);
   if (isReady && meetUrl) {
     return (
       <a href={meetUrl} target="_blank" rel="noopener noreferrer"
@@ -283,7 +285,10 @@ function DemoClassPortalContent() {
           }
           setActiveSessionDate(dateStr);
           if (data.data.preferredTime) setActivePreferredTime(data.data.preferredTime);
-          if (data.data.preferredTimezone) setRescheduleTimezone(data.data.preferredTimezone);
+          // Default page + reschedule picker to the lead's own timezone (still user-changeable in the picker).
+          // ponytail: phone-code fallback covers +91/+971/+1/+44/+65/+61 only; extend getMatchingTimezone if more markets sign up
+          const phoneCode = (data.data.phone || "").trim().split(/s+/)[0];
+          setRescheduleTimezone(data.data.preferredTimezone || getMatchingTimezone("", phoneCode));
         } else {
           setLead(null);
           setError("We couldn't find a booking for this Lead ID. Please check the link sent to your WhatsApp and try again.");
@@ -317,7 +322,7 @@ function DemoClassPortalContent() {
   const [isSessionReady, setIsSessionReady] = useState(false);
   useEffect(() => {
     if (!lead) return;
-    let target = parseTargetSessionTime(activeSessionDate, activePreferredTime);
+    let target = parseTargetSessionTime(activeSessionDate, activePreferredTime, !isUSA);
     if (!target && lead.scheduledClass?.startTime) target = new Date(lead.scheduledClass.startTime);
     function check() {
       if (!target) { setIsSessionReady(true); return; }
@@ -326,7 +331,7 @@ function DemoClassPortalContent() {
     check();
     const id = setInterval(check, 5000);
     return () => clearInterval(id);
-  }, [lead, activeSessionDate, activePreferredTime]);
+  }, [lead, activeSessionDate, activePreferredTime, isUSA]);
 
   const upcomingDates = getUpcomingDates(7);
 
@@ -467,7 +472,7 @@ function DemoClassPortalContent() {
 
               {/* Countdown */}
               <div className="relative z-10 max-w-lg mx-auto">
-                <CountdownBlock sessionDate={activeSessionDate} preferredTime={activePreferredTime} scheduledClass={lead.scheduledClass} />
+                <CountdownBlock sessionDate={activeSessionDate} preferredTime={activePreferredTime} scheduledClass={lead.scheduledClass} asIST={!isUSA} />
               </div>
 
               {/* Meet Link Info + Join Button */}
@@ -481,7 +486,7 @@ function DemoClassPortalContent() {
                     </p>
                   </div>
                 )}
-                <JoinButton sessionDate={activeSessionDate} preferredTime={activePreferredTime} scheduledClass={lead.scheduledClass} meetUrl={meetUrl} />
+                <JoinButton sessionDate={activeSessionDate} preferredTime={activePreferredTime} scheduledClass={lead.scheduledClass} meetUrl={meetUrl} asIST={!isUSA} />
               </div>
 
               {/* Meet Link Confirmed Badge & Reschedule Quick Link */}
@@ -544,7 +549,7 @@ function DemoClassPortalContent() {
                 {/* Time */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1 min-w-0">
                   <div className="flex items-center gap-1.5 text-amber-600"><Clock className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Session Time</span></div>
-                  <p className="text-md md:text-xl font-extrabold text-gray-900">{activePreferredTime}</p>
+                  <p className="text-md md:text-xl font-extrabold text-gray-900">{isUSA ? activePreferredTime : istSlotToLocalLabel(activePreferredTime, timezone)}</p>
                 </div>
                 {/* Student */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1">
