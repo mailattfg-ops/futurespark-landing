@@ -34,6 +34,7 @@ import {
 } from "@/lib/timezone-utils";
 import { TimezoneSelect } from "@/components/ui/timezone-select";
 import { CustomSelect } from "@/components/ui/custom-select";
+import { track } from "@/lib/meta";
 
 const countryCodes = [
   { code: "+91", flag: "🇮🇳", label: "India (+91)" },
@@ -245,6 +246,7 @@ export function BookDemoFormSection() {
       const result = await response.json();
 
       if (result.success) {
+        track("Lead");
         setIsSubmitted(true);
       } else {
         setSubmitError(result.message || "Failed to submit demo request.");
