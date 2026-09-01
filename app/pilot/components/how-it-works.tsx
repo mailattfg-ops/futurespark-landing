@@ -136,12 +136,12 @@ export function HowItWorksSection() {
       <div style={{ position: "absolute", top: "25%", left: "1%", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(253, 174, 39, 0.25) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(48px)", zIndex: 0 }} />
       <div style={{ position: "absolute", top: "15%", right: "2%", width: "320px", height: "320px", background: "radial-gradient(circle, rgba(248, 114, 31, 0.22) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(46px)", zIndex: 0 }} />
       <div style={{ position: "absolute", bottom: "-50px", left: "15%", width: "350px", height: "220px", background: "radial-gradient(ellipse at center, rgba(9, 177, 187, 0.20) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none", filter: "blur(40px)", zIndex: 0 }} />
-      
+
       <div style={{ maxWidth: 1180, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
         <ScrollReveal variant="fade-down">
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
             <span style={{ color: COLORS.teal, fontSize: 13, fontWeight: 800, textTransform: "uppercase", letterSpacing: 1.5 }}>
-              ✦ HOW IT WORKS ✦
+              ✦ OUR FLOW ✦
             </span>
           </div>
 
