@@ -182,23 +182,59 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
     return quickDateOptions[idx] || quickDateOptions[0];
   }, [selectedDateId, customDateOption, quickDateOptions]);
 
-  // Slots calculation based on date, timezone, and USA exclusion
+  // Slots calculation based on date, timezone, USA exclusion, and backend capacity
   const loadSlotsForDate = useCallback(
-    (targetDate: Date) => {
+    async (targetDate: Date, dateStr: string) => {
+      setIsLoadingSlots(true);
       const available = getAvailableSlotsForDate(targetDate, timezone, isUSA);
+
+      try {
+        const res = await fetch(`/api/pilot-leads/slot-availability?date=${encodeURIComponent(dateStr)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data && Array.isArray(json.data.slots)) {
+            const serverSlotsMap = new Map<string, any>();
+            json.data.slots.forEach((s: any) => serverSlotsMap.set(s.time, s));
+
+            const merged = available.map((s) => {
+              const serverInfo = serverSlotsMap.get(s.time);
+              if (serverInfo) {
+                return {
+                  ...s,
+                  bookedCount: serverInfo.bookedCount,
+                  maxCapacity: serverInfo.maxCapacity,
+                  remainingSeats: serverInfo.remainingSeats,
+                  isBookedOut: serverInfo.isBookedOut,
+                };
+              }
+              return s;
+            });
+
+            setSlotsList(merged);
+            const firstAvailable = merged.find((s) => !s.isBookedOut);
+            setSelectedSlotTime(firstAvailable ? firstAvailable.time : "");
+            setIsLoadingSlots(false);
+            return;
+          }
+        }
+      } catch {
+        // Fallback to local available slots
+      }
+
       setSlotsList(available);
       if (available.length > 0) {
         setSelectedSlotTime(available[0].time);
       } else {
         setSelectedSlotTime("");
       }
+      setIsLoadingSlots(false);
     },
     [timezone, isUSA]
   );
 
   useEffect(() => {
     if (step === 2 && activeDateObj?.rawDate) {
-      loadSlotsForDate(activeDateObj.rawDate);
+      loadSlotsForDate(activeDateObj.rawDate, activeDateObj.fullDateStr);
     }
   }, [step, activeDateObj, loadSlotsForDate]);
 
@@ -221,6 +257,17 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
   };
 
   const handleFinalSubmit = async () => {
+    if (!selectedSlotTime) {
+      setSubmitError("Please select an available time slot.");
+      return;
+    }
+
+    const currentSlot = slotsList.find((s) => s.time === selectedSlotTime);
+    if (currentSlot?.isBookedOut) {
+      setSubmitError("The selected slot is fully booked. Please choose an available time slot.");
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -667,17 +714,34 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                     <div className="grid grid-cols-3 gap-2">
                       {slotsList.map((slot) => {
                         const isSelected = selectedSlotTime === slot.time;
+                        const isBookedOut = slot.isBookedOut;
                         return (
                           <button
                             key={slot.id}
                             type="button"
-                            onClick={() => setSelectedSlotTime(slot.time)}
-                            className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${isSelected
-                              ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30"
-                              : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
+                            disabled={isBookedOut}
+                            onClick={() => {
+                              if (!isBookedOut) setSelectedSlotTime(slot.time);
+                            }}
+                            className={`p-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center ${isBookedOut
+                              ? "border-gray-200 bg-gray-100/90 text-gray-400 cursor-not-allowed opacity-80"
+                              : isSelected
+                              ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30 cursor-pointer"
+                              : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white cursor-pointer"
                               }`}
                           >
-                            <span className="text-xs font-bold">{slot.time}</span>
+                            <span className={`text-xs font-bold ${isBookedOut ? "line-through text-gray-400" : ""}`}>
+                              {slot.time}
+                            </span>
+                            {isBookedOut ? (
+                              <span className="text-[9px] font-extrabold text-red-500 bg-red-50 px-1.5 py-0.5 rounded mt-0.5 border border-red-200">
+                                Fully Booked
+                              </span>
+                            ) : slot.remainingSeats !== undefined && slot.maxCapacity && slot.remainingSeats > 0 && slot.remainingSeats < slot.maxCapacity ? (
+                              <span className="text-[9px] font-bold text-amber-600 bg-amber-50 px-1 py-0.5 rounded mt-0.5 border border-amber-200/60">
+                                {slot.remainingSeats} seat{slot.remainingSeats > 1 ? "s" : ""} left
+                              </span>
+                            ) : null}
                           </button>
                         );
                       })}

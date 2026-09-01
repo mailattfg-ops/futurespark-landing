@@ -244,6 +244,10 @@ export interface SlotOption {
   mentor: string;
   scheduleType?: "DEMO";
   available?: boolean;
+  bookedCount?: number;
+  maxCapacity?: number;
+  remainingSeats?: number;
+  isBookedOut?: boolean;
 }
 
 export const defaultTimeSlots: SlotOption[] = [
