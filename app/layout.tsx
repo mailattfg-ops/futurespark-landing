@@ -86,6 +86,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  verification: {
+    other: {
+      "facebook-domain-verification": "v9m93wnlwouc74fqueatyyf08hn1jr",
+    },
+  },
 };
 
 const jsonLdData = {
@@ -135,6 +140,7 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} font-sans antialiased h-full text-[16px]`}
     >
       <head>
+        <meta name="facebook-domain-verification" content="v9m93wnlwouc74fqueatyyf08hn1jr" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
