@@ -93,10 +93,10 @@ export function BookDemoFormSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Dynamic 3 Quick Date Cards (Today/Tomorrow/Day 2 for non-USA; Tomorrow/Day 2/Day 3 for USA)
+  // Dynamic Quick Date Cards
   const quickDateOptions = useMemo<DateOption[]>(() => {
-    return generateQuickDates(isUSA);
-  }, [isUSA]);
+    return generateQuickDates(isUSA, timezone);
+  }, [isUSA, timezone]);
 
   // Custom date object if user picks a date from calendar input
   const customDateOption = useMemo<DateOption | null>(() => {
@@ -261,12 +261,9 @@ export function BookDemoFormSection() {
 
   // Calculate min date string YYYY-MM-DD for date input
   const minDateStr = useMemo(() => {
-    const d = new Date();
-    if (isUSA) {
-      d.setDate(d.getDate() + 1);
-    }
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  }, [isUSA]);
+    const firstDate = quickDateOptions[0]?.rawDate || new Date();
+    return `${firstDate.getFullYear()}-${String(firstDate.getMonth() + 1).padStart(2, "0")}-${String(firstDate.getDate()).padStart(2, "0")}`;
+  }, [quickDateOptions]);
 
   return (
     <section id="book-demo" className="w-full bg-gradient-to-b from-[#2E0B73] via-[#3B128E] to-[#250860] py-8 sm:py-10 relative overflow-hidden font-sans scroll-mt-16">
@@ -678,7 +675,7 @@ export function BookDemoFormSection() {
                           onClick={() => {
                             if (!isBookedOut) setSelectedSlotTime(slot.time);
                           }}
-                          className={`p-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center ${isBookedOut
+                          className={`py-2 px-3 rounded-xl border text-center transition-all flex items-center justify-center ${isBookedOut
                             ? "border-gray-200 bg-gray-100/90 text-gray-400 cursor-not-allowed opacity-80"
                             : isSelected
                             ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30 cursor-pointer"
@@ -688,15 +685,6 @@ export function BookDemoFormSection() {
                           <span className={`text-xs font-bold ${isBookedOut ? "line-through text-gray-400" : ""}`}>
                             {isUSA ? slot.time : istSlotToLocalLabel(slot.time, timezone, activeDateObj.rawDate)}
                           </span>
-                          {isBookedOut ? (
-                            <span className="text-[9px] font-extrabold text-red-500 bg-red-50 px-1.5 py-0.5 rounded mt-0.5 border border-red-200">
-                              Fully Booked
-                            </span>
-                          ) : slot.remainingSeats !== undefined && slot.maxCapacity && slot.remainingSeats > 0 && slot.remainingSeats < slot.maxCapacity ? (
-                            <span className="text-[9px] font-bold text-amber-600 bg-amber-50 px-1 py-0.5 rounded mt-0.5 border border-amber-200/60">
-                              {slot.remainingSeats} seat{slot.remainingSeats > 1 ? "s" : ""} left
-                            </span>
-                          ) : null}
                         </button>
                       );
                     })}

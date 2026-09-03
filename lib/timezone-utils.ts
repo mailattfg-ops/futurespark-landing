@@ -296,10 +296,15 @@ export function isUSALocation(presentCountry?: string, countryCode?: string, tim
   return false;
 }
 
-export function generateQuickDates(isUSA = false): DateOption[] {
+export function generateQuickDates(isUSA = false, timezone = "Asia/Kolkata"): DateOption[] {
   const dates: DateOption[] = [];
   const today = new Date();
-  const startOffset = isUSA ? 1 : 0;
+
+  // Check if Today has any available slots
+  const todaySlots = getAvailableSlotsForDate(today, timezone, isUSA);
+  const isTodayAvailable = !isUSA && todaySlots.length > 0;
+
+  const startOffset = isTodayAvailable ? 0 : 1;
 
   for (let i = 0; i < 4; i++) {
     const offset = startOffset + i;

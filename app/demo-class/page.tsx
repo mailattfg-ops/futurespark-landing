@@ -60,17 +60,21 @@ const TIMEZONE_OPTIONS = [
 function getUpcomingDates(count = 7): { dateStr: string; displayLabel: string; isToday: boolean }[] {
   const dates = [];
   const today = new Date();
+  const todaySlots = getAvailableSlotsForDate(today, "Asia/Kolkata", false);
+  const startOffset = todaySlots.length > 0 ? 0 : 1;
+
   for (let i = 0; i < count; i++) {
+    const offset = startOffset + i;
     const d = new Date(today);
-    d.setDate(today.getDate() + i);
+    d.setDate(today.getDate() + offset);
     const dayNum = String(d.getDate()).padStart(2, "0");
     const monthNum = String(d.getMonth() + 1).padStart(2, "0");
     const year = d.getFullYear();
     const dateStr = `${dayNum}/${monthNum}/${year}`;
     const weekday = d.toLocaleDateString("en-US", { weekday: "short" });
     const monthName = d.toLocaleDateString("en-US", { month: "short" });
-    const displayLabel = i === 0 ? `Today, ${monthName} ${d.getDate()}` : i === 1 ? `Tomorrow, ${monthName} ${d.getDate()}` : `${weekday}, ${monthName} ${d.getDate()}`;
-    dates.push({ dateStr, displayLabel, isToday: i === 0 });
+    const displayLabel = offset === 0 ? `Today, ${monthName} ${d.getDate()}` : offset === 1 ? `Tomorrow, ${monthName} ${d.getDate()}` : `${weekday}, ${monthName} ${d.getDate()}`;
+    dates.push({ dateStr, displayLabel, isToday: offset === 0 });
   }
   return dates;
 }

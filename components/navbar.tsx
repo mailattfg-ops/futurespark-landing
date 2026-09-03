@@ -55,7 +55,7 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-5 lg:gap-7">
+            {/* <nav className="hidden md:flex items-center gap-5 lg:gap-7">
               <Link
                 href="/curriculum"
                 className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
@@ -74,7 +74,7 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
               >
                 About Us
               </Link>
-            </nav>
+            </nav> */}
           </div>
 
           {/* Right: Actions (Reserve Your Seat) */}
@@ -115,7 +115,7 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
         </div>
 
         {/* Mobile Dropdown Menu */}
-        {mobileMenuOpen && (
+        {/* {mobileMenuOpen && (
           <div className="md:hidden py-4 px-4 bg-white/95 backdrop-blur-md border border-gray-100 rounded-2xl shadow-xl mt-2 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
             <nav className="flex flex-col space-y-2">
               <Link
@@ -152,7 +152,7 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
               </div>
             )}
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Top Left Corner Red Ribbon - Pilot Version (Hidden on /pilot page) */}

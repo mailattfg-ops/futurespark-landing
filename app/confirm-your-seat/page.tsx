@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useState, useMemo, useEffect, useCallback, Suspense } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ChevronLeft,
   Calendar as CalendarIcon,
@@ -17,8 +20,6 @@ import {
   ShieldCheck,
   Laptop,
   Star,
-  X,
-  ChevronDown,
 } from "lucide-react";
 import {
   timezones,
@@ -31,10 +32,10 @@ import {
   SlotOption,
   DateOption,
   defaultTimeSlots,
-} from "@/lib/timezone-utils";
-import { TimezoneSelect } from "@/components/ui/timezone-select";
-import { CustomSelect } from "@/components/ui/custom-select";
-import { track } from "@/lib/meta";
+} from "../../lib/timezone-utils";
+import { TimezoneSelect } from "../../components/ui/timezone-select";
+import { CustomSelect } from "../../components/ui/custom-select";
+import { track } from "../../lib/meta";
 
 const countryCodes = [
   { code: "+91", flag: "🇮🇳", label: "India (+91)" },
@@ -51,13 +52,8 @@ const gradeOptions = [
   "Grade 9", "Grade 10", "Grade 11", "Grade 12",
 ];
 
-
-interface BookDemoModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
+function ConfirmSeatFormContent() {
+  const router = useRouter();
   const [step, setStep] = useState<1 | 2>(1);
 
   // Step 1 Form Fields
@@ -71,7 +67,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
   const [language, setLanguage] = useState("");
   const [hearAbout, setHearAbout] = useState("");
 
-  // Step 2 Form Fields
+  // Step 2 Form Fields - Quick Dates + Custom Date
   const [selectedDateId, setSelectedDateId] = useState<string>("date-0");
   const [customDateVal, setCustomDateVal] = useState<string>("");
   const [showCalendarPicker, setShowCalendarPicker] = useState<boolean>(false);
@@ -83,6 +79,11 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
     setTimezone(matched);
   }, [presentCountry, countryCode]);
 
+  // Detect if selected location is USA
+  const isUSA = useMemo(() => {
+    return isUSALocation(presentCountry, countryCode, timezone);
+  }, [presentCountry, countryCode, timezone]);
+
   // Live slots & selection state
   const [slotsList, setSlotsList] = useState<SlotOption[]>(defaultTimeSlots);
   const [selectedSlotTime, setSelectedSlotTime] = useState<string>("10:00 AM");
@@ -93,67 +94,22 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const scrollBodyRef = useRef<HTMLDivElement>(null);
-
-  // Lock body scroll when modal is open
+  // Auto-redirect to home page on submission
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+    if (isSubmitted) {
+      const timer = setTimeout(() => {
+        router.push("/");
+      }, 2000);
+      return () => clearTimeout(timer);
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
-  // Close on Escape key
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    if (isOpen) window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [isOpen, onClose]);
-
-  // Reset scroll and form when modal state changes
-  useEffect(() => {
-    if (isOpen && scrollBodyRef.current) {
-      scrollBodyRef.current.scrollTop = 0;
-    }
-  }, [isOpen, step]);
-
-  // Reset form when modal closes
-  useEffect(() => {
-    if (!isOpen) {
-      setStep(1);
-      setParentName("");
-      setPhone("");
-      setEmail("");
-      setChildName("");
-      setStudentGrade("");
-      setPresentCountry("");
-      setLanguage("");
-      setHearAbout("");
-      setSelectedDateId("date-0");
-      setCustomDateVal("");
-      setShowCalendarPicker(false);
-      setIsSubmitted(false);
-      setSubmitError(null);
-    }
-  }, [isOpen]);
-
-  // Detect if selected location is USA
-  const isUSA = useMemo(() => {
-    return isUSALocation(presentCountry, countryCode, timezone);
-  }, [presentCountry, countryCode, timezone]);
+  }, [isSubmitted, router]);
 
   // Dynamic Quick Date Cards
   const quickDateOptions = useMemo<DateOption[]>(() => {
     return generateQuickDates(isUSA, timezone);
   }, [isUSA, timezone]);
 
+  // Custom date object if user picks a date from calendar input
   const customDateOption = useMemo<DateOption | null>(() => {
     if (!customDateVal) return null;
     const dateObj = new Date(customDateVal);
@@ -220,7 +176,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
           }
         }
       } catch {
-        // Fallback to local available slots
+        // Fallback to local available slots if endpoint fails
       }
 
       setSlotsList(available);
@@ -306,54 +262,64 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
       } else {
         setSubmitError(result.message || "Failed to submit demo request.");
       }
-    } catch (err: any) {
-      console.error("Submission failed:", err);
+    } catch {
       setIsSubmitted(true);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // Calculate min date string YYYY-MM-DD for custom date input based on first available date
   const minDateStr = useMemo(() => {
     const firstDate = quickDateOptions[0]?.rawDate || new Date();
     return `${firstDate.getFullYear()}-${String(firstDate.getMonth() + 1).padStart(2, "0")}-${String(firstDate.getDate()).padStart(2, "0")}`;
   }, [quickDateOptions]);
 
-  if (!isOpen) return null;
-
   return (
-    <div
-      ref={overlayRef}
-      onClick={(e) => {
-        if (e.target === overlayRef.current) onClose();
-      }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200"
-    >
-      <div className="w-full max-w-xl bg-gradient-to-b from-[#2E0B73] via-[#3B128E] to-[#250860] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-white/20 relative animate-in zoom-in-95 duration-200 max-h-[94vh] sm:max-h-[90vh] flex flex-col">
-        {/* Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-30 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
-          aria-label="Close modal"
-        >
-          <X className="w-4 h-4" />
-        </button>
+    <div className="min-h-screen bg-gradient-to-b from-[#2E0B73] via-[#3B128E] to-[#250860] text-white flex flex-col justify-between relative overflow-hidden font-sans">
+      {/* Background Decorative Mesh Blobs */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Modal Header */}
-        <div className="p-3.5 sm:p-6 pb-2.5 sm:pb-3 pr-12 sm:pr-6 text-center space-y-1 sm:space-y-1.5 flex-shrink-0">
-          <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[9.5px] sm:text-[11px] font-bold uppercase tracking-wider max-w-[85%] sm:max-w-none">
-            <Sparkles className="w-3 h-3 text-amber-400 animate-pulse flex-shrink-0" />
-            <span className="truncate">Financial Literacy FREE Pilot Program</span>
+      {/* Top Header */}
+      <header className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between z-10">
+        <Link href="/" className="flex items-center group">
+          <div className="inline-flex items-center justify-center bg-white/95 hover:bg-white rounded-xl px-3 py-1.5 shadow-md border border-white/60 backdrop-blur-md transition-all">
+            <Image
+              src="/newlogo.png"
+              alt="Finquo Junior Logo"
+              width={140}
+              height={36}
+              className="h-7 sm:h-8.5 w-auto object-contain"
+              priority
+            />
           </div>
-          <h2 className="text-xl sm:text-3xl font-black text-white tracking-tight font-sans">
-            Confirm your seat
-          </h2>
-        </div>
+        </Link>
 
-        {/* Scrollable Form Body */}
-        <div ref={scrollBodyRef} className="px-3 sm:px-6 pt-0 pb-3 sm:pb-4 overflow-y-auto flex-1">
-          <div className="bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl p-3.5 sm:p-5 shadow-xl text-gray-900 border border-white/40 space-y-3.5 sm:space-y-4 mb-2">
+        {/* <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-all"
+        >
+          <ChevronLeft className="w-4 h-4" /> Back to Home
+        </Link> */}
+      </header>
+
+      {/* Main Content Form Card */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 z-10">
+        <div className="w-full max-w-xl mx-auto space-y-4">
+          {/* Compact Section Header */}
+          <div className="text-center space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
+              <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+              Financial Literacy FREE Pilot Program
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-sans">
+              Confirm your seat
+            </h1>
+          </div>
+
+          {/* FINQUO Glassmorphic Form Card */}
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-xl text-gray-900 border border-white/40 relative space-y-4">
             {/* Step Indicator Header */}
             <div className="flex items-center justify-between pb-2 border-b border-gray-100">
               <div className="flex items-center gap-2">
@@ -383,6 +349,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
             </div>
 
             {isSubmitted ? (
+              /* Confirmation State */
               <div className="py-6 text-center space-y-3 animate-in fade-in zoom-in-95 duration-300">
                 <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
                   <CheckCircle2 className="w-7 h-7" />
@@ -414,28 +381,37 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                     </span>
                   </div>
                 </div>
-                <p className="text-[11px] text-gray-500 leading-relaxed max-w-xs mx-auto">
-                  Confirmation link sent to your WhatsApp. Your mentor will be waiting in the virtual classroom!
+                <p className="text-[11px] text-[#6366F1] font-bold leading-relaxed max-w-xs mx-auto flex items-center justify-center gap-1.5 animate-pulse">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /> Redirecting to Home Page...
                 </p>
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    setStep(1);
+                    setParentName("");
+                    setPhone("");
+                    setEmail("");
+                    setChildName("");
+                  }}
                   className="px-5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-800 transition-colors cursor-pointer"
                 >
-                  Done
+                  Reserve Another Seat
                 </button>
               </div>
             ) : step === 1 ? (
+              /* STEP 1: Parent & Student Info */
               <form onSubmit={handleStep1Submit} className="space-y-3">
+                {/* Parent Name & Student Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label htmlFor="modal-parentName" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    <label htmlFor="parentName" className="block text-[11px] font-bold text-gray-700 font-sans">
                       Parent / Guardian Name <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <User className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
                       <input
-                        id="modal-parentName"
+                        id="parentName"
                         type="text"
                         required
                         value={parentName}
@@ -447,13 +423,13 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
 
                   <div className="space-y-1">
-                    <label htmlFor="modal-childName" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    <label htmlFor="childName" className="block text-[11px] font-bold text-gray-700 font-sans">
                       Student&apos;s Name <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <GraduationCap className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
                       <input
-                        id="modal-childName"
+                        id="childName"
                         type="text"
                         required
                         value={childName}
@@ -465,13 +441,14 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
+                {/* Student Grade & Email Address */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label htmlFor="modal-studentGrade" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    <label htmlFor="studentGrade" className="block text-[11px] font-bold text-gray-700 font-sans">
                       Student&apos;s Grade <span className="text-red-500">*</span>
                     </label>
                     <CustomSelect
-                      id="modal-studentGrade"
+                      id="studentGrade"
                       value={studentGrade}
                       onChange={setStudentGrade}
                       options={gradeOptions}
@@ -481,13 +458,13 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
 
                   <div className="space-y-1">
-                    <label htmlFor="modal-email" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    <label htmlFor="email" className="block text-[11px] font-bold text-gray-700 font-sans">
                       Parent&apos;s Email Address <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <Mail className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-3 pointer-events-none" />
                       <input
-                        id="modal-email"
+                        id="email"
                         type="email"
                         required
                         value={email}
@@ -499,15 +476,16 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
+                {/* WhatsApp Number & Present Country */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label htmlFor="modal-phone" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    <label htmlFor="phone" className="block text-[11px] font-bold text-gray-700 font-sans">
                       Parent&apos;s WhatsApp Number <span className="text-red-500">*</span>
                     </label>
                     <div className="grid grid-cols-12 gap-1.5">
                       <div className="col-span-5 sm:col-span-4">
                         <CustomSelect
-                          id="modal-countryCode"
+                          id="countryCode"
                           aria-label="Country Code"
                           value={countryCode}
                           onChange={setCountryCode}
@@ -522,7 +500,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                       <div className="col-span-7 sm:col-span-8 relative">
                         <Phone className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-3 pointer-events-none" />
                         <input
-                          id="modal-phone"
+                          id="phone"
                           type="tel"
                           required
                           value={phone}
@@ -535,11 +513,11 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
 
                   <div className="space-y-1">
-                    <label htmlFor="modal-presentCountry" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    <label htmlFor="presentCountry" className="block text-[11px] font-bold text-gray-700 font-sans">
                       Country of Residence <span className="text-red-500">*</span>
                     </label>
                     <CustomSelect
-                      id="modal-presentCountry"
+                      id="presentCountry"
                       value={presentCountry}
                       onChange={setPresentCountry}
                       options={allCountriesList}
@@ -551,13 +529,14 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
+                {/* Preferred Language & How did you hear */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label htmlFor="modal-language" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    <label htmlFor="language" className="block text-[11px] font-bold text-gray-700 font-sans">
                       Preferred Language <span className="text-red-500">*</span>
                     </label>
                     <CustomSelect
-                      id="modal-language"
+                      id="language"
                       value={language}
                       onChange={setLanguage}
                       options={[
@@ -573,11 +552,11 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
 
                   <div className="space-y-1">
-                    <label htmlFor="modal-hearAbout" className="block text-[11px] font-bold text-gray-700 font-sans">
+                    <label htmlFor="hearAbout" className="block text-[11px] font-bold text-gray-700 font-sans">
                       How did you hear? <span className="text-gray-400 font-normal">(Optional)</span>
                     </label>
                     <CustomSelect
-                      id="modal-hearAbout"
+                      id="hearAbout"
                       value={hearAbout}
                       onChange={setHearAbout}
                       options={[
@@ -596,6 +575,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   <p className="text-xs text-red-500 font-medium pt-0.5">{submitError}</p>
                 )}
 
+                {/* Step 1 CTA Button */}
                 <div className="pt-1">
                   <button
                     type="submit"
@@ -616,7 +596,9 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                 </div>
               </form>
             ) : (
+              /* STEP 2: Choose Date & Time Slot */
               <div className="space-y-4">
+                {/* Top Navigation */}
                 <div className="flex items-center justify-between">
                   <button
                     type="button"
@@ -629,6 +611,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   <TimezoneSelect value={timezone} onChange={setTimezone} />
                 </div>
 
+                {/* Quick Date Selection Cards + Calendar Date Picker */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-bold text-gray-900">Select Class Date</h4>
@@ -659,6 +642,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                     })}
                   </div>
 
+                  {/* Calendar Date Picker Toggle */}
                   <div>
                     {showCalendarPicker ? (
                       <div className="p-2.5 bg-indigo-50/60 border border-indigo-200/80 rounded-xl flex items-center justify-between gap-2 animate-in fade-in duration-200">
@@ -692,6 +676,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   </div>
                 </div>
 
+                {/* Time Slots Section */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="text-[11px] font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
@@ -724,11 +709,11 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                             onClick={() => {
                               if (!isBookedOut) setSelectedSlotTime(slot.time);
                             }}
-                            className={`py-2 px-3 rounded-xl border text-center transition-all flex items-center justify-center ${isBookedOut
+                            className={`py-2.5 px-3 rounded-xl border text-center transition-all flex items-center justify-center ${isBookedOut
                               ? "border-gray-200 bg-gray-100/90 text-gray-400 cursor-not-allowed opacity-80"
                               : isSelected
-                              ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30 cursor-pointer"
-                              : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white cursor-pointer"
+                                ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30 cursor-pointer"
+                                : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white cursor-pointer"
                               }`}
                           >
                             <span className={`text-xs font-bold ${isBookedOut ? "line-through text-gray-400" : ""}`}>
@@ -745,6 +730,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                   <p className="text-xs text-red-500 font-medium">{submitError}</p>
                 )}
 
+                {/* Step 2 CTA Button */}
                 <div className="pt-1">
                   <button
                     type="button"
@@ -770,6 +756,7 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
             )}
           </div>
 
+          {/* Trust Badges Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
               <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
@@ -781,7 +768,26 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
             </div>
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="w-full max-w-5xl mx-auto px-4 py-3 text-center text-xs text-white/50 z-10">
+        © {new Date().getFullYear()} Finquo Junior. All rights reserved.
+      </footer>
     </div>
+  );
+}
+
+export default function ConfirmYourSeatPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#2E0B73] flex items-center justify-center text-white">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </div>
+      }
+    >
+      <ConfirmSeatFormContent />
+    </Suspense>
   );
 }
