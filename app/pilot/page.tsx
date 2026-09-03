@@ -6,6 +6,7 @@ import { Footer } from "@/components/footer";
 import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { BookDemoFormSection } from "@/app/home/components/book-demo-form";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { track } from "@/lib/meta";
 
 import { PilotHero } from "./components/pilot-hero";
 import { DualMarqueeSection } from "./components/dual-marquee";
@@ -17,13 +18,18 @@ export default function FinquoPilotPage() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
+  const handleConfirmSeat = () => {
+    track("InitiateCheckout");
+    setIsDemoModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden selection:bg-[#4F46E5]/20 selection:text-[#4F46E5]">
       {/* Shared Navigation Header */}
-      <Navbar onOpenDemoModal={() => setIsDemoModalOpen(true)} />
+      <Navbar onOpenDemoModal={handleConfirmSeat} />
 
       {/* Hero Banner & Stats Cards */}
-      <PilotHero onOpenDemoModal={() => setIsDemoModalOpen(true)} />
+      <PilotHero onOpenDemoModal={handleConfirmSeat} />
 
       {/* Dual Marquee Ticker */}
       <DualMarqueeSection />

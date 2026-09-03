@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BookOpen, UserCheck, FolderCheck, PackageCheck } from "lucide-react";
 
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { track } from "@/lib/meta";
 
 export function FoundationsOfWealthSection() {
   const features = [
@@ -80,6 +81,7 @@ export function FoundationsOfWealthSection() {
               href="#book-demo"
               onClick={(e) => {
                 e.preventDefault();
+                track("InitiateCheckout");
                 const el = document.getElementById("book-demo") || document.getElementById("book-class");
                 if (el) {
                   el.scrollIntoView({ behavior: "smooth" });

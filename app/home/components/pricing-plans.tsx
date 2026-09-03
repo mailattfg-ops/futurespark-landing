@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Check, Sparkles } from "lucide-react";
+import { track } from "@/lib/meta";
 
 export function PricingPlansSection() {
   const [billingCycle, setBillingCycle] = useState<"annual" | "monthly">("annual");
@@ -99,6 +100,7 @@ export function PricingPlansSection() {
                   href="#book-demo"
                   onClick={(e) => {
                     e.preventDefault();
+                    track("InitiateCheckout");
                     document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="w-full inline-flex items-center justify-center py-3.5 px-6 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-indigo-500/25 transition-all text-center cursor-pointer"

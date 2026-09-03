@@ -23,10 +23,16 @@ import { JoinThousandsSection } from "@/app/home/components/join-thousands";
 import { CertificationsTrustSection } from "@/app/home/components/certifications-trust";
 import { ParentReviewsSection } from "@/app/home/components/parent-reviews";
 import { Footer } from "@/components/footer";
+import { track } from "@/lib/meta";
 
 export default function HomePage() {
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+
+  const handleOpenDemoModal = () => {
+    track("InitiateCheckout");
+    setIsDemoModalOpen(true);
+  };
 
   const loadConfig = async () => {
     try {
@@ -75,10 +81,10 @@ export default function HomePage() {
       <BookDemoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
 
       {/* 1. Header / Navigation */}
-      <Navbar onOpenDemoModal={() => setIsDemoModalOpen(true)} />
+      <Navbar onOpenDemoModal={handleOpenDemoModal} />
 
       {/* 2. Hero Section */}
-      {isEnabled("hero") && <HeroSection onOpenDemoModal={() => setIsDemoModalOpen(true)} />}
+      {isEnabled("hero") && <HeroSection onOpenDemoModal={handleOpenDemoModal} />}
 
       {/* 3. Why Financial Literacy */}
       {isEnabled("whyFinancialLiteracy") && <WhyFinancialLiteracySection />}
