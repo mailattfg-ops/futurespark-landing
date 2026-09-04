@@ -27,6 +27,7 @@ import {
   getCountryCodeFromTimezone,
   getMatchingTimezone,
   allCountriesList,
+  allCountryCodesList,
   isUSALocation,
   generateQuickDates,
   getAvailableSlotsForDate,
@@ -38,15 +39,9 @@ import {
 import { TimezoneSelect } from "../../components/ui/timezone-select";
 import { CustomSelect } from "../../components/ui/custom-select";
 import { track } from "../../lib/meta";
+import { getDefaultSectionState, SectionState } from "../../lib/section-config";
 
-const countryCodes = [
-  { code: "+91", flag: "🇮🇳", label: "India (+91)" },
-  { code: "+1", flag: "🇺🇸", label: "USA (+1)" },
-  { code: "+44", flag: "🇬🇧", label: "UK (+44)" },
-  { code: "+971", flag: "🇦🇪", label: "UAE (+971)" },
-  { code: "+65", flag: "🇸🇬", label: "Singapore (+65)" },
-  { code: "+61", flag: "🇦🇺", label: "Australia (+61)" },
-];
+const countryCodes = allCountryCodesList;
 
 const gradeOptions = [
   "Grade 1", "Grade 2", "Grade 3", "Grade 4",
@@ -57,6 +52,36 @@ const gradeOptions = [
 function ConfirmSeatFormContent() {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2>(1);
+  const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
+
+  useEffect(() => {
+    async function loadSectionsConfig() {
+      try {
+        const cached = localStorage.getItem("landing_sections_config");
+        if (cached) {
+          setSections(JSON.parse(cached));
+        }
+        const res = await fetch("/api/sections");
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setSections(json.data);
+            localStorage.setItem("landing_sections_config", JSON.stringify(json.data));
+          }
+        }
+      } catch {}
+    }
+    loadSectionsConfig();
+
+    const handleUpdate = () => {
+      const cached = localStorage.getItem("landing_sections_config");
+      if (cached) setSections(JSON.parse(cached));
+    };
+    window.addEventListener("storage_sections_updated", handleUpdate);
+    return () => window.removeEventListener("storage_sections_updated", handleUpdate);
+  }, []);
+
+  const isEnabled = (key: string) => sections[key] !== false;
 
   // Step 1 Form Fields
   const [parentName, setParentName] = useState("");
@@ -298,41 +323,38 @@ function ConfirmSeatFormContent() {
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
 
       {/* Top Header */}
-      <header className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between z-10">
-        <Link href="/" className="flex items-center group">
-          <div className="inline-flex items-center justify-center bg-white/95 hover:bg-white rounded-xl px-3 py-1.5 shadow-md border border-white/60 backdrop-blur-md transition-all">
-            <Image
-              src="/newlogo.png"
-              alt="Finquo Junior Logo"
-              width={140}
-              height={36}
-              className="h-7 sm:h-8.5 w-auto object-contain"
-              priority
-            />
-          </div>
-        </Link>
-
-        {/* <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-all"
-        >
-          <ChevronLeft className="w-4 h-4" /> Back to Home
-        </Link> */}
-      </header>
+      {isEnabled("confirm_header") && (
+        <header className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between z-10">
+          <Link href="/" className="flex items-center group">
+            <div className="inline-flex items-center justify-center bg-white/95 hover:bg-white rounded-xl px-3 py-1.5 shadow-md border border-white/60 backdrop-blur-md transition-all">
+              <Image
+                src="/newlogo.png"
+                alt="Finquo Junior Logo"
+                width={140}
+                height={36}
+                className="h-7 sm:h-8.5 w-auto object-contain"
+                priority
+              />
+            </div>
+          </Link>
+        </header>
+      )}
 
       {/* Main Content Form Card */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 z-10">
         <div className="w-full max-w-xl mx-auto space-y-4">
           {/* Compact Section Header */}
-          <div className="text-center space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
-              <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-              Financial Literacy FREE Pilot Program
+          {isEnabled("confirm_heroBanner") && (
+            <div className="text-center space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider">
+                <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+                Financial Literacy FREE Pilot Program
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-sans">
+                Confirm your seat
+              </h1>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-sans">
-              Confirm your seat
-            </h1>
-          </div>
+          )}
 
           {/* FINQUO Glassmorphic Form Card */}
           <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-xl text-gray-900 border border-white/40 relative space-y-4">
@@ -507,9 +529,12 @@ function ConfirmSeatFormContent() {
                           onChange={setCountryCode}
                           options={countryCodes.map((c) => ({
                             value: c.code,
-                            label: c.code,
+                            displayValue: c.code,
+                            label: `${c.country} (${c.code})`,
                             flag: c.flag,
+                            country: c.country,
                           }))}
+                          searchable
                         />
                       </div>
 
@@ -773,23 +798,27 @@ function ConfirmSeatFormContent() {
           </div>
 
           {/* Trust Badges Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
-              <span className="text-xs font-bold">5/5 Parent Rating</span>
+          {isEnabled("confirm_trustBadges") && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
+                <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
+                <span className="text-xs font-bold">5/5 Parent Rating</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
+                <Laptop className="w-3.5 h-3.5 text-indigo-300 flex-shrink-0" />
+                <span className="text-xs font-bold">Live 1-on-1 Virtual Lab</span>
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white">
-              <Laptop className="w-3.5 h-3.5 text-indigo-300 flex-shrink-0" />
-              <span className="text-xs font-bold">Live 1-on-1 Virtual Lab</span>
-            </div>
-          </div>
+          )}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="w-full max-w-5xl mx-auto px-4 py-3 text-center text-xs text-white/50 z-10">
-        © {new Date().getFullYear()} Finquo Junior. All rights reserved.
-      </footer>
+      {isEnabled("confirm_footer") && (
+        <footer className="w-full max-w-5xl mx-auto px-4 py-3 text-center text-xs text-white/50 z-10">
+          © {new Date().getFullYear()} Finquo Junior. All rights reserved.
+        </footer>
+      )}
     </div>
   );
 }

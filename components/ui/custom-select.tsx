@@ -7,8 +7,10 @@ import { ChevronDown, Search, Check } from "lucide-react";
 export interface CustomSelectOption {
   value: string;
   label: string;
+  displayValue?: string;
   flag?: string;
   icon?: React.ReactNode;
+  country?: string;
 }
 
 interface CustomSelectProps {
@@ -78,7 +80,9 @@ export function CustomSelect({
     if (!searchable || !searchQuery.trim()) return normalizedOptions;
     const q = searchQuery.toLowerCase().trim();
     return normalizedOptions.filter((opt) =>
-      opt.label.toLowerCase().includes(q) || opt.value.toLowerCase().includes(q)
+      opt.label.toLowerCase().includes(q) ||
+      opt.value.toLowerCase().includes(q) ||
+      (opt.country && opt.country.toLowerCase().includes(q))
     );
   }, [normalizedOptions, searchQuery, searchable]);
 
@@ -138,6 +142,11 @@ export function CustomSelect({
     }
   }, [isOpen, searchable]);
 
+  const popoverWidth = searchable ? Math.max(coords.width, 240) : coords.width;
+  const popoverLeft = typeof window !== "undefined"
+    ? Math.max(10, Math.min(coords.left, window.innerWidth - popoverWidth - 12))
+    : coords.left;
+
   return (
     <div className={`relative w-full ${className}`}>
       {/* Trigger Button */}
@@ -156,9 +165,9 @@ export function CustomSelect({
           <span className="truncate">
             {selectedOption ? (
               <span className="flex items-center gap-1.5 truncate">
-                {selectedOption.flag && <span>{selectedOption.flag}</span>}
+                {selectedOption.flag && <span className="flex-shrink-0">{selectedOption.flag}</span>}
                 {selectedOption.icon}
-                <span className="truncate">{selectedOption.label}</span>
+                <span className="truncate">{selectedOption.displayValue || selectedOption.label}</span>
               </span>
             ) : (
               placeholder
@@ -178,8 +187,8 @@ export function CustomSelect({
           ref={dropdownRef}
           style={{
             position: "fixed",
-            left: `${coords.left}px`,
-            width: `${coords.width}px`,
+            left: `${popoverLeft}px`,
+            width: `${popoverWidth}px`,
             ...(openUpward
               ? { bottom: `${window.innerHeight - coords.top + 6}px` }
               : { top: `${coords.top + 6}px` }),
@@ -209,11 +218,11 @@ export function CustomSelect({
                 No matching options found.
               </div>
             ) : (
-              filteredOptions.map((opt) => {
+              filteredOptions.map((opt, idx) => {
                 const isSelected = opt.value === value;
                 return (
                   <button
-                    key={opt.value}
+                    key={`${opt.value}-${opt.country || opt.label}-${idx}`}
                     type="button"
                     onClick={() => {
                       onChange(opt.value);

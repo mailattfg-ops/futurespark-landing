@@ -11,12 +11,16 @@ import {
   Loader2,
   Clock,
   ChevronDown,
+  ShieldCheck,
+  Laptop,
 } from "lucide-react";
 import {
   timezones,
   detectUserTimezone,
   getCountryCodeFromTimezone,
   getMatchingTimezone,
+  allCountriesList,
+  allCountryCodesList,
   isUSALocation,
   generateQuickDates,
   getAvailableSlotsForDate,
@@ -26,16 +30,11 @@ import {
   defaultTimeSlots,
 } from "../../lib/timezone-utils";
 import { TimezoneSelect } from "../../components/ui/timezone-select";
+import { CustomSelect } from "../../components/ui/custom-select";
 import { track } from "../../lib/meta";
+import { getDefaultSectionState, SectionState } from "../../lib/section-config";
 
-const countryCodes = [
-  { code: "+91", flag: "🇮🇳", label: "IN +91" },
-  { code: "+1", flag: "🇺🇸", label: "US +1" },
-  { code: "+44", flag: "🇬🇧", label: "UK +44" },
-  { code: "+971", flag: "🇦🇪", label: "UAE +971" },
-  { code: "+65", flag: "🇸🇬", label: "SG +65" },
-  { code: "+61", flag: "🇦🇺", label: "AU +61" },
-];
+const countryCodes = allCountryCodesList;
 
 const gradeOptions = [
   "Grade 1", "Grade 2", "Grade 3", "Grade 4",
@@ -47,12 +46,43 @@ function ClaimFreeClassFormContent() {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [partialLeadId, setPartialLeadId] = useState<string | null>(null);
+  const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
+
+  useEffect(() => {
+    async function loadSectionsConfig() {
+      try {
+        const cached = localStorage.getItem("landing_sections_config");
+        if (cached) {
+          setSections(JSON.parse(cached));
+        }
+        const res = await fetch("/api/sections");
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setSections(json.data);
+            localStorage.setItem("landing_sections_config", JSON.stringify(json.data));
+          }
+        }
+      } catch { }
+    }
+    loadSectionsConfig();
+
+    const handleUpdate = () => {
+      const cached = localStorage.getItem("landing_sections_config");
+      if (cached) setSections(JSON.parse(cached));
+    };
+    window.addEventListener("storage_sections_updated", handleUpdate);
+    return () => window.removeEventListener("storage_sections_updated", handleUpdate);
+  }, []);
+
+  const isEnabled = (key: string) => sections[key] !== false;
 
   // ── Step 1 State ───────────────────────────────────────────────────────────
   const [childName, setChildName] = useState("");
   const [studentGrade, setStudentGrade] = useState("Grade 6");
   const [dialCode, setDialCode] = useState("+91");
   const [phone, setPhone] = useState("");
+  const [presentCountry, setPresentCountry] = useState("India");
   const [email, setEmail] = useState("");
   const [hasLaptop, setHasLaptop] = useState<boolean>(true);
   const [isStep1Submitting, setIsStep1Submitting] = useState(false);
@@ -178,8 +208,8 @@ function ClaimFreeClassFormContent() {
   // Handle Step 1 Submission ("Book a Free Trial Class")
   const handleStep1Submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!childName.trim() || !phone.trim() || !email.trim()) {
-      setSubmitError("Please fill in your name, mobile number, and email.");
+    if (!childName.trim() || !phone.trim()) {
+      setSubmitError("Please fill in student name and mobile number.");
       return;
     }
 
@@ -192,8 +222,6 @@ function ClaimFreeClassFormContent() {
       studentGrade,
       dialCode,
       phone: phone.trim(),
-      email: email.trim(),
-      hasLaptop,
     };
 
     try {
@@ -240,8 +268,6 @@ function ClaimFreeClassFormContent() {
       studentGrade,
       dialCode,
       phone: phone.trim(),
-      email: email.trim(),
-      hasLaptop,
       preferredSlotDate: `${activeDateObj.fullDateStr} (${activeDateObj.weekdayName})`,
       preferredSlotTime: selectedSlotTime,
     };
@@ -268,6 +294,11 @@ function ClaimFreeClassFormContent() {
   // Handle Step 3 Final Submission ("Submit")
   const handleStep3Submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!parentName.trim() || !email.trim()) {
+      setSubmitError("Please fill in parent name and email address.");
+      return;
+    }
+
     setSubmitError(null);
     setIsStep3Submitting(true);
 
@@ -311,20 +342,22 @@ function ClaimFreeClassFormContent() {
   return (
     <div className="min-h-screen bg-[#EEF5FC] text-gray-900 flex flex-col justify-between font-sans">
       {/* Top Light Navbar with Logo */}
-      <header className="w-full bg-white border-b border-gray-200/80 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-xs z-10">
-        <Link href="/" className="flex items-center">
-          <div className="relative w-36 h-9 sm:w-44 sm:h-11">
-            <Image
-              src="/newlogo.png"
-              alt="Finquo Junior Logo"
-              fill
-              sizes="(min-width: 640px) 176px, 144px"
-              className="object-contain object-left"
-              priority
-            />
-          </div>
-        </Link>
-      </header>
+      {isEnabled("claim_header") && (
+        <header className="w-full bg-white border-b border-gray-200/80 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-xs z-10">
+          <Link href="/" className="flex items-center">
+            <div className="relative w-36 h-9 sm:w-44 sm:h-11">
+              <Image
+                src="/newlogo.png"
+                alt="Finquo Junior Logo"
+                fill
+                sizes="(min-width: 640px) 176px, 144px"
+                className="object-contain object-left"
+                priority
+              />
+            </div>
+          </Link>
+        </header>
+      )}
 
       {/* Main Content Area */}
       <main className="flex-1 flex items-center justify-center px-4 py-8 sm:py-12 z-10">
@@ -347,10 +380,10 @@ function ClaimFreeClassFormContent() {
 
                 <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight text-center flex-1 font-sans">
                   {step === 1
-                    ? "Claim Your Free Coding Class"
+                    ? "Book Financial Literacy Class"
                     : step === 2
-                    ? "Select Date & Time"
-                    : "Help us customize your experience"}
+                      ? "Select Date & Time"
+                      : "Help us customize your experience"}
                 </h1>
                 <div className="w-6" />
               </div>
@@ -358,19 +391,16 @@ function ClaimFreeClassFormContent() {
               {/* 3-Segment Progress Bar */}
               <div className="flex items-center gap-2.5">
                 <div
-                  className={`h-2 flex-1 rounded-full transition-all duration-300 ${
-                    step >= 1 ? "bg-[#7C3AED]" : "bg-gray-200"
-                  }`}
+                  className={`h-2 flex-1 rounded-full transition-all duration-300 ${step >= 1 ? "bg-[#7C3AED]" : "bg-gray-200"
+                    }`}
                 />
                 <div
-                  className={`h-2 flex-1 rounded-full transition-all duration-300 ${
-                    step >= 2 ? "bg-[#7C3AED]" : "bg-gray-200"
-                  }`}
+                  className={`h-2 flex-1 rounded-full transition-all duration-300 ${step >= 2 ? "bg-[#7C3AED]" : "bg-gray-200"
+                    }`}
                 />
                 <div
-                  className={`h-2 flex-1 rounded-full transition-all duration-300 ${
-                    step >= 3 ? "bg-[#7C3AED]" : "bg-gray-200"
-                  }`}
+                  className={`h-2 flex-1 rounded-full transition-all duration-300 ${step >= 3 ? "bg-[#7C3AED]" : "bg-gray-200"
+                    }`}
                 />
               </div>
             </div>
@@ -397,48 +427,41 @@ function ClaimFreeClassFormContent() {
             ) : step === 1 ? (
               /* SECTION 1 FORM */
               <form onSubmit={handleStep1Submit} className="space-y-5">
-                {/* Child's Full Name */}
+                {/* Student's Name */}
                 <div className="space-y-1">
                   <div className="relative">
                     <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-500 z-10">
-                      Child&apos;s Full Name
+                      Student&apos;s Name
                     </label>
                     <input
                       type="text"
                       required
                       value={childName}
                       onChange={(e) => setChildName(e.target.value)}
-                      placeholder="Enter your child's full name"
+                      placeholder="Enter student's name"
                       className="w-full bg-[#F3F6FC]/70 border border-gray-200 rounded-2xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] focus:bg-white transition-all font-medium"
                     />
                   </div>
-                  <p className="text-[11px] text-gray-400 font-medium pl-1">
-                    This will be used on your child&apos;s certificate
-                  </p>
                 </div>
 
-                {/* Select Child's Grade */}
+                {/* Student's Grade */}
                 <div className="space-y-1">
                   <div className="relative">
                     <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-500 z-10">
-                      Select Child&apos;s Grade
+                      Student&apos;s Grade
                     </label>
-                    <select
+                    <CustomSelect
+                      id="studentGrade"
                       value={studentGrade}
-                      onChange={(e) => setStudentGrade(e.target.value)}
-                      className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-[#7C3AED] appearance-none cursor-pointer font-medium"
-                    >
-                      {gradeOptions.map((g) => (
-                        <option key={g} value={g}>
-                          {g}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="w-5 h-5 text-gray-700 absolute right-4 top-3.5 pointer-events-none" />
+                      onChange={setStudentGrade}
+                      options={gradeOptions}
+                      placeholder="Select grade (1 to 12)"
+                      buttonClassName="py-3 px-4 text-sm text-gray-900 border-gray-300 rounded-2xl font-medium focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20"
+                    />
                   </div>
                 </div>
 
-                {/* Dial Code & Mobile Number */}
+                {/* Dial Code & Parent's WhatsApp Number */}
                 <div className="space-y-1">
                   <div className="grid grid-cols-12 gap-2.5">
                     {/* Dial Code */}
@@ -446,31 +469,34 @@ function ClaimFreeClassFormContent() {
                       <label className="absolute -top-2.5 left-3 bg-white px-1 text-[11px] font-bold text-gray-500 z-10">
                         Dial Code
                       </label>
-                      <select
+                      <CustomSelect
+                        id="dialCode"
+                        aria-label="Dial Code"
                         value={dialCode}
-                        onChange={(e) => setDialCode(e.target.value)}
-                        className="w-full bg-white border border-gray-300 rounded-2xl pl-3 pr-7 py-3 text-xs sm:text-sm font-bold text-gray-900 focus:outline-none focus:border-[#7C3AED] appearance-none cursor-pointer"
-                      >
-                        {countryCodes.map((c) => (
-                          <option key={c.code} value={c.code}>
-                            {c.flag} {c.code}
-                          </option>
-                        ))}
-                      </select>
-                      <ChevronDown className="w-4 h-4 text-gray-700 absolute right-2.5 top-4 pointer-events-none" />
+                        onChange={setDialCode}
+                        options={countryCodes.map((c) => ({
+                          value: c.code,
+                          displayValue: c.code,
+                          label: `${c.country} (${c.code})`,
+                          flag: c.flag,
+                          country: c.country,
+                        }))}
+                        searchable
+                        buttonClassName="py-3 px-2 sm:px-3 text-xs sm:text-sm font-bold text-gray-900 border-gray-300 rounded-2xl focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20"
+                      />
                     </div>
 
-                    {/* Mobile Number */}
+                    {/* Parent's WhatsApp Number */}
                     <div className="col-span-7 sm:col-span-8 relative">
                       <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-500 z-10">
-                        Mobile Number
+                        Parent&apos;s WhatsApp Number
                       </label>
                       <input
                         type="tel"
                         required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Enter 10-digit mobile number"
+                        placeholder="Enter WhatsApp number"
                         className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] transition-all font-medium"
                       />
                     </div>
@@ -480,52 +506,6 @@ function ClaimFreeClassFormContent() {
                   </p>
                 </div>
 
-                {/* Parent's Email ID */}
-                <div className="space-y-1">
-                  <div className="relative">
-                    <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-500 z-10">
-                      Parent&apos;s Email ID
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter parent's email address"
-                      className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] transition-all font-medium"
-                    />
-                  </div>
-                </div>
-
-                {/* Do you have a Laptop or Desktop? */}
-                <div className="space-y-2 pt-1">
-                  <label className="block text-xs font-bold text-gray-800">
-                    Do you have a Laptop or Desktop?
-                  </label>
-                  <div className="flex items-center gap-6">
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                      <input
-                        type="radio"
-                        name="hasLaptop"
-                        checked={hasLaptop === true}
-                        onChange={() => setHasLaptop(true)}
-                        className="w-4 h-4 accent-[#7C3AED] cursor-pointer"
-                      />
-                      <span className="text-xs font-semibold text-gray-800">Yes</span>
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                      <input
-                        type="radio"
-                        name="hasLaptop"
-                        checked={hasLaptop === false}
-                        onChange={() => setHasLaptop(false)}
-                        className="w-4 h-4 accent-[#7C3AED] cursor-pointer"
-                      />
-                      <span className="text-xs font-semibold text-gray-800">No</span>
-                    </label>
-                  </div>
-                </div>
 
                 {submitError && (
                   <p className="text-xs text-red-500 font-semibold">{submitError}</p>
@@ -551,19 +531,14 @@ function ClaimFreeClassFormContent() {
                     )}
                   </button>
 
-                  <div className="text-center text-[10px] text-gray-400 space-y-0.5 mt-3 leading-tight">
-                    <p>Note: Laptop or desktop is compulsory for this class.</p>
-                    <p>
-                      By proceeding further, you agree to our{" "}
-                      <Link href="/privacy-policy" className="text-[#7C3AED] underline">
-                        Terms &amp; Conditions
-                      </Link>{" "}
-                      and our{" "}
-                      <Link href="/privacy-policy" className="text-[#7C3AED] underline">
-                        Privacy Policy
-                      </Link>
-                      .
-                    </p>
+                  <div className="flex items-center justify-center gap-3 text-[11px] sm:text-xs text-gray-500 font-medium mt-3">
+                    <span className="flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> 100% Free Trial
+                    </span>
+                    <span className="text-gray-300">•</span>
+                    <span className="flex items-center gap-1">
+                      <Laptop className="w-3.5 h-3.5 text-indigo-500" /> Laptop/Desktop Recommended
+                    </span>
                   </div>
                 </div>
               </form>
@@ -588,11 +563,10 @@ function ClaimFreeClassFormContent() {
                           key={opt.id}
                           type="button"
                           onClick={() => setSelectedDateId(opt.id)}
-                          className={`py-3 px-2 rounded-2xl border text-center transition-all cursor-pointer ${
-                            isSelected
+                          className={`py-3 px-2 rounded-2xl border text-center transition-all cursor-pointer ${isSelected
                               ? "bg-[#7C3AED] text-white border-[#7C3AED] font-extrabold shadow-sm"
                               : "bg-white border-gray-200 hover:border-gray-300 text-gray-800 font-semibold"
-                          }`}
+                            }`}
                         >
                           <span className="block text-xs">{opt.dayName}</span>
                           <span className={`block text-xs font-black mt-0.5 ${isSelected ? "text-white" : "text-gray-900"}`}>
@@ -633,13 +607,12 @@ function ClaimFreeClassFormContent() {
                             type="button"
                             disabled={isBookedOut}
                             onClick={() => !isBookedOut && setSelectedSlotTime(slot.time)}
-                            className={`py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center ${
-                              isBookedOut
+                            className={`py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center ${isBookedOut
                                 ? "bg-gray-100/90 border-gray-200 text-gray-400 cursor-not-allowed opacity-80"
                                 : isSelected
-                                ? "border-[#7C3AED] bg-[#7C3AED]/10 text-[#7C3AED] font-extrabold ring-2 ring-[#7C3AED]/30 cursor-pointer"
-                                : "bg-white border-gray-200 hover:border-gray-300 text-gray-800 font-semibold cursor-pointer"
-                            }`}
+                                  ? "border-[#7C3AED] bg-[#7C3AED]/10 text-[#7C3AED] font-extrabold ring-2 ring-[#7C3AED]/30 cursor-pointer"
+                                  : "bg-white border-gray-200 hover:border-gray-300 text-gray-800 font-semibold cursor-pointer"
+                              }`}
                           >
                             <span className={`text-xs font-bold ${isBookedOut ? "line-through text-gray-400" : ""}`}>
                               {displayTime}
@@ -683,92 +656,42 @@ function ClaimFreeClassFormContent() {
             ) : (
               /* SECTION 3 FORM */
               <form onSubmit={handleStep3Submit} className="space-y-5">
-                {/* Parent's Full Name */}
+                {/* Parent / Guardian Name */}
                 <div className="space-y-1">
                   <div className="relative">
                     <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-500 z-10">
-                      Parent&apos;s Full Name
+                      Parent / Guardian Name
                     </label>
                     <input
                       type="text"
                       required
                       value={parentName}
                       onChange={(e) => setParentName(e.target.value)}
-                      placeholder="Enter parent's full name"
+                      placeholder="Enter parent / guardian name"
                       className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] transition-all font-medium"
                     />
                   </div>
-                  <p className="text-[11px] text-gray-400 font-medium pl-1">
-                    This will be used on your child&apos;s certificate
-                  </p>
                 </div>
 
-                {/* Who are you? */}
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-gray-800">Who are you?</label>
-                  <div className="flex flex-wrap gap-2">
-                    {["Parent", "Student", "Guardian"].map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => setWhoAreYou(opt)}
-                        className={`px-4 py-2 rounded-2xl border text-xs font-semibold transition-all cursor-pointer ${
-                          whoAreYou === opt
-                            ? "bg-[#7C3AED]/10 border-[#7C3AED] text-[#7C3AED] font-extrabold ring-1 ring-[#7C3AED]"
-                            : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
+                {/* Parent's Email Address */}
+                <div className="space-y-1">
+                  <div className="relative">
+                    <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-500 z-10">
+                      Parent&apos;s Email Address
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="parent@example.com"
+                      className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#7C3AED] transition-all font-medium"
+                    />
                   </div>
                 </div>
 
-                {/* Why are you booking this demo class? */}
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-gray-800">
-                    Why are you booking this demo class?
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {["Want to buy course", "Just want the free demo class"].map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => setBookingReason(opt)}
-                        className={`px-4 py-2 rounded-2xl border text-xs font-semibold transition-all cursor-pointer ${
-                          bookingReason === opt
-                            ? "bg-[#7C3AED]/10 border-[#7C3AED] text-[#7C3AED] font-extrabold ring-1 ring-[#7C3AED]"
-                            : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                </div>
 
-                {/* When are you planning to buy the course? */}
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-gray-800">
-                    When are you planning to buy the course?
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {["After the demo", "This week", "This month", "Just exploring"].map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => setPurchaseTimeline(opt)}
-                        className={`px-4 py-2 rounded-2xl border text-xs font-semibold transition-all cursor-pointer ${
-                          purchaseTimeline === opt
-                            ? "bg-[#7C3AED]/10 border-[#7C3AED] text-[#7C3AED] font-extrabold ring-1 ring-[#7C3AED]"
-                            : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+
 
                 {submitError && (
                   <p className="text-xs text-red-500 font-semibold">{submitError}</p>
@@ -801,9 +724,11 @@ function ClaimFreeClassFormContent() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-white border-t border-gray-200/80 px-4 py-4 text-center text-xs text-gray-500 z-10">
-        © {new Date().getFullYear()} Finquo Junior. All rights reserved.
-      </footer>
+      {isEnabled("claim_footer") && (
+        <footer className="w-full bg-white border-t border-gray-200/80 px-4 py-4 text-center text-xs text-gray-500 z-10">
+          © {new Date().getFullYear()} Finquo Junior. All rights reserved.
+        </footer>
+      )}
     </div>
   );
 }

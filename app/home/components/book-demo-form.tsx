@@ -24,6 +24,7 @@ import {
   timezones,
   getMatchingTimezone,
   allCountriesList,
+  allCountryCodesList,
   isUSALocation,
   generateQuickDates,
   getAvailableSlotsForDate,
@@ -36,14 +37,7 @@ import { TimezoneSelect } from "@/components/ui/timezone-select";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { track } from "@/lib/meta";
 
-const countryCodes = [
-  { code: "+91", flag: "🇮🇳", label: "India (+91)" },
-  { code: "+1", flag: "🇺🇸", label: "USA (+1)" },
-  { code: "+44", flag: "🇬🇧", label: "UK (+44)" },
-  { code: "+971", flag: "🇦🇪", label: "UAE (+971)" },
-  { code: "+65", flag: "🇸🇬", label: "Singapore (+65)" },
-  { code: "+61", flag: "🇦🇺", label: "Australia (+61)" },
-];
+const countryCodes = allCountryCodesList;
 
 const gradeOptions = [
   "Grade 1", "Grade 2", "Grade 3", "Grade 4",
