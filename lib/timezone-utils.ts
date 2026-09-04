@@ -216,6 +216,46 @@ export const allCountriesList: string[] = [
   "Zimbabwe"
 ];
 
+export function detectUserTimezone(): string {
+  try {
+    if (typeof window !== "undefined" && typeof Intl !== "undefined") {
+      const deviceTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (deviceTz) {
+        const exact = timezones.find((t) => t.value.toLowerCase() === deviceTz.toLowerCase());
+        if (exact) return exact.value;
+
+        const city = deviceTz.split("/")[1]?.replace("_", " ").toLowerCase();
+        if (city) {
+          const matchCity = timezones.find((t) =>
+            t.countryKeywords.some((k) => k.includes(city) || city.includes(k)) ||
+            t.value.toLowerCase().includes(city)
+          );
+          if (matchCity) return matchCity.value;
+        }
+
+        const region = deviceTz.split("/")[0];
+        const matchRegion = timezones.find((t) => t.value.startsWith(region));
+        if (matchRegion) return matchRegion.value;
+      }
+    }
+  } catch {
+    // Ignore error
+  }
+  return "Asia/Kolkata";
+}
+
+export function getCountryCodeFromTimezone(tz: string): string {
+  if (!tz) return "+91";
+  const lower = tz.toLowerCase();
+  if (lower.includes("kolkata") || lower.includes("india")) return "+91";
+  if (lower.includes("dubai") || lower.includes("riyadh") || lower.includes("abudhabi") || lower.includes("muscat")) return "+971";
+  if (lower.startsWith("america/") || lower.includes("new_york") || lower.includes("chicago") || lower.includes("los_angeles")) return "+1";
+  if (lower.includes("london") || lower.includes("uk") || lower.includes("europe")) return "+44";
+  if (lower.includes("singapore")) return "+65";
+  if (lower.startsWith("australia/")) return "+61";
+  return "+91";
+}
+
 export function getMatchingTimezone(countryStr: string, countryCodeStr?: string): string {
   const c = (countryStr || "").trim().toLowerCase();
   const code = (countryCodeStr || "").trim();
@@ -235,7 +275,7 @@ export function getMatchingTimezone(countryStr: string, countryCodeStr?: string)
   if (code === "+65") return "Asia/Singapore";
   if (code === "+61") return "Australia/Sydney";
 
-  return "Asia/Kolkata";
+  return detectUserTimezone();
 }
 
 export interface SlotOption {

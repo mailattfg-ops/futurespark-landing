@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import {
   timezones,
+  detectUserTimezone,
+  getCountryCodeFromTimezone,
   getMatchingTimezone,
   allCountriesList,
   isUSALocation,
@@ -73,10 +75,22 @@ function ConfirmSeatFormContent() {
   const [showCalendarPicker, setShowCalendarPicker] = useState<boolean>(false);
   const [timezone, setTimezone] = useState(timezones[0].value);
 
+  // Auto-detect device timezone and country code on mount
+  useEffect(() => {
+    const autoDetected = detectUserTimezone();
+    if (autoDetected) {
+      setTimezone(autoDetected);
+      const code = getCountryCodeFromTimezone(autoDetected);
+      if (code) setCountryCode(code);
+    }
+  }, []);
+
   // Auto-sync Timezone with Present Country & Country Code
   useEffect(() => {
-    const matched = getMatchingTimezone(presentCountry, countryCode);
-    setTimezone(matched);
+    if (presentCountry || countryCode !== "+91") {
+      const matched = getMatchingTimezone(presentCountry, countryCode);
+      setTimezone(matched);
+    }
   }, [presentCountry, countryCode]);
 
   // Detect if selected location is USA
