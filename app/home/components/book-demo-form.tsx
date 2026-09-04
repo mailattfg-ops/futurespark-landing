@@ -140,10 +140,12 @@ export function BookDemoFormSection() {
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data && Array.isArray(json.data.slots)) {
+            const cutoffHour = json.data.todayCutoffHour;
+            const updatedAvailable = getAvailableSlotsForDate(targetDate, timezone, isUSA, cutoffHour);
             const serverSlotsMap = new Map<string, any>();
             json.data.slots.forEach((s: any) => serverSlotsMap.set(s.time, s));
 
-            const merged = available.map((s) => {
+            const merged = updatedAvailable.map((s) => {
               const serverInfo = serverSlotsMap.get(s.time);
               if (serverInfo) {
                 return {

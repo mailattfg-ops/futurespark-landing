@@ -423,7 +423,8 @@ export function parseTimeToMinutes(timeStr: string): number {
 export function getAvailableSlotsForDate(
   targetDate: Date,
   timezone: string,
-  isUSA = false
+  isUSA = false,
+  customCutoffHour?: number
 ): SlotOption[] {
   // ponytail: cutoff clock runs on IST for everyone except USA (USA keeps its original viewer-clock behavior)
   const nowInTz = getCurrentDateTimeInTimezone(isUSA ? timezone : "Asia/Kolkata");
@@ -443,7 +444,8 @@ export function getAvailableSlotsForDate(
   }
 
   const currentHour = nowInTz.getHours();
-  if (currentHour >= 16) {
+  const cutoffHour = typeof customCutoffHour === "number" ? customCutoffHour : 16;
+  if (currentHour >= cutoffHour) {
     return [];
   }
 
