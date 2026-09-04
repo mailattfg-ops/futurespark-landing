@@ -1,4 +1,4 @@
-export type PageType = "home" | "confirm-your-seat" | "claim-free-class";
+export type PageType = "home" | "confirm-your-seat" | "claim-free-class" | "curriculum" | "about-us";
 
 export interface LandingSection {
   id: string;
@@ -263,6 +263,98 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     page: "claim-free-class",
     category: "Footer",
     description: "Page bottom copyright and links.",
+    enabled: true,
+  },
+
+  // ── Curriculum Page (/curriculum) ──────────────────────────────────────────
+  {
+    id: "curriculum_hero",
+    name: "Hero Banner & Course Detail Card",
+    page: "curriculum",
+    category: "Hero & Details",
+    description: "Top hero banner and floating Foundations of Wealth course overview card.",
+    enabled: true,
+  },
+  {
+    id: "curriculum_master",
+    name: "What Your Child Will Master",
+    page: "curriculum",
+    category: "Curriculum Content",
+    description: "Grid of key financial skills and certification highlight cards.",
+    enabled: true,
+  },
+  {
+    id: "curriculum_weeklyPlan",
+    name: "Weekly Course Plan Timeline",
+    page: "curriculum",
+    category: "Curriculum Content",
+    description: "Interactive 8-week structured roadmap with animated scroll timeline.",
+    enabled: true,
+  },
+  {
+    id: "curriculum_summaryBadges",
+    name: "Summary Badges Row",
+    page: "curriculum",
+    category: "Curriculum Content",
+    description: "Pill badges showcasing module counts, ratings, and target grades.",
+    enabled: true,
+  },
+  {
+    id: "curriculum_reviews",
+    name: "Parent & Student Reviews",
+    page: "curriculum",
+    category: "Social Proof",
+    description: "Testimonials and review quotes from parents and kids.",
+    enabled: true,
+  },
+  {
+    id: "curriculum_footer",
+    name: "Footer Navigation",
+    page: "curriculum",
+    category: "Footer",
+    description: "Page bottom footer navigation and copyright.",
+    enabled: true,
+  },
+
+  // ── About Us Page (/about-us) ──────────────────────────────────────────────
+  {
+    id: "about_hero",
+    name: "About Us Hero & Mission Statement",
+    page: "about-us",
+    category: "Header & Intro",
+    description: "Main About Us header, wavy graphic divider, and vision paragraphs.",
+    enabled: true,
+  },
+  {
+    id: "about_whyFinancialLiteracy",
+    name: "Why Financial Literacy Section",
+    page: "about-us",
+    category: "Content & Value",
+    description: "2-column section explaining why financial literacy matters.",
+    enabled: true,
+  },
+  {
+    id: "about_teamCommunity",
+    name: "Our Community & Team Banner",
+    page: "about-us",
+    category: "Content & Value",
+    description: "Large featured team photo card with community overlay.",
+    enabled: true,
+  },
+  {
+    id: "about_awardsPartners",
+    name: "Awards & Institutional Partners",
+    page: "about-us",
+    category: "Trust & Proof",
+    description: "Logos and badges of recognized awards and university partners.",
+    enabled: true,
+  },
+  {
+    id: "about_footer",
+    name: "Footer Navigation",
+    page: "about-us",
+    category: "Footer",
+    description: "Page bottom footer navigation and copyright.",
     enabled: true,
   },
 ];

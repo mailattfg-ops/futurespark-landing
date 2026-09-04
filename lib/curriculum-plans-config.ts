@@ -1,0 +1,80 @@
+export interface CurriculumPlanItem {
+  id: string;
+  week: string;
+  title: string;
+  subtitle: string;
+  icon: string;
+}
+
+export const DEFAULT_WEEKLY_PLANS: CurriculumPlanItem[] = [
+  {
+    id: "plan-1",
+    week: "Week 1",
+    title: "Money doesn't grow on trees it needs to be earned",
+    subtitle: "Money doesn't grow on trees it needs to be earned",
+    icon: "wallet",
+  },
+  {
+    id: "plan-2",
+    week: "Week 2",
+    title: "Magical of compounding",
+    subtitle: "How magical is Compounding and Introduction to Prospect Theory",
+    icon: "sparkles",
+  },
+  {
+    id: "plan-3",
+    week: "Week 3",
+    title: "Basic Accounting terms",
+    subtitle: "Basic accounting terms, Understanding Financial Statements of Businesses",
+    icon: "wallet",
+  },
+  {
+    id: "plan-4",
+    week: "Week 4",
+    title: "Make and use Personal Financial Statements",
+    subtitle: "How to make and use Personal Financial Statements?",
+    icon: "book",
+  },
+  {
+    id: "plan-5",
+    week: "Week 5",
+    title: "Needs vs Wants & Smart Budgeting",
+    subtitle: "Understanding 50/30/20 rule, income vs expense, and smart savings",
+    icon: "pie-chart",
+  },
+  {
+    id: "plan-6",
+    week: "Week 6",
+    title: "Banking, Cards & Loan Interest",
+    subtitle: "How bank accounts, credit cards, debit cards, and interest rates work",
+    icon: "credit-card",
+  },
+  {
+    id: "plan-7",
+    week: "Week 7",
+    title: "Market Cycles, Stocks & Inflation",
+    subtitle: "Understanding inflation, market cycles, SEBI, and compound growth",
+    icon: "trending-up",
+  },
+  {
+    id: "plan-8",
+    week: "Week 8",
+    title: "Capstone Business Pitch & Certification",
+    subtitle: "Developing a business model and presenting your personal capstone project",
+    icon: "award",
+  },
+];
+
+export const AVAILABLE_PLAN_ICONS = [
+  { id: "wallet", label: "Wallet" },
+  { id: "sparkles", label: "Sparkles" },
+  { id: "book", label: "Book" },
+  { id: "pie-chart", label: "Pie Chart" },
+  { id: "credit-card", label: "Credit Card" },
+  { id: "trending-up", label: "Trending Up" },
+  { id: "award", label: "Award" },
+  { id: "building", label: "Building" },
+  { id: "shield", label: "Shield" },
+  { id: "coins", label: "Coins" },
+  { id: "bar-chart", label: "Bar Chart" },
+];
