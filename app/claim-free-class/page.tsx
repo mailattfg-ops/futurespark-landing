@@ -380,7 +380,7 @@ function ClaimFreeClassFormContent() {
 
                 <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight text-center flex-1 font-sans">
                   {step === 1
-                    ? "Book Financial Literacy Class"
+                    ? "Book Financial Literacy Classes"
                     : step === 2
                       ? "Select Date & Time"
                       : "Help us customize your experience"}
@@ -564,8 +564,8 @@ function ClaimFreeClassFormContent() {
                           type="button"
                           onClick={() => setSelectedDateId(opt.id)}
                           className={`py-3 px-2 rounded-2xl border text-center transition-all cursor-pointer ${isSelected
-                              ? "bg-[#7C3AED] text-white border-[#7C3AED] font-extrabold shadow-sm"
-                              : "bg-white border-gray-200 hover:border-gray-300 text-gray-800 font-semibold"
+                            ? "bg-[#7C3AED] text-white border-[#7C3AED] font-extrabold shadow-sm"
+                            : "bg-white border-gray-200 hover:border-gray-300 text-gray-800 font-semibold"
                             }`}
                         >
                           <span className="block text-xs">{opt.dayName}</span>
@@ -608,10 +608,10 @@ function ClaimFreeClassFormContent() {
                             disabled={isBookedOut}
                             onClick={() => !isBookedOut && setSelectedSlotTime(slot.time)}
                             className={`py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center ${isBookedOut
-                                ? "bg-gray-100/90 border-gray-200 text-gray-400 cursor-not-allowed opacity-80"
-                                : isSelected
-                                  ? "border-[#7C3AED] bg-[#7C3AED]/10 text-[#7C3AED] font-extrabold ring-2 ring-[#7C3AED]/30 cursor-pointer"
-                                  : "bg-white border-gray-200 hover:border-gray-300 text-gray-800 font-semibold cursor-pointer"
+                              ? "bg-gray-100/90 border-gray-200 text-gray-400 cursor-not-allowed opacity-80"
+                              : isSelected
+                                ? "border-[#7C3AED] bg-[#7C3AED]/10 text-[#7C3AED] font-extrabold ring-2 ring-[#7C3AED]/30 cursor-pointer"
+                                : "bg-white border-gray-200 hover:border-gray-300 text-gray-800 font-semibold cursor-pointer"
                               }`}
                           >
                             <span className={`text-xs font-bold ${isBookedOut ? "line-through text-gray-400" : ""}`}>
@@ -648,9 +648,9 @@ function ClaimFreeClassFormContent() {
                     )}
                   </button>
 
-                  <p className="text-[10px] text-gray-400 text-center font-medium mt-3">
+                  {/* <p className="text-[10px] text-gray-400 text-center font-medium mt-3">
                     Note: Free class will be conducted by reputed teachers.
-                  </p>
+                  </p> */}
                 </div>
               </form>
             ) : (
