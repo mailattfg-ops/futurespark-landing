@@ -110,23 +110,80 @@ export async function POST(req: Request) {
       );
     }
 
-    // Clean phone number format
-    const cleanPhone = String(phone).trim();
+    // Clean & normalize phone number format (Auto-adds +91 for 10-digit Indian numbers)
+    let cleanPhone = String(phone).trim();
+    const digitsOnly = cleanPhone.replace(/\D/g, "");
+    if (digitsOnly.length === 10) {
+      cleanPhone = `+91${digitsOnly}`;
+    } else if (!cleanPhone.startsWith("+") && digitsOnly.length > 0) {
+      cleanPhone = `+${digitsOnly}`;
+    }
 
     const isVercel = process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
 
-    // 1. Trigger WhatsApp Marketing Template (finquo_free_demo_marketing) via Communication Service
+    // 1. Submit Lead to Pilot Leads API endpoint (Saves in Database & Admin Portal)
+    const leadEndpoints = [
+      process.env.BACKEND_URL
+        ? `${process.env.BACKEND_URL.replace(/\/$/, "")}/api/pilot-leads`
+        : null,
+      process.env.NEXT_PUBLIC_BACKEND_URL
+        ? `${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/\/$/, "")}/api/pilot-leads`
+        : null,
+      "https://api.finquo.ai/api/pilot-leads",
+      "https://app.finquo.ai/api/pilot-leads",
+      !isVercel ? "http://127.0.0.1:3002/courses/pilot-leads" : null,
+      !isVercel ? "http://localhost:3002/courses/pilot-leads" : null,
+      !isVercel ? "http://127.0.0.1:3000/api/pilot-leads" : null,
+      !isVercel ? "http://localhost:3000/api/pilot-leads" : null,
+    ].filter(Boolean) as string[];
+
+    const leadPayload = {
+      parentName,
+      studentName,
+      studentGrade,
+      parentEmail: parentEmail || `${cleanPhone.replace(/\D/g, "")}@lead.sheet`,
+      parentPhone: cleanPhone,
+      presentCountry: body.presentCountry || "India",
+      preferredLanguage: body.preferredLanguage || "English",
+      preferredSlotDate: sessionDate !== "to be confirmed" ? sessionDate : undefined,
+      preferredSlotTime: sessionTime !== "to be confirmed" ? sessionTime : undefined,
+      preferredTimezone: timezone,
+      hearAbout: "Google Sheets Webhook",
+    };
+
+    let leadSaved = false;
+    for (const url of leadEndpoints) {
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(leadPayload),
+        });
+        if (res.ok) {
+          leadSaved = true;
+          break;
+        }
+      } catch {}
+    }
+
+    // 2. Trigger WhatsApp Marketing Template (finquo_free_demo_marketing) via Communication Service / Gateway
     const commEndpoints = [
       process.env.COMMUNICATION_SERVICE_URL
         ? `${process.env.COMMUNICATION_SERVICE_URL.replace(/\/$/, "")}/whatsapp/send-marketing-template`
         : null,
-      process.env.COMMUNICATION_SERVICE_URL
-        ? `${process.env.COMMUNICATION_SERVICE_URL.replace(/\/$/, "")}/whatsapp/session-reminder`
+      process.env.BACKEND_URL
+        ? `${process.env.BACKEND_URL.replace(/\/$/, "")}/api/whatsapp/send-marketing-template`
         : null,
+      process.env.NEXT_PUBLIC_BACKEND_URL
+        ? `${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/\/$/, "")}/api/whatsapp/send-marketing-template`
+        : null,
+      "https://api.finquo.ai/api/whatsapp/send-marketing-template",
+      "https://app.finquo.ai/api/whatsapp/send-marketing-template",
       "https://api.finquo.ai/whatsapp/send-marketing-template",
-      "https://api.finquo.ai/whatsapp/session-reminder",
       !isVercel ? "http://127.0.0.1:3003/whatsapp/send-marketing-template" : null,
-      !isVercel ? "http://127.0.0.1:3003/whatsapp/session-reminder" : null,
+      !isVercel ? "http://localhost:3003/whatsapp/send-marketing-template" : null,
+      !isVercel ? "http://127.0.0.1:3000/api/whatsapp/send-marketing-template" : null,
+      !isVercel ? "http://localhost:3000/api/whatsapp/send-marketing-template" : null,
     ].filter(Boolean) as string[];
 
     let whatsappSent = false;
@@ -162,44 +219,11 @@ export async function POST(req: Request) {
       }
     }
 
-    // 2. Proxy to Pilot Leads endpoint to save lead record in Database & Admin Web
-    const leadEndpoints = [
-      process.env.BACKEND_URL
-        ? `${process.env.BACKEND_URL.replace(/\/$/, "")}/api/pilot-leads`
-        : null,
-      "https://api.finquo.ai/api/pilot-leads",
-      !isVercel ? "http://127.0.0.1:3002/courses/pilot-leads" : null,
-      !isVercel ? "http://localhost:3002/courses/pilot-leads" : null,
-    ].filter(Boolean) as string[];
-
-    const leadPayload = {
-      parentName,
-      studentName,
-      studentGrade,
-      parentEmail: parentEmail || `${cleanPhone.replace(/\D/g, "")}@lead.sheet`,
-      parentPhone: cleanPhone,
-      presentCountry: body.presentCountry || "India",
-      preferredLanguage: body.preferredLanguage || "English",
-      preferredSlotDate: sessionDate !== "to be confirmed" ? sessionDate : undefined,
-      preferredSlotTime: sessionTime !== "to be confirmed" ? sessionTime : undefined,
-      preferredTimezone: timezone,
-      hearAbout: "Google Sheets Webhook",
-    };
-
-    for (const url of leadEndpoints) {
-      try {
-        await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(leadPayload),
-        });
-      } catch {}
-    }
-
     return NextResponse.json(
       {
         success: true,
         message: "Google Sheets new row processed successfully",
+        leadSaved,
         whatsappSent,
         phone: cleanPhone,
         details: whatsappResponseDetails || "Processed",
