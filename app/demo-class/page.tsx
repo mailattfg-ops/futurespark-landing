@@ -81,21 +81,73 @@ function getUpcomingDates(count = 7): { dateStr: string; displayLabel: string; i
 
 function parseTargetSessionTime(sessionDateStr: string, timeSlotStr: string, asIST = false): Date | null {
   try {
-    const dateMatch = sessionDateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-    if (!dateMatch) return null;
-    const [, day, month, year] = dateMatch;
-    const startTimeMatch = timeSlotStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-    let hours = 16, minutes = 30;
+    if (!sessionDateStr || !timeSlotStr) return null;
+
+    const startTimeMatch = timeSlotStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+    let hours = 16, minutes = 0;
     if (startTimeMatch) {
       const [, hStr, mStr, ampm] = startTimeMatch;
-      let h = parseInt(hStr, 10); minutes = parseInt(mStr, 10);
-      if (ampm.toUpperCase() === "PM" && h < 12) h += 12;
-      if (ampm.toUpperCase() === "AM" && h === 12) h = 0;
+      let h = parseInt(hStr, 10);
+      minutes = parseInt(mStr, 10);
+      if (ampm) {
+        if (ampm.toUpperCase() === "PM" && h < 12) h += 12;
+        if (ampm.toUpperCase() === "AM" && h === 12) h = 0;
+      }
       hours = h;
     }
-    if (asIST) return new Date(Date.UTC(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10), 0, hours * 60 + minutes - 330)); // stored slot times are IST (UTC+5:30)
-    return new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10), hours, minutes, 0);
-  } catch { return null; }
+
+    let year: number | null = null;
+    let month: number | null = null;
+    let day: number | null = null;
+
+    const ddmmyyyyMatch = sessionDateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (ddmmyyyyMatch) {
+      day = parseInt(ddmmyyyyMatch[1], 10);
+      month = parseInt(ddmmyyyyMatch[2], 10);
+      year = parseInt(ddmmyyyyMatch[3], 10);
+    } else {
+      const yyyymmddMatch = sessionDateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (yyyymmddMatch) {
+        year = parseInt(yyyymmddMatch[1], 10);
+        month = parseInt(yyyymmddMatch[2], 10);
+        day = parseInt(yyyymmddMatch[3], 10);
+      } else {
+        const rawParsed = new Date(sessionDateStr);
+        if (!isNaN(rawParsed.getTime())) {
+          year = rawParsed.getFullYear();
+          month = rawParsed.getMonth() + 1;
+          day = rawParsed.getDate();
+        } else {
+          const parts = sessionDateStr.split(",");
+          for (const part of parts) {
+            const pMatch = part.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (pMatch) {
+              day = parseInt(pMatch[1], 10);
+              month = parseInt(pMatch[2], 10);
+              year = parseInt(pMatch[3], 10);
+              break;
+            }
+            const pDate = new Date(part.trim());
+            if (!isNaN(pDate.getTime())) {
+              year = pDate.getFullYear();
+              month = pDate.getMonth() + 1;
+              day = pDate.getDate();
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (!year || !month || !day) return null;
+
+    if (asIST) {
+      return new Date(Date.UTC(year, month - 1, day, 0, hours * 60 + minutes - 330));
+    }
+    return new Date(year, month - 1, day, hours, minutes, 0);
+  } catch {
+    return null;
+  }
 }
 
 // "29/08/2026" -> "Sat, Aug 29, 2026"; non-date strings pass through unchanged
@@ -115,7 +167,7 @@ function CountdownBlock({ sessionDate, preferredTime, scheduledClass, asIST = fa
     function tick() {
       if (!target) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
       const diffMs = target.getTime() - Date.now();
-      if (diffMs <= 30 * 60 * 1000) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
+      if (diffMs <= 10 * 60 * 1000) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
       const s = Math.floor(diffMs / 1000);
       setTimeLeft({ days: Math.floor(s / 86400), hours: Math.floor((s % 86400) / 3600), minutes: Math.floor((s % 3600) / 60), seconds: s % 60, isReady: false });
     }
@@ -145,7 +197,7 @@ function JoinButton({ sessionDate, preferredTime, scheduledClass, meetUrl, asIST
   useEffect(() => {
     let target = parseTargetSessionTime(sessionDate, preferredTime, asIST);
     if (!target && scheduledClass?.startTime) target = new Date(scheduledClass.startTime);
-    function check() { if (!target) { setIsReady(true); return; } setIsReady(target.getTime() - Date.now() <= 30 * 60 * 1000); }
+    function check() { if (!target) { setIsReady(true); return; } setIsReady(target.getTime() - Date.now() <= 10 * 60 * 1000); }
     check(); const id = setInterval(check, 5000); return () => clearInterval(id);
   }, [sessionDate, preferredTime, scheduledClass, asIST]);
   if (isReady && meetUrl) {
@@ -162,7 +214,7 @@ function JoinButton({ sessionDate, preferredTime, scheduledClass, meetUrl, asIST
         <Video className="w-5 h-5" /> Join Meeting
       </button>
       <div className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 rounded-lg bg-gray-900/90 text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-lg z-50">
-        Unlocks 30 minutes before your session starts
+        Unlocks 10 minutes before your session starts
         <div className="absolute left-1/2 -translate-x-1/2 top-full border-4 border-transparent border-t-gray-900/90" />
       </div>
     </div>
@@ -330,7 +382,7 @@ function DemoClassPortalContent() {
     if (!target && lead.scheduledClass?.startTime) target = new Date(lead.scheduledClass.startTime);
     function check() {
       if (!target) { setIsSessionReady(true); return; }
-      setIsSessionReady(target.getTime() - Date.now() <= 30 * 60 * 1000);
+      setIsSessionReady(target.getTime() - Date.now() <= 10 * 60 * 1000);
     }
     check();
     const id = setInterval(check, 5000);
@@ -485,7 +537,7 @@ function DemoClassPortalContent() {
                   <div className="text-center px-4 py-3 rounded-2xl bg-red-500/25 border border-red-400/40">
                     <p className="text-xs sm:text-sm text-red-100 leading-relaxed">
                       The Zoom meeting link will be available{" "}
-                      <span className="font-bold text-amber-300">30 minutes before the session</span>.
+                      <span className="font-bold text-amber-300">10 minutes before the session</span>.
                       {" "}Click the button below to join when it becomes active.
                     </p>
                   </div>
