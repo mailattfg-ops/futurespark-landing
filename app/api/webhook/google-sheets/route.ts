@@ -4,63 +4,99 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
 
-    // Extract fields with multiple naming fallbacks
-    const phone =
-      body.phone_number ||
-      body.phone ||
-      body.parentPhone ||
-      body.mobile ||
-      body.phoneNumber ||
-      body.Contact;
+    // Helper to find value across normalized key variations (ignores quotes, spaces, underscores, hyphens)
+    const findField = (...candidateKeys: string[]): string | undefined => {
+      const normalizedMap = new Map<string, any>();
+      for (const [k, v] of Object.entries(body)) {
+        if (v !== undefined && v !== null && String(v).trim() !== "") {
+          const cleanKey = k.toLowerCase().replace(/[^a-z0-9]/g, "");
+          normalizedMap.set(cleanKey, v);
+        }
+      }
+
+      for (const key of candidateKeys) {
+        const cleanTarget = key.toLowerCase().replace(/[^a-z0-9]/g, "");
+        if (normalizedMap.has(cleanTarget)) {
+          return String(normalizedMap.get(cleanTarget)).trim();
+        }
+      }
+      return undefined;
+    };
+
+    const phone = findField(
+      "phone_number",
+      "phone",
+      "parentphone",
+      "parents_phone_number",
+      "parent_phone",
+      "mobile_number",
+      "mobile",
+      "whatsapp_number",
+      "contact",
+      "phonenumber"
+    );
 
     const parentName =
-      body.parentName ||
-      body.name ||
-      body.parent_name ||
-      body.Name ||
-      "Parent";
+      findField(
+        "parent_name",
+        "parents_name",
+        "parentname",
+        "name",
+        "full_name",
+        "parent"
+      ) || "Parent";
 
     const studentName =
-      body.studentName ||
-      body.student_name ||
-      body.child_name ||
-      body.Student ||
-      "Student";
+      findField(
+        "childs_full_name",
+        "child_full_name",
+        "childs_name",
+        "child_name",
+        "studentName",
+        "student_name",
+        "child",
+        "student"
+      ) || "Student";
 
     const studentGrade =
-      body.studentGrade ||
-      body.grade ||
-      body.Grade ||
-      "Grade 6";
+      findField(
+        "childs_grade",
+        "child_grade",
+        "studentGrade",
+        "student_grade",
+        "grade",
+        "class"
+      ) || "Grade 6";
 
     const parentEmail =
-      body.parentEmail ||
-      body.email ||
-      body.Email ||
-      "";
+      findField(
+        "parent_email",
+        "parents_email",
+        "email_address",
+        "email"
+      ) || "";
 
     const sessionDate =
-      body.sessionDate ||
-      body.preferredSlotDate ||
-      body.date ||
-      body.Date ||
-      "to be confirmed";
+      findField(
+        "sessionDate",
+        "preferredSlotDate",
+        "date",
+        "preferred_date"
+      ) || "to be confirmed";
 
     const sessionTime =
-      body.sessionTime ||
-      body.preferredSlotTime ||
-      body.time ||
-      body.Time ||
-      "to be confirmed";
+      findField(
+        "sessionTime",
+        "preferredSlotTime",
+        "time",
+        "preferred_time"
+      ) || "to be confirmed";
 
     const timezone =
-      body.timezone ||
-      body.preferredTimezone ||
-      "Asia/Kolkata";
+      findField("timezone", "preferredTimezone", "tz") || "Asia/Kolkata";
 
     const courseName =
-      body.courseName ||
-      body.course ||
+      findField("courseName", "course", "program") ||
       "1-on-1 Financial Literacy Mentorship";
 
     if (!phone) {
