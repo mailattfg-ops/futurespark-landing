@@ -4,7 +4,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
 
-export function Footer() {
+interface FooterProps {
+  onOpenDemoModal?: () => void;
+}
+
+export function Footer({ onOpenDemoModal }: FooterProps) {
+  const handleJoinClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onOpenDemoModal) {
+      onOpenDemoModal();
+    } else {
+      window.dispatchEvent(new Event("open_demo_modal"));
+    }
+  };
+
   return (
     <footer className="w-full bg-[#371085] text-white pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 relative overflow-hidden font-sans">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,9 +119,13 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#book-demo" className="hover:text-white transition-colors block py-0.5">
+                  <button
+                    type="button"
+                    onClick={handleJoinClick}
+                    className="hover:text-white transition-colors block py-0.5 text-left font-medium cursor-pointer"
+                  >
                     Schedule Demo
-                  </Link>
+                  </button>
                 </li>
                 <li className="col-span-2 sm:col-span-1">
                   <Link href="#faq" className="hover:text-white transition-colors block py-0.5">
@@ -120,16 +137,13 @@ export function Footer() {
 
             {/* CTA Button */}
             <div className="pt-2 sm:pt-4">
-              <Link
-                href="#book-demo"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
-                }}
+              <button
+                type="button"
+                onClick={handleJoinClick}
                 className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-[#371085] hover:bg-amber-300 hover:text-[#280a66] text-xs sm:text-[13px] font-extrabold px-6 py-3 sm:py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95 text-center"
               >
                 Join Now
-              </Link>
+              </button>
             </div>
           </div>
         </div>

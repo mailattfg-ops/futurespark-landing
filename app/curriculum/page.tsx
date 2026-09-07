@@ -132,7 +132,7 @@ export default function CurriculumPage() {
             localStorage.setItem("landing_sections_config", JSON.stringify(json.data));
           }
         }
-      } catch {}
+      } catch { }
     }
     loadSectionsConfig();
 
@@ -141,7 +141,12 @@ export default function CurriculumPage() {
       if (cached) setSections(JSON.parse(cached));
     };
     window.addEventListener("storage_sections_updated", handleUpdate);
-    return () => window.removeEventListener("storage_sections_updated", handleUpdate);
+    const handleOpenModalEvent = () => handleOpenDemoModal();
+    window.addEventListener("open_demo_modal", handleOpenModalEvent);
+    return () => {
+      window.removeEventListener("storage_sections_updated", handleUpdate);
+      window.removeEventListener("open_demo_modal", handleOpenModalEvent);
+    };
   }, []);
 
   useEffect(() => {
@@ -159,7 +164,7 @@ export default function CurriculumPage() {
             localStorage.setItem("landing_curriculum_plans", JSON.stringify(json.data));
           }
         }
-      } catch {}
+      } catch { }
     }
     loadWeeklyPlans();
 
@@ -227,23 +232,23 @@ export default function CurriculumPage() {
 
       {/* 2. Hero Vector Banner & Main Floating Card Container */}
       {isEnabled("curriculum_hero") && (
-        <div className="relative w-full pb-[520px] sm:pb-[420px] md:pb-[380px]">
-          <section className="bg-[#5B6EF6] relative overflow-hidden text-white pt-20 sm:pt-24 pb-32 sm:pb-44 mt-20 h-[240px] sm:h-[340px] md:h-[400px]">
-            {/* Background Piggybank Coin Vector Image (100% Opacity) */}
-            <div className="absolute inset-x-0 top-0 h-[240px] sm:h-[340px] md:h-[400px] select-none pointer-events-none overflow-hidden">
+        <div className="relative w-full pb-[480px] sm:pb-[420px] md:pb-[380px]">
+          <section className="bg-[#5B6EF6] relative overflow-hidden text-white mt-16 md:mt-20 h-[280px] sm:h-[360px] md:h-[400px]">
+            {/* Background Piggybank Coin Vector Image (Full Width cover focused on top hand & coin slot matching Image 2) */}
+            <div className="absolute inset-0 select-none pointer-events-none overflow-hidden">
               <Image
-                src="/curriculum-hero.jpg"
+                src="/curriculum-hero.png"
                 alt="Curriculum piggybank vector graphic"
                 fill
                 priority
                 sizes="100vw"
-                className="object-cover object-top opacity-100"
+                className="object-cover object-[center_12%] opacity-100"
               />
             </div>
           </section>
 
           {/* Main Floating Card Overlapping Hero Banner with position absolute */}
-          <section id="course-details" className="absolute inset-x-0 top-36 sm:top-52 md:top-80 z-20 w-full py-0">
+          <section id="course-details" className="absolute inset-x-0 top-40 sm:top-56 md:top-64 z-20 w-full py-0">
             <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <ScrollReveal variant="zoom-in" duration={700} delay={150} className="bg-white border border-gray-200/90 rounded-3xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-center">
@@ -409,9 +414,8 @@ export default function CurriculumPage() {
                           </span>
                           {/* Green Dot with Soft Ring Halo */}
                           <span
-                            className={`w-2.5 h-2.5 rounded-full bg-[#10B981] ring-4 ring-[#DCFCE7] flex-shrink-0 z-10 transition-transform duration-300 ${
-                              isActive ? "scale-110" : "scale-100"
-                            }`}
+                            className={`w-2.5 h-2.5 rounded-full bg-[#10B981] ring-4 ring-[#DCFCE7] flex-shrink-0 z-10 transition-transform duration-300 ${isActive ? "scale-110" : "scale-100"
+                              }`}
                           />
                         </div>
 
@@ -448,9 +452,8 @@ export default function CurriculumPage() {
                   {visibleWeeksCount < weeklyPlans.length ? "Load More" : "Show Less"}
                 </span>
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${
-                    visibleWeeksCount >= weeklyPlans.length ? "rotate-180" : ""
-                  }`}
+                  className={`w-4 h-4 transition-transform duration-200 ${visibleWeeksCount >= weeklyPlans.length ? "rotate-180" : ""
+                    }`}
                 />
               </button>
             </div>
@@ -538,7 +541,7 @@ export default function CurriculumPage() {
       )}
 
       {/* 7. Shared Navigation Footer */}
-      {isEnabled("curriculum_footer") && <Footer />}
+      {isEnabled("curriculum_footer") && <Footer onOpenDemoModal={handleOpenDemoModal} />}
 
       {/* 8. Booking Modal */}
       <BookDemoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />

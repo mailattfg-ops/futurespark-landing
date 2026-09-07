@@ -64,12 +64,15 @@ export default function HomePage() {
     loadConfig();
 
     const handleStorageUpdate = () => loadConfig();
+    const handleOpenModalEvent = () => handleOpenDemoModal();
     window.addEventListener("storage_sections_updated", handleStorageUpdate);
     window.addEventListener("storage", handleStorageUpdate);
+    window.addEventListener("open_demo_modal", handleOpenModalEvent);
 
     return () => {
       window.removeEventListener("storage_sections_updated", handleStorageUpdate);
       window.removeEventListener("storage", handleStorageUpdate);
+      window.removeEventListener("open_demo_modal", handleOpenModalEvent);
     };
   }, []);
 
@@ -138,7 +141,7 @@ export default function HomePage() {
       {isEnabled("parentReviews") && <ParentReviewsSection />}
 
       {/* 20. Footer */}
-      {isEnabled("footer") && <Footer />}
+      {isEnabled("footer") && <Footer onOpenDemoModal={handleOpenDemoModal} />}
     </main>
   );
 }

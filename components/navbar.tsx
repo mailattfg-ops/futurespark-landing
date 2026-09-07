@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import { getDefaultSectionState, SectionState } from "@/lib/section-config";
 
 interface NavbarProps {
   onOpenDemoModal?: () => void;
@@ -13,8 +14,38 @@ interface NavbarProps {
 export function Navbar({ onOpenDemoModal }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
   const pathname = usePathname();
   const isPilotPage = pathname === "/pilot";
+
+  useEffect(() => {
+    async function loadSectionsConfig() {
+      try {
+        const cached = localStorage.getItem("landing_sections_config");
+        if (cached) {
+          setSections(JSON.parse(cached));
+        }
+        const res = await fetch("/api/sections");
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setSections(json.data);
+            localStorage.setItem("landing_sections_config", JSON.stringify(json.data));
+          }
+        }
+      } catch {}
+    }
+    loadSectionsConfig();
+
+    const handleUpdate = () => {
+      const cached = localStorage.getItem("landing_sections_config");
+      if (cached) setSections(JSON.parse(cached));
+    };
+    window.addEventListener("storage_sections_updated", handleUpdate);
+    return () => window.removeEventListener("storage_sections_updated", handleUpdate);
+  }, []);
+
+  const isEnabled = (key: string) => sections[key] !== false;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,30 +86,36 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
             </Link>
 
             {/* Desktop Navigation Links */}
-            {/* <nav className="hidden md:flex items-center gap-5 lg:gap-7">
-              <Link
-                href="/curriculum"
-                className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
-              >
-                Curriculum
-              </Link>
-              <Link
-                href="/teachers"
-                className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
-              >
-                Teachers
-              </Link>
-              <Link
-                href="/about-us"
-                className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
-              >
-                About Us
-              </Link>
-            </nav> */}
+            <nav className="hidden md:flex items-center gap-5 lg:gap-7">
+              {isEnabled("navbar_curriculum") && (
+                <Link
+                  href="/curriculum"
+                  className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
+                >
+                  Curriculum
+                </Link>
+              )}
+              {isEnabled("navbar_teachers") && (
+                <Link
+                  href="/teachers"
+                  className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
+                >
+                  Teachers
+                </Link>
+              )}
+              {isEnabled("navbar_about") && (
+                <Link
+                  href="/about-us"
+                  className="text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
+                >
+                  About Us
+                </Link>
+              )}
+            </nav>
           </div>
 
           {/* Right: Actions (Reserve Your Seat) */}
-          {!isPilotPage && (
+          {!isPilotPage && isEnabled("navbar_cta") && (
             <div className="hidden md:flex items-center gap-4 lg:gap-6">
               <Link
                 href="/pilot"
@@ -91,7 +128,7 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
 
           {/* Mobile Menu Toggle Button */}
           <div className="flex md:hidden items-center gap-2.5">
-            {!isPilotPage && (
+            {!isPilotPage && isEnabled("navbar_cta") && (
               <Link
                 href="/pilot"
                 className="px-3 py-1.5 rounded-lg bg-[#F59E0B] text-white text-xs font-bold shadow-sm cursor-pointer"
@@ -115,32 +152,38 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
         </div>
 
         {/* Mobile Dropdown Menu */}
-        {/* {mobileMenuOpen && (
+        {mobileMenuOpen && (
           <div className="md:hidden py-4 px-4 bg-white/95 backdrop-blur-md border border-gray-100 rounded-2xl shadow-xl mt-2 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
             <nav className="flex flex-col space-y-2">
-              <Link
-                href="/curriculum"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
-              >
-                Curriculum
-              </Link>
-              <Link
-                href="/teachers"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
-              >
-                Teachers
-              </Link>
-              <Link
-                href="/about-us"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
-              >
-                About Us
-              </Link>
+              {isEnabled("navbar_curriculum") && (
+                <Link
+                  href="/curriculum"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
+                >
+                  Curriculum
+                </Link>
+              )}
+              {isEnabled("navbar_teachers") && (
+                <Link
+                  href="/teachers"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
+                >
+                  Teachers
+                </Link>
+              )}
+              {isEnabled("navbar_about") && (
+                <Link
+                  href="/about-us"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
+                >
+                  About Us
+                </Link>
+              )}
             </nav>
-            {!isPilotPage && (
+            {!isPilotPage && isEnabled("navbar_cta") && (
               <div className="pt-2 border-t border-gray-100">
                 <Link
                   href="/pilot"
@@ -152,11 +195,11 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
               </div>
             )}
           </div>
-        )} */}
+        )}
       </div>
 
       {/* Top Left Corner Red Ribbon - Pilot Version (Hidden on /pilot page) */}
-      {!isPilotPage && (
+      {!isPilotPage && isEnabled("navbar_ribbon") && (
         <div className="fixed top-0 left-0 z-45 w-24 h-24 sm:w-32 sm:h-32 overflow-hidden pointer-events-none">
           <div className="absolute top-3.5 sm:top-5 -left-8 sm:-left-10 w-32 sm:w-40 py-0.5 sm:py-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-wider text-center -rotate-45 shadow-md border-y border-white/30 select-none">
             Pilot Version

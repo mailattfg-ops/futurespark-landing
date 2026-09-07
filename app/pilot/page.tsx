@@ -51,7 +51,7 @@ export default function FinquoPilotPage() {
       <AboutProgramSection />
 
       {/* Shared Footer */}
-      <Footer />
+      <Footer onOpenDemoModal={handleConfirmSeat} />
 
       {/* Booking Modal */}
       <BookDemoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />

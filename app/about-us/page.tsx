@@ -30,7 +30,7 @@ export default function AboutUsPage() {
             localStorage.setItem("landing_sections_config", JSON.stringify(json.data));
           }
         }
-      } catch {}
+      } catch { }
     }
     loadSectionsConfig();
 
@@ -39,7 +39,12 @@ export default function AboutUsPage() {
       if (cached) setSections(JSON.parse(cached));
     };
     window.addEventListener("storage_sections_updated", handleUpdate);
-    return () => window.removeEventListener("storage_sections_updated", handleUpdate);
+    const handleOpenModalEvent = () => handleOpenDemoModal();
+    window.addEventListener("open_demo_modal", handleOpenModalEvent);
+    return () => {
+      window.removeEventListener("storage_sections_updated", handleUpdate);
+      window.removeEventListener("open_demo_modal", handleOpenModalEvent);
+    };
   }, []);
 
   const isEnabled = (key: string) => sections[key] !== false;
@@ -57,7 +62,7 @@ export default function AboutUsPage() {
       {/* 2. About Us Hero Section */}
       {isEnabled("about_hero") && (
         <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-white relative">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="w-full">
             {/* Main Title */}
             <ScrollReveal variant="fade-up" duration={600}>
               <div className="text-center space-y-4">
@@ -68,17 +73,20 @@ export default function AboutUsPage() {
             </ScrollReveal>
 
             {/* Purple Wavy Divider Line */}
-            <div className="w-full my-6 sm:my-8 flex justify-center overflow-hidden">
+            <div className="w-full my-4 sm:my-6 overflow-hidden">
               <svg
-                className="w-full max-w-5xl h-8 sm:h-12 text-[#5B45F5]"
-                viewBox="0 0 1200 60"
+                className="w-full h-10 sm:h-16 md:h-20 text-[#5B45F5]"
+                viewBox="0 0 1200 120"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="none"
               >
                 <path
-                  d="M0 30 C 150 5, 300 55, 450 30 C 600 5, 750 55, 900 30 C 1050 5, 1150 45, 1200 30 L 1200 60 L 0 60 Z"
-                  fill="currentColor"
+                  d="M 0 60 C 200 -10, 400 130, 600 60 C 800 -10, 1000 130, 1200 60"
+                  stroke="currentColor"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
                 />
               </svg>
             </div>
@@ -142,7 +150,7 @@ export default function AboutUsPage() {
       {isEnabled("about_awardsPartners") && <AwardsPartnersSection />}
 
       {/* 6. Shared Navigation Footer */}
-      {isEnabled("about_footer") && <Footer />}
+      {isEnabled("about_footer") && <Footer onOpenDemoModal={handleOpenDemoModal} />}
 
       {/* 7. Booking Modal */}
       <BookDemoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />

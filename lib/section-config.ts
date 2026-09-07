@@ -14,6 +14,46 @@ export type SectionState = Record<string, boolean>;
 export const DEFAULT_SECTIONS: LandingSection[] = [
   // ── Homepage (/) ─────────────────────────────────────────────────────────────
   {
+    id: "navbar_curriculum",
+    name: "Navbar Link: Curriculum",
+    page: "home",
+    category: "Header Navigation",
+    description: "Toggle the Curriculum menu link in top navigation bar.",
+    enabled: true,
+  },
+  {
+    id: "navbar_teachers",
+    name: "Navbar Link: Teachers",
+    page: "home",
+    category: "Header Navigation",
+    description: "Toggle the Teachers menu link in top navigation bar.",
+    enabled: true,
+  },
+  {
+    id: "navbar_about",
+    name: "Navbar Link: About Us",
+    page: "home",
+    category: "Header Navigation",
+    description: "Toggle the About Us menu link in top navigation bar.",
+    enabled: true,
+  },
+  {
+    id: "navbar_cta",
+    name: "Navbar CTA Button (Free Pilot Program)",
+    page: "home",
+    category: "Header Navigation",
+    description: "Toggle the Free Pilot Program CTA button in top navbar.",
+    enabled: true,
+  },
+  {
+    id: "navbar_ribbon",
+    name: "Navbar Pilot Ribbon Badge",
+    page: "home",
+    category: "Header Navigation",
+    description: "Toggle the red top-left corner Pilot Version ribbon badge.",
+    enabled: true,
+  },
+  {
     id: "hero",
     name: "Hero Section",
     page: "home",
