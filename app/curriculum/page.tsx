@@ -82,7 +82,7 @@ const reviews: ReviewItem[] = [
     name: "Leah Andrews",
     role: "CEO",
     company: "Inspihire",
-    avatar: "/review-avatar-1.png",
+    avatar: "/avatar-woman-pink.png",
     comment:
       "Whether you're a beginner or an expert, Finquo Junior provides excellent resources to help your child achieve financial mastery.",
   },
@@ -90,7 +90,7 @@ const reviews: ReviewItem[] = [
     name: "Raj Patel",
     role: "COO",
     company: "GrowthHacks",
-    avatar: "/avatar-man-gray.png",
+    avatar: "/avatar-woman-pink.png",
     comment:
       "Streamlining processes and boosting financial confidence early is key to scaling a child's business mindset effectively.",
   },

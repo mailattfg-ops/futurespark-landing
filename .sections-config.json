@@ -1,5 +1,5 @@
 {
-  "navbar_curriculum": true,
+  "navbar_curriculum": false,
   "navbar_teachers": false,
   "navbar_about": true,
   "navbar_cta": true,
