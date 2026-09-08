@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, ReactNode } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -8,8 +8,7 @@ import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { track } from "@/lib/meta";
 import { getDefaultSectionState, SectionState } from "@/lib/section-config";
-import { DEFAULT_WEEKLY_PLANS, CurriculumPlanItem } from "@/lib/curriculum-plans-config";
-import { PlanIcon } from "@/components/curriculum-plan-icon";
+import { MultiCategoryGallery } from "@/components/curriculum/multi-category-gallery";
 import {
   BookOpen,
   Award,
@@ -113,9 +112,7 @@ const features = [
 
 export default function CurriculumPage() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-  const [visibleWeeksCount, setVisibleWeeksCount] = useState(4);
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
-  const [weeklyPlans, setWeeklyPlans] = useState<CurriculumPlanItem[]>(DEFAULT_WEEKLY_PLANS);
 
   useEffect(() => {
     async function loadSectionsConfig() {
@@ -149,80 +146,11 @@ export default function CurriculumPage() {
     };
   }, []);
 
-  useEffect(() => {
-    async function loadWeeklyPlans() {
-      try {
-        const cached = localStorage.getItem("landing_curriculum_plans");
-        if (cached) {
-          setWeeklyPlans(JSON.parse(cached));
-        }
-        const res = await fetch("/api/curriculum-plans");
-        if (res.ok) {
-          const json = await res.json();
-          if (json.success && Array.isArray(json.data)) {
-            setWeeklyPlans(json.data);
-            localStorage.setItem("landing_curriculum_plans", JSON.stringify(json.data));
-          }
-        }
-      } catch { }
-    }
-    loadWeeklyPlans();
-
-    const handlePlansUpdate = () => {
-      const cached = localStorage.getItem("landing_curriculum_plans");
-      if (cached) setWeeklyPlans(JSON.parse(cached));
-    };
-    window.addEventListener("storage_curriculum_plans_updated", handlePlansUpdate);
-    return () => window.removeEventListener("storage_curriculum_plans_updated", handlePlansUpdate);
-  }, []);
-
   const isEnabled = (key: string) => sections[key] !== false;
-
-  // Timeline Scroll Animation State
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeItemIndex, setActiveItemIndex] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!timelineRef.current) return;
-      const rect = timelineRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      // Start progress when timeline top reaches 65% of viewport
-      const startOffset = windowHeight * 0.65;
-      const distanceFromStart = startOffset - rect.top;
-      const totalDist = rect.height;
-
-      if (distanceFromStart > 0) {
-        const rawPercent = Math.min(100, Math.max(0, (distanceFromStart / totalDist) * 100));
-        setScrollProgress(rawPercent);
-
-        const count = Math.min(visibleWeeksCount, weeklyPlans.length);
-        const activeIdx = Math.min(count - 1, Math.floor((rawPercent / 100) * count));
-        setActiveItemIndex(activeIdx);
-      } else {
-        setScrollProgress(0);
-        setActiveItemIndex(0);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [visibleWeeksCount]);
 
   const handleOpenDemoModal = () => {
     track("InitiateCheckout");
     setIsDemoModalOpen(true);
-  };
-
-  const handleToggleWeeks = () => {
-    if (visibleWeeksCount < weeklyPlans.length) {
-      setVisibleWeeksCount(weeklyPlans.length);
-    } else {
-      setVisibleWeeksCount(4);
-    }
   };
 
   return (
@@ -367,98 +295,9 @@ export default function CurriculumPage() {
         </section>
       )}
 
-      {/* 4. Weekly Course Plan Timeline Section */}
+      {/* 4. Weekly Course Plan Multi-Category Gallery Section */}
       {isEnabled("curriculum_weeklyPlan") && (
-        <section className="w-full bg-white py-14 sm:py-20 border-y border-gray-100 font-sans">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            {/* Top Wide Purple Header Banner matching Image 2 */}
-            <ScrollReveal variant="fade-up" duration={600} className="mb-10">
-              <div className="w-full bg-[#8B5CF6] rounded-[24px] px-8 py-5 shadow-xs">
-                <h3 className="text-white text-xl sm:text-2xl font-extrabold tracking-tight font-sans">
-                  Weekly Course Plan
-                </h3>
-              </div>
-            </ScrollReveal>
-
-            {/* Timeline List Container */}
-            <div ref={timelineRef} className="relative max-w-4xl mx-auto">
-              {/* Background Muted Track Line */}
-              <div className="absolute top-[12px] bottom-[12px] left-[96px] sm:left-[116px] w-[1.5px] bg-[#E5E7EB] pointer-events-none z-0" />
-
-              {/* Active Emerald Progress Fill Line Growing Smoothly on Scroll */}
-              <div
-                className="absolute top-[12px] left-[96px] sm:left-[116px] w-[1.5px] bg-[#10B981] pointer-events-none z-[1] transition-[height] duration-500 ease-out"
-                style={{
-                  height: `calc(${scrollProgress}% - 12px)`,
-                  maxHeight: "calc(100% - 24px)",
-                }}
-              />
-
-              <div className="space-y-4 relative z-10">
-                {weeklyPlans.slice(0, visibleWeeksCount).map((plan, idx) => {
-                  const stepThreshold = (idx / (visibleWeeksCount - 1 || 1)) * 100;
-                  const isActive = scrollProgress >= stepThreshold - 5;
-
-                  return (
-                    <ScrollReveal
-                      key={idx}
-                      variant="fade-up"
-                      duration={500}
-                      delay={idx * 60}
-                    >
-                      <div className="flex items-center gap-4 sm:gap-6 relative">
-                        {/* Left Column: Week Label + Green Dot with Halo Ring on Line */}
-                        <div className="w-[105px] sm:w-[125px] flex-shrink-0 flex items-center justify-end gap-2.5 pr-1 relative z-10">
-                          <span className="text-base sm:text-lg font-bold text-[#C4B5FD] font-sans tracking-tight">
-                            {plan.week}
-                          </span>
-                          {/* Green Dot with Soft Ring Halo */}
-                          <span
-                            className={`w-2.5 h-2.5 rounded-full bg-[#10B981] ring-4 ring-[#DCFCE7] flex-shrink-0 z-10 transition-transform duration-300 ${isActive ? "scale-110" : "scale-100"
-                              }`}
-                          />
-                        </div>
-
-                        {/* Right Card matching Image 2 */}
-                        <div className="flex-1 bg-white border border-[#8B5CF6] rounded-[20px] p-4 sm:p-5 flex items-center gap-4 hover:shadow-md transition-all">
-                          {/* Solid Filled Purple Circle Icon Badge */}
-                          <div className="w-12 h-12 rounded-full bg-[#8B5CF6] flex items-center justify-center flex-shrink-0 text-white shadow-xs">
-                            <PlanIcon name={plan.icon} className="w-5 h-5 text-white stroke-[2.2]" />
-                          </div>
-                          <div className="space-y-0.5">
-                            <h4 className="text-base sm:text-lg font-extrabold text-[#18181B] font-sans leading-snug">
-                              {plan.title}
-                            </h4>
-                            <p className="text-xs sm:text-sm text-[#71717A] font-medium leading-relaxed">
-                              {plan.subtitle}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </ScrollReveal>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Load More Pill Button matching Image 2 */}
-            <div className="mt-10 text-center">
-              <button
-                type="button"
-                onClick={handleToggleWeeks}
-                className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded-full bg-[#F4F4F5] hover:bg-[#E4E4E7] text-[#18181B] text-xs sm:text-sm font-extrabold transition-all cursor-pointer"
-              >
-                <span>
-                  {visibleWeeksCount < weeklyPlans.length ? "Load More" : "Show Less"}
-                </span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${visibleWeeksCount >= weeklyPlans.length ? "rotate-180" : ""
-                    }`}
-                />
-              </button>
-            </div>
-          </div>
-        </section>
+        <MultiCategoryGallery onOpenDemoModal={handleOpenDemoModal} />
       )}
 
       {/* 5. Summary Pill Badges Row */}

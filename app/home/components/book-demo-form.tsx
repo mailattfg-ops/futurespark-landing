@@ -135,9 +135,16 @@ export function BookDemoFormSection() {
           const json = await res.json();
           if (json.success && json.data && Array.isArray(json.data.slots)) {
             const cutoffHour = json.data.todayCutoffHour;
-            const updatedAvailable = getAvailableSlotsForDate(targetDate, timezone, isUSA, cutoffHour);
+            const hiddenSlots: string[] = Array.isArray(json.data.hiddenSlots) ? json.data.hiddenSlots : [];
             const serverSlotsMap = new Map<string, any>();
             json.data.slots.forEach((s: any) => serverSlotsMap.set(s.time, s));
+
+            const updatedAvailable = getAvailableSlotsForDate(targetDate, timezone, isUSA, cutoffHour)
+              .filter((s) => {
+                if (hiddenSlots.includes(s.time)) return false;
+                if (serverSlotsMap.size > 0 && !serverSlotsMap.has(s.time)) return false;
+                return true;
+              });
 
             const merged = updatedAvailable.map((s) => {
               const serverInfo = serverSlotsMap.get(s.time);
@@ -659,7 +666,7 @@ export function BookDemoFormSection() {
                     No demo slots available for this date. Please pick another date above.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-4 gap-2.5 max-h-64 overflow-y-auto pr-1 justify-center items-center">
                     {slotsList.map((slot) => {
                       const isSelected = selectedSlotTime === slot.time;
                       const isBookedOut = slot.isBookedOut;
@@ -671,14 +678,14 @@ export function BookDemoFormSection() {
                           onClick={() => {
                             if (!isBookedOut) setSelectedSlotTime(slot.time);
                           }}
-                          className={`py-2 px-3 rounded-xl border text-center transition-all flex items-center justify-center ${isBookedOut
+                          className={`py-2.5 px-2 rounded-xl border text-center transition-all flex items-center justify-center ${isBookedOut
                             ? "border-gray-200 bg-gray-100/90 text-gray-400 cursor-not-allowed opacity-80"
                             : isSelected
                             ? "border-[#6366F1] bg-[#6366F1]/10 text-gray-900 font-extrabold shadow-xs ring-2 ring-[#6366F1]/30 cursor-pointer"
                             : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white cursor-pointer"
                             }`}
                         >
-                          <span className={`text-xs font-bold ${isBookedOut ? "line-through text-gray-400" : ""}`}>
+                          <span className={`text-xs font-bold text-center whitespace-nowrap ${isBookedOut ? "line-through text-gray-400" : ""}`}>
                             {isUSA ? slot.time : istSlotToLocalLabel(slot.time, timezone, activeDateObj.rawDate)}
                           </span>
                         </button>

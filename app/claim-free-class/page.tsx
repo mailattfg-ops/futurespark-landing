@@ -138,9 +138,16 @@ function ClaimFreeClassFormContent() {
           const json = await res.json();
           if (json.success && json.data && Array.isArray(json.data.slots)) {
             const cutoffHour = json.data.todayCutoffHour;
-            const updatedAvailable = getAvailableSlotsForDate(targetDate, timezone, isUSA, cutoffHour);
+            const hiddenSlots: string[] = Array.isArray(json.data.hiddenSlots) ? json.data.hiddenSlots : [];
             const serverSlotsMap = new Map<string, any>();
             json.data.slots.forEach((s: any) => serverSlotsMap.set(s.time, s));
+
+            const updatedAvailable = getAvailableSlotsForDate(targetDate, timezone, isUSA, cutoffHour)
+              .filter((s) => {
+                if (hiddenSlots.includes(s.time)) return false;
+                if (serverSlotsMap.size > 0 && !serverSlotsMap.has(s.time)) return false;
+                return true;
+              });
 
             const merged = updatedAvailable.map((s) => {
               const serverInfo = serverSlotsMap.get(s.time);
@@ -595,7 +602,7 @@ function ClaimFreeClassFormContent() {
                       No demo slots available for this date. Please pick another date above.
                     </div>
                   ) : (
-                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                    <div className="grid grid-cols-4 gap-2.5 sm:gap-3 max-h-80 overflow-y-auto pr-1 justify-center items-center">
                       {slotsList.map((slot) => {
                         const isSelected = selectedSlotTime === slot.time;
                         const isBookedOut = slot.isBookedOut;
@@ -607,18 +614,18 @@ function ClaimFreeClassFormContent() {
                             type="button"
                             disabled={isBookedOut}
                             onClick={() => !isBookedOut && setSelectedSlotTime(slot.time)}
-                            className={`py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center ${isBookedOut
+                            className={`py-3 px-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center ${isBookedOut
                               ? "bg-gray-100/90 border-gray-200 text-gray-400 cursor-not-allowed opacity-80"
                               : isSelected
                                 ? "border-[#7C3AED] bg-[#7C3AED]/10 text-[#7C3AED] font-extrabold ring-2 ring-[#7C3AED]/30 cursor-pointer"
                                 : "bg-white border-gray-200 hover:border-gray-300 text-gray-800 font-semibold cursor-pointer"
                               }`}
                           >
-                            <span className={`text-xs font-bold ${isBookedOut ? "line-through text-gray-400" : ""}`}>
+                            <span className={`text-xs font-bold text-center whitespace-nowrap ${isBookedOut ? "line-through text-gray-400" : ""}`}>
                               {displayTime}
                             </span>
                             {isBookedOut && (
-                              <span className="text-[9px] font-medium text-gray-400 mt-0.5">Slot Full</span>
+                              <span className="text-[9px] font-medium text-gray-400 mt-0.5 text-center">Slot Full</span>
                             )}
                           </button>
                         );
