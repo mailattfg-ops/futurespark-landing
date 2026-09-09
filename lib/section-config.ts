@@ -1,3 +1,5 @@
+import bundledSections from "@/.sections-config.json";
+
 export type PageType = "home" | "confirm-your-seat" | "claim-free-class" | "curriculum" | "about-us";
 
 export interface LandingSection {
@@ -404,5 +406,39 @@ export function getDefaultSectionState(): SectionState {
   DEFAULT_SECTIONS.forEach((section) => {
     state[section.id] = section.enabled;
   });
-  return state;
+  return {
+    ...state,
+    ...(bundledSections as SectionState),
+  };
 }
+
+export function getSavedSections(): SectionState | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const cached = localStorage.getItem("landing_sections_config");
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (parsed && typeof parsed === "object") return parsed;
+    }
+  } catch {}
+  try {
+    const match = document.cookie.match(/(?:^|; )landing_sections_config=([^;]*)/);
+    if (match) {
+      const parsed = JSON.parse(decodeURIComponent(match[1]));
+      if (parsed && typeof parsed === "object") return parsed;
+    }
+  } catch {}
+  return null;
+}
+
+export function saveSectionsLocally(state: SectionState) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem("landing_sections_config", JSON.stringify(state));
+    document.cookie = `landing_sections_config=${encodeURIComponent(
+      JSON.stringify(state)
+    )}; path=/; max-age=31536000; SameSite=Lax`;
+    window.dispatchEvent(new Event("storage_sections_updated"));
+  } catch {}
+}
+

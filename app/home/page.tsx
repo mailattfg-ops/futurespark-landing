@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getDefaultSectionState, SectionState } from "@/lib/section-config";
+import { getDefaultSectionState, SectionState, getSavedSections, saveSectionsLocally } from "@/lib/section-config";
 import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/app/home/components/hero-section";
 import { WhyFinancialLiteracySection } from "@/app/home/components/why-financial-literacy";
@@ -36,24 +36,20 @@ export default function HomePage() {
 
   const loadConfig = async () => {
     try {
-      // Check local storage first for quick client sync
-      if (typeof window !== "undefined") {
-        const cached = localStorage.getItem("landing_sections_config");
-        if (cached) {
-          try {
-            setSections({ ...getDefaultSectionState(), ...JSON.parse(cached) });
-          } catch {}
-        }
+      // Check local storage / cookie first for instant sync
+      const cached = getSavedSections();
+      if (cached) {
+        setSections((prev) => ({ ...prev, ...cached }));
       }
 
       // Fetch latest from server
       const res = await fetch("/api/sections", { cache: "no-store" });
       const data = await res.json();
       if (data.success && data.data) {
-        setSections(data.data);
-        if (typeof window !== "undefined") {
-          localStorage.setItem("landing_sections_config", JSON.stringify(data.data));
-        }
+        const currentSaved = getSavedSections();
+        const merged = { ...data.data, ...(currentSaved || {}) };
+        setSections(merged);
+        saveSectionsLocally(merged);
       }
     } catch {
       // Default fallback

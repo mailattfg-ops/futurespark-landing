@@ -9,7 +9,7 @@ import { WhyFinancialLiteracySection } from "@/app/home/components/why-financial
 import { AwardsPartnersSection } from "@/app/home/components/awards-partners";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { track } from "@/lib/meta";
-import { getDefaultSectionState, SectionState } from "@/lib/section-config";
+import { getDefaultSectionState, SectionState, getSavedSections, saveSectionsLocally } from "@/lib/section-config";
 
 export default function AboutUsPage() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
@@ -18,16 +18,18 @@ export default function AboutUsPage() {
   useEffect(() => {
     async function loadSectionsConfig() {
       try {
-        const cached = localStorage.getItem("landing_sections_config");
+        const cached = getSavedSections();
         if (cached) {
-          setSections(JSON.parse(cached));
+          setSections((prev) => ({ ...prev, ...cached }));
         }
         const res = await fetch("/api/sections", { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
-            setSections(json.data);
-            localStorage.setItem("landing_sections_config", JSON.stringify(json.data));
+            const currentSaved = getSavedSections();
+            const merged = { ...json.data, ...(currentSaved || {}) };
+            setSections(merged);
+            saveSectionsLocally(merged);
           }
         }
       } catch { }
@@ -35,14 +37,16 @@ export default function AboutUsPage() {
     loadSectionsConfig();
 
     const handleUpdate = () => {
-      const cached = localStorage.getItem("landing_sections_config");
-      if (cached) setSections(JSON.parse(cached));
+      const cached = getSavedSections();
+      if (cached) setSections((prev) => ({ ...prev, ...cached }));
     };
     window.addEventListener("storage_sections_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
     const handleOpenModalEvent = () => handleOpenDemoModal();
     window.addEventListener("open_demo_modal", handleOpenModalEvent);
     return () => {
       window.removeEventListener("storage_sections_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
       window.removeEventListener("open_demo_modal", handleOpenModalEvent);
     };
   }, []);

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { getDefaultSectionState, SectionState } from "@/lib/section-config";
 import bundledSections from "@/.sections-config.json";
 import fs from "fs";
@@ -26,8 +27,7 @@ function loadFileState(): SectionState | null {
   return null;
 }
 
-// Initialize in-memory state: Bundled JSON is baked into the build at compile time,
-// with runtime file read fallback in local dev.
+// In-memory fallback
 let memorySections: SectionState = {
   ...getDefaultSectionState(),
   ...(bundledSections as SectionState),
@@ -35,14 +35,32 @@ let memorySections: SectionState = {
 };
 
 export async function GET() {
-  // Check if file was updated in local dev
+  // 1. Check local file if in development
   const fileState = loadFileState();
   if (fileState) {
     memorySections = { ...memorySections, ...fileState };
   }
 
+  // 2. Read cookie preference if present (persists client choices in production without a database)
+  let cookieSections: SectionState | null = null;
+  try {
+    const cookieStore = await cookies();
+    const cookieVal = cookieStore.get("landing_sections_config")?.value;
+    if (cookieVal) {
+      cookieSections = JSON.parse(decodeURIComponent(cookieVal));
+    }
+  } catch {}
+
+  const mergedState: SectionState = {
+    ...getDefaultSectionState(),
+    ...(bundledSections as SectionState),
+    ...(fileState || {}),
+    ...memorySections,
+    ...(cookieSections || {}),
+  };
+
   return NextResponse.json(
-    { success: true, data: memorySections },
+    { success: true, data: mergedState },
     { headers: NO_CACHE_HEADERS }
   );
 }
@@ -56,14 +74,14 @@ export async function POST(req: Request) {
 
     memorySections = { ...memorySections, ...body };
 
-    // Persist to local project file in development environment
+    // Persist to local project file in development environment if writable
     try {
       fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(memorySections, null, 2), "utf-8");
     } catch {
       // Safely ignore on read-only environments (e.g. Vercel Serverless)
     }
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         message: "Section configurations updated successfully",
@@ -71,6 +89,15 @@ export async function POST(req: Request) {
       },
       { headers: NO_CACHE_HEADERS }
     );
+
+    // Set cookie so all future requests from this browser retain the updated toggles
+    response.cookies.set("landing_sections_config", encodeURIComponent(JSON.stringify(memorySections)), {
+      path: "/",
+      maxAge: 31536000, // 1 year
+      sameSite: "lax",
+    });
+
+    return response;
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message || "Failed to update sections" },
@@ -78,3 +105,4 @@ export async function POST(req: Request) {
     );
   }
 }
+

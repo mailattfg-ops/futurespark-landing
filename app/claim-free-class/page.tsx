@@ -32,7 +32,7 @@ import {
 import { TimezoneSelect } from "../../components/ui/timezone-select";
 import { CustomSelect } from "../../components/ui/custom-select";
 import { track } from "../../lib/meta";
-import { getDefaultSectionState, SectionState } from "../../lib/section-config";
+import { getDefaultSectionState, SectionState, getSavedSections, saveSectionsLocally } from "../../lib/section-config";
 
 const countryCodes = allCountryCodesList;
 
@@ -51,16 +51,18 @@ function ClaimFreeClassFormContent() {
   useEffect(() => {
     async function loadSectionsConfig() {
       try {
-        const cached = localStorage.getItem("landing_sections_config");
+        const cached = getSavedSections();
         if (cached) {
-          setSections(JSON.parse(cached));
+          setSections((prev) => ({ ...prev, ...cached }));
         }
         const res = await fetch("/api/sections", { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
-            setSections(json.data);
-            localStorage.setItem("landing_sections_config", JSON.stringify(json.data));
+            const currentSaved = getSavedSections();
+            const merged = { ...json.data, ...(currentSaved || {}) };
+            setSections(merged);
+            saveSectionsLocally(merged);
           }
         }
       } catch { }
@@ -68,11 +70,15 @@ function ClaimFreeClassFormContent() {
     loadSectionsConfig();
 
     const handleUpdate = () => {
-      const cached = localStorage.getItem("landing_sections_config");
-      if (cached) setSections(JSON.parse(cached));
+      const cached = getSavedSections();
+      if (cached) setSections((prev) => ({ ...prev, ...cached }));
     };
     window.addEventListener("storage_sections_updated", handleUpdate);
-    return () => window.removeEventListener("storage_sections_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("storage_sections_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
   }, []);
 
   const isEnabled = (key: string) => sections[key] !== false;
