@@ -1,7 +1,7 @@
 {
   "navbar_curriculum": true,
   "navbar_teachers": false,
-  "navbar_about": false,
+  "navbar_about": true,
   "navbar_cta": true,
   "navbar_ribbon": true,
   "hero": true,
