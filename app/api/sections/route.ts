@@ -15,33 +15,90 @@ const NO_CACHE_HEADERS = {
   Expires: "0",
 };
 
+const getBackendEndpoints = (path: string) => {
+  const isVercel = process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+  const localCandidates = !isVercel
+    ? [
+        `http://127.0.0.1:3000/api/pilot-leads${path}`,
+        `http://localhost:3000/api/pilot-leads${path}`,
+        `http://127.0.0.1:3002/courses/pilot-leads${path}`,
+        `http://localhost:3002/courses/pilot-leads${path}`,
+      ]
+    : [];
+
+  const remoteCandidates = [
+    process.env.BACKEND_URL && !process.env.BACKEND_URL.includes("localhost") && !process.env.BACKEND_URL.includes("127.0.0.1")
+      ? `${process.env.BACKEND_URL.replace(/\/$/, "")}/api/pilot-leads${path}`
+      : null,
+    process.env.NEXT_PUBLIC_BACKEND_URL && !process.env.NEXT_PUBLIC_BACKEND_URL.includes("localhost") && !process.env.NEXT_PUBLIC_BACKEND_URL.includes("127.0.0.1")
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL.replace(/\/$/, "")}/api/pilot-leads${path}`
+      : null,
+    "https://api.finquo.ai/api/pilot-leads" + path,
+  ];
+
+  return [...localCandidates, ...remoteCandidates].filter(Boolean) as string[];
+};
+
 function loadFileState(): SectionState | null {
   try {
     if (fs.existsSync(CONFIG_FILE_PATH)) {
       return JSON.parse(fs.readFileSync(CONFIG_FILE_PATH, "utf-8"));
     }
   } catch {
-    // Read-only filesystem or file missing in serverless
+    // Read-only filesystem
   }
   return null;
 }
 
+async function fetchSectionsFromDb(): Promise<SectionState | null> {
+  for (const url of getBackendEndpoints("/sections")) {
+    try {
+      const res = await fetch(url, { cache: "no-store" });
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.data && typeof json.data === "object" && Object.keys(json.data).length > 0) {
+          return json.data as SectionState;
+        }
+      }
+    } catch {}
+  }
+  return null;
+}
+
+async function saveSectionsToDb(state: SectionState): Promise<boolean> {
+  for (const url of getBackendEndpoints("/sections")) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.success) return true;
+      }
+    } catch {}
+  }
+  return false;
+}
+
 export async function GET() {
+  const dbSections = await fetchSectionsFromDb();
   const fileState = loadFileState();
-  const currentSections = {
+
+  const merged = {
     ...getDefaultSectionState(),
     ...(bundledSections as SectionState),
     ...(fileState || {}),
+    ...(dbSections || {}),
   };
 
   const response = NextResponse.json(
-    { success: true, data: currentSections },
+    { success: true, data: merged },
     { headers: NO_CACHE_HEADERS }
   );
 
-  // Clear any legacy cookie that was stuck in the browser
   response.cookies.delete("landing_sections_config");
-
   return response;
 }
 
@@ -52,33 +109,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, message: "Invalid payload" }, { status: 400 });
     }
 
+    const currentDb = (await fetchSectionsFromDb()) || {};
     const fileState = loadFileState() || {};
-    const updated = {
+    const updated: SectionState = {
       ...getDefaultSectionState(),
       ...(bundledSections as SectionState),
       ...fileState,
+      ...currentDb,
       ...body,
     };
 
-    // Write directly to project file
+    // Save to DB globally
+    const savedToDb = await saveSectionsToDb(updated);
+
+    // Also persist to local file in dev environment
     try {
       fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(updated, null, 2), "utf-8");
-    } catch {
-      // Ignore if filesystem is read-only in serverless
-    }
+    } catch {}
 
     const response = NextResponse.json(
       {
         success: true,
-        message: "Section configurations updated successfully",
+        message: savedToDb ? "Section configurations saved globally in database" : "Section configurations updated",
         data: updated,
       },
       { headers: NO_CACHE_HEADERS }
     );
 
-    // Clear legacy cookie
     response.cookies.delete("landing_sections_config");
-
     return response;
   } catch (error: any) {
     return NextResponse.json(
@@ -87,5 +145,3 @@ export async function POST(req: Request) {
     );
   }
 }
-
-
