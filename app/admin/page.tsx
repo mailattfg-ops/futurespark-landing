@@ -41,6 +41,7 @@ import {
   Pencil,
   Trash2,
   Plus,
+  AlertCircle,
 } from "lucide-react";
 
 interface PageOption {
@@ -66,6 +67,7 @@ export default function AdminDashboardPage() {
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [activePage, setActivePage] = useState<PageType>("home");
   const [filterCategory, setFilterCategory] = useState<string>("All");
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -242,15 +244,22 @@ export default function AdminDashboardPage() {
   // Helper to persist section state immediately
   const persistSectionsApi = async (updated: SectionState) => {
     try {
-      localStorage.setItem("landing_sections_config", JSON.stringify(updated));
-      window.dispatchEvent(new Event("storage_sections_updated"));
-      await fetch("/api/sections", {
+      const res = await fetch("/api/sections", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
       });
-    } catch (err) {
+      const json = await res.json().catch(() => null);
+      if (!res.ok || !json?.success) {
+        throw new Error(json?.message || `Save failed (HTTP ${res.status})`);
+      }
+      // Cache locally only after the server confirms the save actually persisted
+      localStorage.setItem("landing_sections_config", JSON.stringify(updated));
+      window.dispatchEvent(new Event("storage_sections_updated"));
+      setSaveError(null);
+    } catch (err: any) {
       console.error("Failed to persist section config:", err);
+      setSaveError(err?.message || "Failed to save section settings.");
     }
   };
 
@@ -302,6 +311,7 @@ export default function AdminDashboardPage() {
   const handleSave = async () => {
     setIsSaving(true);
     setSaveSuccess(false);
+    setSaveError(null);
     try {
       const res = await fetch("/api/sections", {
         method: "POST",
@@ -309,13 +319,18 @@ export default function AdminDashboardPage() {
         body: JSON.stringify(sectionsState),
       });
 
-      if (res.ok) {
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
         localStorage.setItem("landing_sections_config", JSON.stringify(sectionsState));
         window.dispatchEvent(new Event("storage_sections_updated"));
         setSaveSuccess(true);
+        setSaveError(null);
+      } else {
+        setSaveError(json?.message || `Save failed (HTTP ${res.status}). Changes were NOT saved.`);
       }
     } catch (err) {
       console.error("Failed to save sections config:", err);
+      setSaveError("Network error — changes were NOT saved.");
     } finally {
       setIsSaving(false);
     }
@@ -533,6 +548,14 @@ export default function AdminDashboardPage() {
 
         {/* Main Content Body Container */}
         <main className="max-w-6xl mx-auto w-full px-4 sm:px-8 py-8 space-y-6 flex-1">
+          {/* Save Error Banner */}
+          {saveError && (
+            <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs sm:text-sm font-semibold flex items-center gap-2.5 animate-in fade-in slide-in-from-top-2">
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <span>{saveError}</span>
+            </div>
+          )}
+
           {/* Save Success Banner */}
           {saveSuccess && (
             <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-semibold flex items-center justify-between animate-in fade-in slide-in-from-top-2">
