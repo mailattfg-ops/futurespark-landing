@@ -412,33 +412,12 @@ export function getDefaultSectionState(): SectionState {
   };
 }
 
-export function getSavedSections(): SectionState | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const cached = localStorage.getItem("landing_sections_config");
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (parsed && typeof parsed === "object") return parsed;
-    }
-  } catch {}
-  try {
-    const match = document.cookie.match(/(?:^|; )landing_sections_config=([^;]*)/);
-    if (match) {
-      const parsed = JSON.parse(decodeURIComponent(match[1]));
-      if (parsed && typeof parsed === "object") return parsed;
-    }
-  } catch {}
-  return null;
-}
-
-export function saveSectionsLocally(state: SectionState) {
+export function clearLegacyStorage() {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem("landing_sections_config", JSON.stringify(state));
-    document.cookie = `landing_sections_config=${encodeURIComponent(
-      JSON.stringify(state)
-    )}; path=/; max-age=31536000; SameSite=Lax`;
-    window.dispatchEvent(new Event("storage_sections_updated"));
+    localStorage.removeItem("landing_sections_config");
+    document.cookie = "landing_sections_config=; max-age=0; path=/; SameSite=Lax";
   } catch {}
 }
+
 

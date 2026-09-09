@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer";
 import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { track } from "@/lib/meta";
-import { getDefaultSectionState, SectionState, getSavedSections, saveSectionsLocally } from "@/lib/section-config";
+import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
 import { MultiCategoryGallery } from "@/components/curriculum/multi-category-gallery";
 import {
   BookOpen,
@@ -115,37 +115,27 @@ export default function CurriculumPage() {
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
 
   useEffect(() => {
+    clearLegacyStorage();
+
     async function loadSectionsConfig() {
       try {
-        const cached = getSavedSections();
-        if (cached) {
-          setSections((prev) => ({ ...prev, ...cached }));
-        }
         const res = await fetch("/api/sections", { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
-            const currentSaved = getSavedSections();
-            const merged = { ...json.data, ...(currentSaved || {}) };
-            setSections(merged);
-            saveSectionsLocally(merged);
+            setSections(json.data);
           }
         }
       } catch { }
     }
     loadSectionsConfig();
 
-    const handleUpdate = () => {
-      const cached = getSavedSections();
-      if (cached) setSections((prev) => ({ ...prev, ...cached }));
-    };
+    const handleUpdate = () => loadSectionsConfig();
     window.addEventListener("storage_sections_updated", handleUpdate);
-    window.addEventListener("storage", handleUpdate);
     const handleOpenModalEvent = () => handleOpenDemoModal();
     window.addEventListener("open_demo_modal", handleOpenModalEvent);
     return () => {
       window.removeEventListener("storage_sections_updated", handleUpdate);
-      window.removeEventListener("storage", handleUpdate);
       window.removeEventListener("open_demo_modal", handleOpenModalEvent);
     };
   }, []);

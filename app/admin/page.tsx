@@ -9,8 +9,7 @@ import {
   SectionState,
   PageType,
   getDefaultSectionState,
-  getSavedSections,
-  saveSectionsLocally,
+  clearLegacyStorage,
 } from "@/lib/section-config";
 import {
   DEFAULT_WEEKLY_PLANS,
@@ -113,18 +112,11 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     async function loadSections() {
       try {
-        const saved = getSavedSections();
-        if (saved) {
-          setSectionsState((prev) => ({ ...prev, ...saved }));
-        }
-
+        clearLegacyStorage();
         const res = await fetch("/api/sections", { cache: "no-store" });
         const data = await res.json();
         if (data.success && data.data) {
-          const currentSaved = getSavedSections();
-          const merged = { ...data.data, ...(currentSaved || {}) };
-          setSectionsState(merged);
-          saveSectionsLocally(merged);
+          setSectionsState(data.data);
         }
       } catch (err) {
         console.error("Failed to load sections config:", err);
@@ -252,7 +244,6 @@ export default function AdminDashboardPage() {
 
   // Helper to persist section state immediately
   const persistSectionsApi = async (updated: SectionState) => {
-    saveSectionsLocally(updated);
     try {
       const res = await fetch("/api/sections", {
         method: "POST",
@@ -263,10 +254,11 @@ export default function AdminDashboardPage() {
       if (!res.ok || !json?.success) {
         throw new Error(json?.message || `Save failed (HTTP ${res.status})`);
       }
+      window.dispatchEvent(new Event("storage_sections_updated"));
       setSaveError(null);
     } catch (err: any) {
-      console.error("Failed to persist section config to server:", err);
-      // Even if network fails, local preview remains saved
+      console.error("Failed to persist section config to project:", err);
+      setSaveError(err?.message || "Failed to save section settings.");
     }
   };
 
@@ -280,7 +272,6 @@ export default function AdminDashboardPage() {
     const updated = { ...sectionsState, [id]: nextVal };
 
     setSectionsState(updated);
-    saveSectionsLocally(updated);
     persistSectionsApi(updated);
     setSaveSuccess(false);
   };
@@ -290,7 +281,6 @@ export default function AdminDashboardPage() {
     const next = { ...sectionsState };
     DEFAULT_SECTIONS.filter((s) => s.page === activePage).forEach((s) => (next[s.id] = true));
     setSectionsState(next);
-    saveSectionsLocally(next);
     persistSectionsApi(next);
     setSaveSuccess(false);
   };
@@ -300,7 +290,6 @@ export default function AdminDashboardPage() {
     const next = { ...sectionsState };
     DEFAULT_SECTIONS.filter((s) => s.page === activePage).forEach((s) => (next[s.id] = false));
     setSectionsState(next);
-    saveSectionsLocally(next);
     persistSectionsApi(next);
     setSaveSuccess(false);
   };
@@ -313,7 +302,6 @@ export default function AdminDashboardPage() {
       next[s.id] = defaults[s.id] ?? s.enabled;
     });
     setSectionsState(next);
-    saveSectionsLocally(next);
     persistSectionsApi(next);
     setSaveSuccess(false);
   };
@@ -323,7 +311,6 @@ export default function AdminDashboardPage() {
     setIsSaving(true);
     setSaveSuccess(false);
     setSaveError(null);
-    saveSectionsLocally(sectionsState);
     try {
       const res = await fetch("/api/sections", {
         method: "POST",
@@ -333,14 +320,15 @@ export default function AdminDashboardPage() {
 
       const json = await res.json().catch(() => null);
       if (res.ok && json?.success) {
+        window.dispatchEvent(new Event("storage_sections_updated"));
         setSaveSuccess(true);
         setSaveError(null);
       } else {
-        setSaveError(json?.message || `Save failed (HTTP ${res.status}). Changes saved locally.`);
+        setSaveError(json?.message || `Save failed (HTTP ${res.status}).`);
       }
     } catch (err) {
       console.error("Failed to save sections config:", err);
-      setSaveError("Network error — changes saved in your browser.");
+      setSaveError("Network error — changes were not saved.");
     } finally {
       setIsSaving(false);
     }

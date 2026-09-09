@@ -9,39 +9,30 @@ import { WhyFinancialLiteracySection } from "@/app/home/components/why-financial
 import { AwardsPartnersSection } from "@/app/home/components/awards-partners";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { track } from "@/lib/meta";
-import { getDefaultSectionState, SectionState, getSavedSections, saveSectionsLocally } from "@/lib/section-config";
+import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
 
 export default function AboutUsPage() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
 
   useEffect(() => {
+    clearLegacyStorage();
+
     async function loadSectionsConfig() {
       try {
-        const cached = getSavedSections();
-        if (cached) {
-          setSections((prev) => ({ ...prev, ...cached }));
-        }
         const res = await fetch("/api/sections", { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
-            const currentSaved = getSavedSections();
-            const merged = { ...json.data, ...(currentSaved || {}) };
-            setSections(merged);
-            saveSectionsLocally(merged);
+            setSections(json.data);
           }
         }
       } catch { }
     }
     loadSectionsConfig();
 
-    const handleUpdate = () => {
-      const cached = getSavedSections();
-      if (cached) setSections((prev) => ({ ...prev, ...cached }));
-    };
+    const handleUpdate = () => loadSectionsConfig();
     window.addEventListener("storage_sections_updated", handleUpdate);
-    window.addEventListener("storage", handleUpdate);
     const handleOpenModalEvent = () => handleOpenDemoModal();
     window.addEventListener("open_demo_modal", handleOpenModalEvent);
     return () => {

@@ -32,7 +32,7 @@ import {
 import { TimezoneSelect } from "../../components/ui/timezone-select";
 import { CustomSelect } from "../../components/ui/custom-select";
 import { track } from "../../lib/meta";
-import { getDefaultSectionState, SectionState, getSavedSections, saveSectionsLocally } from "../../lib/section-config";
+import { getDefaultSectionState, SectionState, clearLegacyStorage } from "../../lib/section-config";
 
 const countryCodes = allCountryCodesList;
 
@@ -49,36 +49,24 @@ function ClaimFreeClassFormContent() {
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
 
   useEffect(() => {
+    clearLegacyStorage();
+
     async function loadSectionsConfig() {
       try {
-        const cached = getSavedSections();
-        if (cached) {
-          setSections((prev) => ({ ...prev, ...cached }));
-        }
         const res = await fetch("/api/sections", { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
-            const currentSaved = getSavedSections();
-            const merged = { ...json.data, ...(currentSaved || {}) };
-            setSections(merged);
-            saveSectionsLocally(merged);
+            setSections(json.data);
           }
         }
       } catch { }
     }
     loadSectionsConfig();
 
-    const handleUpdate = () => {
-      const cached = getSavedSections();
-      if (cached) setSections((prev) => ({ ...prev, ...cached }));
-    };
+    const handleUpdate = () => loadSectionsConfig();
     window.addEventListener("storage_sections_updated", handleUpdate);
-    window.addEventListener("storage", handleUpdate);
-    return () => {
-      window.removeEventListener("storage_sections_updated", handleUpdate);
-      window.removeEventListener("storage", handleUpdate);
-    };
+    return () => window.removeEventListener("storage_sections_updated", handleUpdate);
   }, []);
 
   const isEnabled = (key: string) => sections[key] !== false;

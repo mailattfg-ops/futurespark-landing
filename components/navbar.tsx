@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { getDefaultSectionState, SectionState, getSavedSections, saveSectionsLocally } from "@/lib/section-config";
+import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
 
 interface NavbarProps {
   onOpenDemoModal?: () => void;
@@ -19,36 +19,24 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
   const isPilotPage = pathname === "/pilot";
 
   useEffect(() => {
+    clearLegacyStorage();
+
     async function loadSectionsConfig() {
       try {
-        const cached = getSavedSections();
-        if (cached) {
-          setSections((prev) => ({ ...prev, ...cached }));
-        }
         const res = await fetch("/api/sections", { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
-            const currentSaved = getSavedSections();
-            const merged = { ...json.data, ...(currentSaved || {}) };
-            setSections(merged);
-            saveSectionsLocally(merged);
+            setSections(json.data);
           }
         }
       } catch {}
     }
     loadSectionsConfig();
 
-    const handleUpdate = () => {
-      const cached = getSavedSections();
-      if (cached) setSections((prev) => ({ ...prev, ...cached }));
-    };
+    const handleUpdate = () => loadSectionsConfig();
     window.addEventListener("storage_sections_updated", handleUpdate);
-    window.addEventListener("storage", handleUpdate);
-    return () => {
-      window.removeEventListener("storage_sections_updated", handleUpdate);
-      window.removeEventListener("storage", handleUpdate);
-    };
+    return () => window.removeEventListener("storage_sections_updated", handleUpdate);
   }, []);
 
   const isEnabled = (key: string) => sections[key] !== false;

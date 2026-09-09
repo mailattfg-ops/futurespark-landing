@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getDefaultSectionState, SectionState, getSavedSections, saveSectionsLocally } from "@/lib/section-config";
 import { Navbar } from "@/components/navbar";
 import { HeroSection } from "@/app/home/components/hero-section";
 import { WhyFinancialLiteracySection } from "@/app/home/components/why-financial-literacy";
@@ -24,6 +23,7 @@ import { CertificationsTrustSection } from "@/app/home/components/certifications
 import { ParentReviewsSection } from "@/app/home/components/parent-reviews";
 import { Footer } from "@/components/footer";
 import { track } from "@/lib/meta";
+import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
 
 export default function HomePage() {
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
@@ -36,20 +36,11 @@ export default function HomePage() {
 
   const loadConfig = async () => {
     try {
-      // Check local storage / cookie first for instant sync
-      const cached = getSavedSections();
-      if (cached) {
-        setSections((prev) => ({ ...prev, ...cached }));
-      }
-
-      // Fetch latest from server
+      clearLegacyStorage();
       const res = await fetch("/api/sections", { cache: "no-store" });
       const data = await res.json();
       if (data.success && data.data) {
-        const currentSaved = getSavedSections();
-        const merged = { ...data.data, ...(currentSaved || {}) };
-        setSections(merged);
-        saveSectionsLocally(merged);
+        setSections(data.data);
       }
     } catch {
       // Default fallback
