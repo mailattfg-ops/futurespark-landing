@@ -109,7 +109,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     async function loadSections() {
       try {
-        const res = await fetch("/api/sections");
+        const res = await fetch("/api/sections", { cache: "no-store" });
         const data = await res.json();
         if (data.success && data.data) {
           setSectionsState((prev) => ({ ...prev, ...data.data }));
@@ -131,7 +131,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     async function loadWeeklyPlans() {
       try {
-        const res = await fetch("/api/curriculum-plans");
+        const res = await fetch("/api/curriculum-plans", { cache: "no-store" });
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
           setWeeklyPlans(json.data);
@@ -162,6 +162,7 @@ export default function AdminDashboardPage() {
         localStorage.setItem("landing_curriculum_plans", JSON.stringify(updatedPlans));
         window.dispatchEvent(new Event("storage_curriculum_plans_updated"));
         setPlansSaveSuccess(true);
+        setTimeout(() => setPlansSaveSuccess(false), 3000);
       }
     } catch (err) {
       console.error("Failed to save curriculum plans:", err);
@@ -238,46 +239,66 @@ export default function AdminDashboardPage() {
     setIsPlanModalOpen(false);
   };
 
-  // Toggle individual section
+  // Helper to persist section state immediately
+  const persistSectionsApi = async (updated: SectionState) => {
+    try {
+      localStorage.setItem("landing_sections_config", JSON.stringify(updated));
+      window.dispatchEvent(new Event("storage_sections_updated"));
+      await fetch("/api/sections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+    } catch (err) {
+      console.error("Failed to persist section config:", err);
+    }
+  };
+
+  // Toggle individual section (instant auto-save)
   const handleToggle = (id: string) => {
     setSectionsState((prev) => {
-      const updated = { ...prev, [id]: !prev[id] };
+      const nextVal = !prev[id];
+      const updated = { ...prev, [id]: nextVal };
+      persistSectionsApi(updated);
       return updated;
     });
     setSaveSuccess(false);
   };
 
-  // Bulk enable all for active page
+  // Bulk enable all for active page (instant auto-save)
   const handleEnableAll = () => {
     setSectionsState((prev) => {
       const next = { ...prev };
       DEFAULT_SECTIONS.filter((s) => s.page === activePage).forEach((s) => (next[s.id] = true));
+      persistSectionsApi(next);
       return next;
     });
     setSaveSuccess(false);
   };
 
-  // Bulk disable all for active page
+  // Bulk disable all for active page (instant auto-save)
   const handleDisableAll = () => {
     setSectionsState((prev) => {
       const next = { ...prev };
       DEFAULT_SECTIONS.filter((s) => s.page === activePage).forEach((s) => (next[s.id] = false));
+      persistSectionsApi(next);
       return next;
     });
     setSaveSuccess(false);
   };
 
-  // Reset active page to defaults
+  // Reset active page to defaults (instant auto-save)
   const handleResetDefault = () => {
     setSectionsState((prev) => {
       const next = { ...prev };
       DEFAULT_SECTIONS.filter((s) => s.page === activePage).forEach((s) => (next[s.id] = s.enabled));
+      persistSectionsApi(next);
       return next;
     });
     setSaveSuccess(false);
   };
 
-  // Save changes to API & localStorage
+  // Manual save all changes button
   const handleSave = async () => {
     setIsSaving(true);
     setSaveSuccess(false);

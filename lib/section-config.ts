@@ -35,7 +35,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     page: "home",
     category: "Header Navigation",
     description: "Toggle the About Us menu link in top navigation bar.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "navbar_cta",

@@ -3,14 +3,18 @@ import { getDefaultSectionState, SectionState } from "@/lib/section-config";
 import fs from "fs";
 import path from "path";
 
-// In-memory cache + file storage fallback for section toggle settings
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+// Persistent file storage for section toggle settings
 const CONFIG_FILE_PATH = path.join(process.cwd(), ".sections-config.json");
 
 function loadStoredState(): SectionState {
   try {
     if (fs.existsSync(CONFIG_FILE_PATH)) {
       const data = fs.readFileSync(CONFIG_FILE_PATH, "utf-8");
-      return { ...getDefaultSectionState(), ...JSON.parse(data) };
+      const parsed = JSON.parse(data);
+      return { ...getDefaultSectionState(), ...parsed };
     }
   } catch (err) {
     console.error("Failed to read section config file:", err);
@@ -26,13 +30,21 @@ function saveStoredState(state: SectionState): void {
   }
 }
 
-let memoryState: SectionState = loadStoredState();
-
 export async function GET() {
-  return NextResponse.json({
-    success: true,
-    data: memoryState,
-  });
+  const state = loadStoredState();
+  return NextResponse.json(
+    {
+      success: true,
+      data: state,
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    }
+  );
 }
 
 export async function POST(req: Request) {
@@ -45,19 +57,27 @@ export async function POST(req: Request) {
       );
     }
 
+    const currentState = loadStoredState();
     const updatedState: SectionState = {
-      ...memoryState,
+      ...currentState,
       ...body,
     };
 
-    memoryState = updatedState;
     saveStoredState(updatedState);
 
-    return NextResponse.json({
-      success: true,
-      message: "Section configurations updated successfully",
-      data: memoryState,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Section configurations updated successfully",
+        data: updatedState,
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+          Pragma: "no-cache",
+        },
+      }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message || "Failed to update sections" },

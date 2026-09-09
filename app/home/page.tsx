@@ -47,7 +47,7 @@ export default function HomePage() {
       }
 
       // Fetch latest from server
-      const res = await fetch("/api/sections");
+      const res = await fetch("/api/sections", { cache: "no-store" });
       const data = await res.json();
       if (data.success && data.data) {
         setSections(data.data);

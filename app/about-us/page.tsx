@@ -22,7 +22,7 @@ export default function AboutUsPage() {
         if (cached) {
           setSections(JSON.parse(cached));
         }
-        const res = await fetch("/api/sections");
+        const res = await fetch("/api/sections", { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
