@@ -1,7 +1,7 @@
 {
   "navbar_curriculum": true,
   "navbar_teachers": false,
-  "navbar_about": false,
+  "navbar_about": true,
   "navbar_cta": true,
   "navbar_ribbon": true,
   "hero": true,
@@ -14,7 +14,7 @@
   "foundationsOfWealth": true,
   "boxUnboxing": true,
   "courseFlow": true,
-  "faq": true,
+  "faq": false,
   "instagramShowcase": true,
   "usOnMedia": false,
   "blogs": false,
@@ -45,5 +45,6 @@
   "about_whyFinancialLiteracy": true,
   "about_teamCommunity": true,
   "about_awardsPartners": true,
+  "about_faq": true,
   "about_footer": true
 }

@@ -141,7 +141,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     page: "home",
     category: "Curriculum & Value",
     description: "Accordion of frequently asked questions and answers.",
-    enabled: true,
+    enabled: false,
   },
   {
     id: "instagramShowcase",
@@ -389,6 +389,14 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     page: "about-us",
     category: "Trust & Proof",
     description: "Logos and badges of recognized awards and university partners.",
+    enabled: true,
+  },
+  {
+    id: "about_faq",
+    name: "Frequently Asked Questions",
+    page: "about-us",
+    category: "FAQ & Help",
+    description: "Accordion of frequently asked questions and answers.",
     enabled: true,
   },
   {

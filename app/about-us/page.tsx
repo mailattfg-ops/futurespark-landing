@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { WhyFinancialLiteracySection } from "@/app/home/components/why-financial-literacy";
 import { AwardsPartnersSection } from "@/app/home/components/awards-partners";
+import { FAQSection } from "@/app/home/components/faq-section";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { track } from "@/lib/meta";
 import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
@@ -144,7 +145,10 @@ export default function AboutUsPage() {
       {/* 5. Awards & Partners Section */}
       {isEnabled("about_awardsPartners") && <AwardsPartnersSection />}
 
-      {/* 6. Shared Navigation Footer */}
+      {/* 6. Frequently Asked Questions */}
+      {isEnabled("about_faq") && <FAQSection />}
+
+      {/* 7. Shared Navigation Footer */}
       {isEnabled("about_footer") && <Footer onOpenDemoModal={handleOpenDemoModal} />}
 
       {/* 7. Booking Modal */}
