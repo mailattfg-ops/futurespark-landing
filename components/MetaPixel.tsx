@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "2502934296849118";
 
 export default function MetaPixel() {
   const pathname = usePathname();
@@ -32,7 +32,7 @@ export default function MetaPixel() {
 
   return (
     <>
-      <Script id="fb-pixel" strategy="afterInteractive">
+      <Script id="meta-pixel" strategy="afterInteractive">
         {`
           !function(f,b,e,v,n,t,s){
             if(f.fbq)return;
