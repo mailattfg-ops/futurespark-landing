@@ -158,7 +158,7 @@ function CountdownBlock({ sessionDate, preferredTime, scheduledClass, asIST = fa
     let target = parseTargetSessionTime(sessionDate, preferredTime, asIST);
     if (!target && scheduledClass?.startTime) target = new Date(scheduledClass.startTime);
     function tick() {
-      if (!target) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
+      if (!target) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: false }); return; }
       const diffMs = target.getTime() - Date.now();
       if (diffMs <= 10 * 60 * 1000) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: true }); return; }
       const s = Math.floor(diffMs / 1000);
