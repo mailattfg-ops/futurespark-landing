@@ -475,30 +475,27 @@ function DemoClassPortalContent() {
     setRescheduleError(null);
 
     try {
-      const payload = {
-        leadId,
-        preferredDays: [rescheduleDate],
-        preferredTime: rescheduleSlot,
-        preferredTimezone: rescheduleTimezone,
-        notes: `[Reschedule Request] Requested for Date: ${rescheduleDate}, Time: ${rescheduleSlot}, Timezone: ${rescheduleTimezone}. Reason: ${rescheduleReason || "None"}`,
-      };
-
-      const res = await fetch(`/api/leads`, {
+      /* Update THIS booking — do not create another lead.
+       *
+       * This used to POST a whole new lead carrying the request in its notes,
+       * which duplicated the family in the CRM on every click, left the real
+       * booking unchanged (so the new date vanished on refresh) and triggered
+       * another WhatsApp reminder pointing at the duplicate.
+       */
+      const res = await fetch(`/api/leads/${encodeURIComponent(leadId)}/reschedule-request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName: lead?.firstName || "Parent",
-          lastName: lead?.lastName || "",
-          email: lead?.email || "parent@example.com",
-          phone: lead?.phone || "0000000000",
-          studentFirstName: lead?.studentFirstName,
-          studentLastName: lead?.studentLastName,
-          preferredDays: [rescheduleDate],
-          preferredTime: rescheduleSlot,
-          notes: payload.notes,
+          date: rescheduleDate,
+          time: rescheduleSlot,
+          timezone: rescheduleTimezone,
+          reason: rescheduleReason || undefined,
         }),
       });
-      if (!res.ok) throw new Error(`Reschedule request failed: ${res.status}`);
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.message || `Reschedule request failed: ${res.status}`);
+      }
 
       setActiveSessionDate(rescheduleDate);
       setActivePreferredTime(rescheduleSlot);
@@ -506,8 +503,15 @@ function DemoClassPortalContent() {
       setTimeout(() => {
         setIsRescheduleOpen(false);
       }, 2000);
-    } catch {
-      setRescheduleError("We couldn't submit your reschedule request. Please try again, or message us on WhatsApp.");
+    } catch (err) {
+      // Show the server's reason when it gave one — "that slot is unavailable"
+      // is actionable, "something went wrong" is not.
+      const reason = err instanceof Error ? err.message : "";
+      setRescheduleError(
+        reason && !/^Reschedule request failed:/.test(reason)
+          ? reason
+          : "We couldn't submit your reschedule request. Please try again, or message us on WhatsApp."
+      );
     } finally {
       setIsSubmittingReschedule(false);
     }
