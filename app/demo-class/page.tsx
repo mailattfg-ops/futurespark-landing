@@ -154,6 +154,7 @@ function CountdownBlock({ sessionDate, preferredTime, scheduledClass, asIST = fa
   sessionDate: string; preferredTime: string; scheduledClass?: { startTime?: string }; asIST?: boolean;
 }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, isReady: false });
+  const [hasTarget, setHasTarget] = useState(false);
   useEffect(() => {
     let target = parseTargetSessionTime(sessionDate, preferredTime, asIST);
     if (!target && scheduledClass?.startTime) target = new Date(scheduledClass.startTime);
@@ -164,10 +165,14 @@ function CountdownBlock({ sessionDate, preferredTime, scheduledClass, asIST = fa
       const s = Math.floor(diffMs / 1000);
       setTimeLeft({ days: Math.floor(s / 86400), hours: Math.floor((s % 86400) / 3600), minutes: Math.floor((s % 3600) / 60), seconds: s % 60, isReady: false });
     }
+    setHasTarget(Boolean(target));
     tick(); const id = setInterval(tick, 1000); return () => clearInterval(id);
   }, [sessionDate, preferredTime, scheduledClass, asIST]);
   const p = (n: number) => String(n).padStart(2, "0");
   if (timeLeft.isReady) return null;
+  // No date yet: say so rather than counting down to 00:00:00:00, which reads
+  // as "your class is starting now".
+  if (!hasTarget) return null;
   return (
     <div className="space-y-3">
       <p className="text-xs font-bold text-indigo-200 uppercase tracking-widest text-center">Class Starts in</p>
@@ -275,9 +280,68 @@ function DemoClassPortalContent() {
   }, [selectedDateId, customDateOption, quickDates]);
 
   // Available slots dynamically filtered by 2-hr lead time & 4:00 PM cutoff for Today
-  const availableSlots = useMemo<SlotOption[]>(() => {
-    if (!activeDateObj || !activeDateObj.rawDate) return [];
-    return getAvailableSlotsForDate(activeDateObj.rawDate, rescheduleTimezone, isUSA);
+  /* Reschedule slots come from the SERVER, not just the local clock.
+   *
+   * getAvailableSlotsForDate only trims by time of day — for any future date it
+   * returns the whole 24-hour list. So the reschedule picker offered every slot
+   * from 12 AM onwards, including ones an admin had hidden and ones already
+   * fully booked, while the booking widgets (book-demo-modal, claim-free-class)
+   * were correctly filtering them. Same merge as those two, so all three agree.
+   */
+  const [availableSlots, setAvailableSlots] = useState<SlotOption[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      if (!activeDateObj || !activeDateObj.rawDate) {
+        if (!cancelled) setAvailableSlots([]);
+        return;
+      }
+      const local = getAvailableSlotsForDate(activeDateObj.rawDate, rescheduleTimezone, isUSA);
+      try {
+        const res = await fetch(
+          `/api/pilot-leads/slot-availability?date=${encodeURIComponent(activeDateObj.fullDateStr)}`
+        );
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.success && json.data && Array.isArray(json.data.slots)) {
+            const hiddenSlots: string[] = Array.isArray(json.data.hiddenSlots) ? json.data.hiddenSlots : [];
+            const serverSlots = new Map<string, any>();
+            json.data.slots.forEach((s: any) => serverSlots.set(s.time, s));
+
+            const merged = getAvailableSlotsForDate(
+              activeDateObj.rawDate,
+              rescheduleTimezone,
+              isUSA,
+              json.data.todayCutoffHour
+            )
+              .filter((s) => !hiddenSlots.includes(s.time) && (serverSlots.size === 0 || serverSlots.has(s.time)))
+              .map((s) => {
+                const info = serverSlots.get(s.time);
+                return info
+                  ? {
+                      ...s,
+                      bookedCount: info.bookedCount,
+                      maxCapacity: info.maxCapacity,
+                      remainingSeats: info.remainingSeats,
+                      isBookedOut: info.isBookedOut,
+                    }
+                  : s;
+              });
+
+            if (!cancelled) setAvailableSlots(merged);
+            return;
+          }
+        }
+      } catch {
+        // Server unreachable — fall back to the local list rather than showing none.
+      }
+      if (!cancelled) setAvailableSlots(local);
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
   }, [activeDateObj, rescheduleTimezone, isUSA]);
 
   // Auto-sync rescheduleDate when activeDateObj changes
@@ -297,10 +361,12 @@ function DemoClassPortalContent() {
     }
   }, [isRescheduleOpen, rescheduleTimezone, isUSA, quickDates, selectedDateId]);
 
-  // Auto select first slot if available
+  // Auto select the first slot that can actually be booked — never a full one,
+  // or the parent lands on a slot the server will refuse.
   useEffect(() => {
-    if (availableSlots.length > 0 && !availableSlots.some((s) => s.time === rescheduleSlot)) {
-      setRescheduleSlot(availableSlots[0].time);
+    const bookable = availableSlots.filter((s) => !s.isBookedOut);
+    if (bookable.length > 0 && !bookable.some((s) => s.time === rescheduleSlot)) {
+      setRescheduleSlot(bookable[0].time);
     }
   }, [availableSlots, rescheduleSlot]);
 
@@ -311,8 +377,10 @@ function DemoClassPortalContent() {
   }, [isUSA]);
 
   // Active session display date/time
-  const [activeSessionDate, setActiveSessionDate] = useState("25/08/2026");
-  const [activePreferredTime, setActivePreferredTime] = useState("04:00 PM");
+  // Empty until the lead is loaded — a placeholder date here is what put
+  // "Tue, Aug 25, 2026" in front of parents who had booked something else.
+  const [activeSessionDate, setActiveSessionDate] = useState("");
+  const [activePreferredTime, setActivePreferredTime] = useState("");
 
   useEffect(() => { if (leadIdQuery) { setLeadId(leadIdQuery); setInputLeadId(leadIdQuery); } }, [leadIdQuery]);
 
@@ -325,12 +393,27 @@ function DemoClassPortalContent() {
         const data = await res.json();
         if (res.ok && data.success && data.data) {
           setLead(data.data);
-          let dateStr = "25/08/2026";
-          if (data.data.notes && typeof data.data.notes === "string") {
-            const match = data.data.notes.match(/(\d{2}\/\d{2}\/\d{4})/);
-            if (match?.[1]) dateStr = match[1];
+
+          /* The session date, in order of what is actually true.
+           *
+           * This used to start from a hard-coded "25/08/2026" and only consult
+           * preferredDays when `notes` was EMPTY — but every lead carries notes
+           * from the signup form, and those notes contain no date, so the real
+           * booked date was never read and every parent saw August 2026.
+           *
+           * A booked class beats the parent's preference, the preference beats a
+           * date embedded in notes, and if none exist we show nothing rather
+           * than inventing a day the family might turn up on.
+           */
+          let dateStr = "";
+          const scheduledStart = data.data.scheduledClass?.startTime;
+          if (scheduledStart && !Number.isNaN(new Date(scheduledStart).getTime())) {
+            const d = new Date(scheduledStart);
+            dateStr = `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
           } else if (data.data.preferredDays?.length) {
             dateStr = data.data.preferredDays.join(", ");
+          } else if (typeof data.data.notes === "string") {
+            dateStr = data.data.notes.match(/(\d{2}\/\d{2}\/\d{4})/)?.[1] ?? "";
           }
           setActiveSessionDate(dateStr);
           if (data.data.preferredTime) setActivePreferredTime(data.data.preferredTime);
@@ -593,12 +676,20 @@ function DemoClassPortalContent() {
                 {/* Date */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1">
                   <div className="flex items-center gap-1.5 text-indigo-600"><Calendar className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Session Date</span></div>
-                  <p className="text-md md:text-xl font-extrabold text-gray-900">{formatSessionDate(activeSessionDate)}</p>
+                  <p className="text-md md:text-xl font-extrabold text-gray-900">
+                    {activeSessionDate ? formatSessionDate(activeSessionDate) : "To be confirmed"}
+                  </p>
                 </div>
                 {/* Time */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1 min-w-0">
                   <div className="flex items-center gap-1.5 text-amber-600"><Clock className="w-4 h-4" /><span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Session Time</span></div>
-                  <p className="text-md md:text-xl font-extrabold text-gray-900">{isUSA ? activePreferredTime : istSlotToLocalLabel(activePreferredTime, timezone)}</p>
+                  <p className="text-md md:text-xl font-extrabold text-gray-900">
+                    {!activePreferredTime
+                      ? "To be confirmed"
+                      : isUSA
+                        ? activePreferredTime
+                        : istSlotToLocalLabel(activePreferredTime, timezone)}
+                  </p>
                 </div>
                 {/* Student */}
                 <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-gray-100 space-y-1">
@@ -775,17 +866,26 @@ function DemoClassPortalContent() {
                   <div className="grid grid-cols-3 gap-2.5">
                     {availableSlots.map((slot) => {
                       const isSelected = rescheduleSlot === slot.time;
+                      // A full slot is shown but not choosable — the server would
+                      // refuse it, and hiding it silently looks like a missing time.
+                      const isBookedOut = slot.isBookedOut;
                       return (
                         <button
                           key={slot.id || slot.time}
                           type="button"
-                          onClick={() => setRescheduleSlot(slot.time)}
-                          className={`py-3 px-2 rounded-2xl border text-xs font-extrabold text-center transition-all cursor-pointer ${isSelected
-                            ? "bg-indigo-50/90 border-[#6366F1] text-indigo-600 shadow-xs"
-                            : "bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                          disabled={isBookedOut}
+                          onClick={() => !isBookedOut && setRescheduleSlot(slot.time)}
+                          className={`py-3 px-2 rounded-2xl border text-xs font-extrabold text-center transition-all ${isBookedOut
+                            ? "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
+                            : isSelected
+                              ? "bg-indigo-50/90 border-[#6366F1] text-indigo-600 shadow-xs cursor-pointer"
+                              : "bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50 cursor-pointer"
                             }`}
                         >
-                          {isUSA ? slot.time : istSlotToLocalLabel(slot.time, rescheduleTimezone, activeDateObj?.rawDate)}
+                          <span className={isBookedOut ? "line-through" : ""}>
+                            {isUSA ? slot.time : istSlotToLocalLabel(slot.time, rescheduleTimezone, activeDateObj?.rawDate)}
+                          </span>
+                          {isBookedOut && <span className="block text-[9px] font-bold mt-0.5">Full</span>}
                         </button>
                       );
                     })}
