@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Lets a verification build run into its own folder (NEXT_DIST_DIR=.next-verify next build)
+  // instead of wiping the .next a running dev server is serving from.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   turbopack: {
     root: __dirname,
   },

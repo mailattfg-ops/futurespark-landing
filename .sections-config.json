@@ -43,8 +43,8 @@
   "curriculum_footer": true,
   "about_hero": true,
   "about_whyFinancialLiteracy": true,
-  "about_teamCommunity": true,
-  "about_awardsPartners": true,
-  "about_faq": true,
+  "about_curriculum": true,
+  "about_different": true,
+  "about_cta": true,
   "about_footer": true
 }
