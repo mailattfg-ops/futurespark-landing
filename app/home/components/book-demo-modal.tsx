@@ -31,19 +31,19 @@ import {
   SlotOption,
   DateOption,
   defaultTimeSlots,
+  allCountryCodesList,
 } from "@/lib/timezone-utils";
 import { TimezoneSelect } from "@/components/ui/timezone-select";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { track } from "@/lib/meta";
 
-const countryCodes = [
-  { code: "+91", flag: "🇮🇳", label: "India (+91)" },
-  { code: "+1", flag: "🇺🇸", label: "USA (+1)" },
-  { code: "+44", flag: "🇬🇧", label: "UK (+44)" },
-  { code: "+971", flag: "🇦🇪", label: "UAE (+971)" },
-  { code: "+65", flag: "🇸🇬", label: "Singapore (+65)" },
-  { code: "+61", flag: "🇦🇺", label: "Australia (+61)" },
-];
+/* The SHARED list, not a local copy.
+ *
+ * This modal carried its own six entries — India, USA, UK, UAE, Singapore,
+ * Australia — while claim-free-class, book-demo-form and confirm-your-seat all
+ * used the full list. A parent in Qatar or Saudi simply could not enter their
+ * number here, on the one form the pilot page opens. */
+const countryCodes = allCountryCodesList;
 
 const gradeOptions = [
   "Grade 1", "Grade 2", "Grade 3", "Grade 4",
@@ -522,9 +522,15 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
                           onChange={setCountryCode}
                           options={countryCodes.map((c) => ({
                             value: c.code,
-                            label: c.code,
+                            // The dial code on the closed button, the country
+                            // name inside the list — a bare "+." told the parent
+                            // nothing about which country they had picked.
+                            displayValue: c.code,
+                            label: `${c.country} (${c.code})`,
                             flag: c.flag,
+                            country: c.country,
                           }))}
+                          searchable
                         />
                       </div>
 

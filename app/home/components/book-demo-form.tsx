@@ -460,9 +460,15 @@ export function BookDemoFormSection() {
                         onChange={setCountryCode}
                         options={countryCodes.map((c) => ({
                           value: c.code,
-                          label: c.code,
+                          // Dial code on the button, country name in the list —
+                          // matching claim-free-class. Labelling by code alone
+                          // left a parent scrolling 153 bare "+1"s.
+                          displayValue: c.code,
+                          label: `${c.country} (${c.code})`,
                           flag: c.flag,
+                          country: c.country,
                         }))}
+                        searchable
                       />
                     </div>
 
