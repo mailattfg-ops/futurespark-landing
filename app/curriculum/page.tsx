@@ -291,7 +291,21 @@ export default function CurriculumPage() {
 
       {/* 4. Weekly Course Plan Multi-Category Gallery Section */}
       {isEnabled("curriculum_weeklyPlan") && (
-        <MultiCategoryGallery onOpenDemoModal={handleOpenDemoModal} />
+		<MultiCategoryGallery onOpenDemoModal={handleOpenDemoModal}>
+			{/* Top Header Banner matching Finquo Junior style */}
+	        <ScrollReveal variant="fade-up" duration={600} className="text-center mb-8">
+	          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-[#7C3AED] text-xs font-bold tracking-wide uppercase mb-3">
+	            <Sparkles className="w-3.5 h-3.5" />
+	            Finquo Junior Curriculum
+	          </div>
+	          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#18181B] tracking-tight font-sans">
+	            Our 40-Session Learning Program
+	          </h2>
+	          <p className="mt-2.5 text-base sm:text-lg text-[#52525B] font-medium max-w-2xl mx-auto">
+	            Practical skills. Real-world learning. A brighter future.
+	          </p>
+	        </ScrollReveal>
+        </MultiCategoryGallery>
       )}
 
       {/* 5. Summary Pill Badges Row */}
