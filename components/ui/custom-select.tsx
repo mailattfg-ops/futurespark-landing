@@ -156,15 +156,15 @@ export function CustomSelect({
         type="button"
         disabled={disabled}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs flex items-center justify-between gap-2 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium cursor-pointer ${
+        className={`w-full bg-white border overflow-hidden border-gray-200 rounded-xl px-3 py-2 text-xs flex items-center justify-between gap-2 focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/20 focus:outline-none transition-all font-sans font-medium cursor-pointer ${
           !selectedOption ? "text-gray-400" : "text-gray-900"
         } ${buttonClassName}`}
       >
-        <div className="flex items-center gap-2 truncate min-w-0">
+        <div className="flex items-center gap-2">
           {leftIcon && <span className="flex-shrink-0 text-gray-400">{leftIcon}</span>}
           <span className="truncate">
             {selectedOption ? (
-              <span className="flex items-center gap-1.5 truncate">
+              <span className="flex items-center gap-1 truncate">
                 {selectedOption.flag && <span className="flex-shrink-0">{selectedOption.flag}</span>}
                 {selectedOption.icon}
                 <span className="truncate">{selectedOption.displayValue || selectedOption.label}</span>
