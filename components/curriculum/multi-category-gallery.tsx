@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import {
   Coins,
   Lightbulb,
@@ -276,9 +276,10 @@ function getCategoryIcon(id: string) {
 
 interface MultiCategoryGalleryProps {
   onOpenDemoModal?: () => void;
+  children: ReactNode
 }
 
-export function MultiCategoryGallery({ onOpenDemoModal }: MultiCategoryGalleryProps) {
+export function MultiCategoryGallery({ onOpenDemoModal, children }: MultiCategoryGalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeModalCategory, setActiveModalCategory] = useState<ProgramCategory | null>(null);
 
@@ -290,22 +291,9 @@ export function MultiCategoryGallery({ onOpenDemoModal }: MultiCategoryGalleryPr
   const selectedCategoryObj = PROGRAM_CATEGORIES.find((c) => c.id === selectedCategory);
 
   return (
-    <section className="w-full bg-linear-to-b from-white via-[#FBFBFE] to-white py-14 sm:py-20 border-y border-gray-100 font-sans">
+    <section className="w-full py-14 sm:py-20 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top Header Banner matching Finquo Junior style */}
-        <ScrollReveal variant="fade-up" duration={600} className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-[#7C3AED] text-xs font-bold tracking-wide uppercase mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            Finquo Junior Curriculum
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#18181B] tracking-tight font-sans">
-            Our 40-Session Learning Program
-          </h2>
-          <p className="mt-2.5 text-base sm:text-lg text-[#52525B] font-medium max-w-2xl mx-auto">
-            Practical skills. Real-world learning. A brighter future.
-          </p>
-        </ScrollReveal>
-
+      	{children}
         {/* Category Filter Pills (Organized into 2 clean, centered rows) */}
         <ScrollReveal variant="fade-up" duration={500} delay={100} className="mb-10 max-w-5xl mx-auto">
           <div className="flex flex-col items-center gap-2.5 sm:gap-3">

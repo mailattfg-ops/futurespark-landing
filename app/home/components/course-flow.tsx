@@ -1,8 +1,11 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Coins, PiggyBank, ShieldAlert, Receipt, TrendingUp, Megaphone, Cpu } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { MultiCategoryGallery } from "@/components/curriculum/multi-category-gallery";
+import { BookDemoModal } from "./book-demo-modal";
+import { track } from "@/lib/meta";
 
 interface CourseStep {
   number: string;
@@ -89,18 +92,27 @@ const courseSteps: CourseStep[] = [
 ];
 
 export function CourseFlowSection() {
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+
+  const handleOpenDemoModal = () => {
+    track("InitiateCheckout");
+    setIsDemoModalOpen(true);
+  };
   return (
     <section className="w-full bg-[#FAFAFA] py-10 sm:py-12 lg:py-16 border-t border-gray-100">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Heading */}
-        <ScrollReveal variant="fade-up" duration={600}>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-8 sm:mb-12 font-sans">
-            Course Flow &amp; Roadmap
-          </h2>
-        </ScrollReveal>
+        <BookDemoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
+		<MultiCategoryGallery onOpenDemoModal={handleOpenDemoModal}>
+          {/* Section Heading */}
+          <ScrollReveal variant="fade-up" duration={600}>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-8 sm:mb-12 font-sans">
+              Course Flow &amp; Roadmap
+            </h2>
+          </ScrollReveal>
+		</MultiCategoryGallery>
 
         {/* Responsive 7-Card Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 sm:gap-5">
+        <div className="hidden grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 sm:gap-5">
           {courseSteps.map((step, idx) => (
             <ScrollReveal
               key={idx}
