@@ -35,7 +35,7 @@ import {
 } from "@/lib/timezone-utils";
 import { TimezoneSelect } from "@/components/ui/timezone-select";
 import { CustomSelect } from "@/components/ui/custom-select";
-import { track } from "@/lib/meta";
+import { track, newEventId } from "@/lib/meta";
 
 /* The SHARED list, not a local copy.
  *
@@ -298,19 +298,22 @@ export function BookDemoModal({ isOpen, onClose }: BookDemoModalProps) {
       preferredTimezone: timezone,
     };
 
+    // One id for both the pixel Lead and the server-side Lead, so Meta counts it once.
+    const eventId = newEventId();
+
     try {
       const response = await fetch("/api/pilot-leads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, eventId }),
       });
 
       const result = await response.json();
 
       if (result.success) {
-        track("Lead");
+        track("Lead", undefined, eventId);
         setIsSubmitted(true);
       } else {
         setSubmitError(result.message || "Failed to submit demo request.");

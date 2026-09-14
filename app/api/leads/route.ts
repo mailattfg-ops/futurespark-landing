@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
+import { leadAttribution } from "@/lib/lead-attribution";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
@@ -37,6 +38,8 @@ export async function POST(req: Request) {
       preferredDays: preferredDays || [],
       preferredTime: preferredTime || undefined,
       notes: notes || undefined,
+      // Meta match keys: read from this request, forwarded to the backend's CAPI call.
+      ...leadAttribution(req, body.eventId),
     };
 
     const isVercel = process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
