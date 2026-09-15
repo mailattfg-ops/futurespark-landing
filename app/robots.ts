@@ -1,8 +1,13 @@
 import { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://junior.finquo.ai";
+/**
+ * The site answers on the apex now — junior.finquo.ai 308s here — so every
+ * crawler-facing URL must name finquo.ai, or Google keeps the old host in
+ * the index and follows a redirect on every fetch.
+ */
+export const BASE_URL = "https://finquo.ai";
 
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
@@ -26,6 +31,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/api/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }

@@ -13,7 +13,10 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const siteUrl = "https://junior.finquo.ai";
+// The apex is the live host — junior.finquo.ai 308s here. Canonical, OG and
+// metadataBase must name it, or every page claims an address that redirects
+// away and Google keeps indexing the old subdomain.
+const siteUrl = "https://finquo.ai";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -62,7 +65,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    siteName: "Finquo Junior",
+    // The SITE is FinQuo; "Finquo Junior" is the programme. Google reads this
+    // (with WebSite.name below) for the site name it prints above a result.
+    siteName: "FinQuo",
     title: "Finquo Junior | The Skills School Forgets to Teach",
     description:
       "A 1-year weekly 1-on-1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits taught by real mentors.",
@@ -93,15 +98,21 @@ export const metadata: Metadata = {
   },
 };
 
+/* The organisation and the website are FinQuo, on the apex domain. "Finquo
+ * Junior" is the programme FinQuo runs — it belongs on the Course node below,
+ * never on the Organization or WebSite node, which is what Google reads for
+ * the site name it prints in results. */
+const brandUrl = "https://finquo.ai";
+
 const jsonLdData = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "EducationalOrganization",
-      "@id": `${siteUrl}/#organization`,
-      "name": "Finquo Junior",
-      "url": siteUrl,
-      "logo": `${siteUrl}/finquo-logo.png`,
+      "@id": `${brandUrl}/#organization`,
+      "name": "FinQuo",
+      "url": brandUrl,
+      "logo": `${brandUrl}/finquo-logo.png`,
       "description": "ISO-grade weekly 1-on-1 mentorship sessions in financial literacy, business, speaking, and digital skills for ages 8 to 18.",
       "sameAs": [
         "https://instagram.com/finquojunior",
@@ -110,20 +121,21 @@ const jsonLdData = {
     },
     {
       "@type": "WebSite",
-      "@id": `${siteUrl}/#website`,
-      "url": siteUrl,
-      "name": "Finquo Junior",
+      "@id": `${brandUrl}/#website`,
+      "url": brandUrl,
+      "name": "FinQuo",
       "publisher": {
-        "@id": `${siteUrl}/#organization`
+        "@id": `${brandUrl}/#organization`
       }
     },
     {
       "@type": "Course",
-      "@id": `${siteUrl}/#course`,
+      "@id": `${brandUrl}/#course`,
       "name": "Foundations of Wealth & Future Skills",
       "description": "40 interactive 1-on-1 sessions covering money foundations, budgeting, scam safety, economy, investing, public speaking, and AI tools.",
+      "alternateName": "Finquo Junior",
       "provider": {
-        "@id": `${siteUrl}/#organization`
+        "@id": `${brandUrl}/#organization`
       }
     }
   ]
