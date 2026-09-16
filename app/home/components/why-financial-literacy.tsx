@@ -14,9 +14,9 @@ const features: FeaturePoint[] = [
     description: "Every session ends with a task the child completes at home.",
   },
   {
-    title: "Vetted by IIM faculty.",
+    title: "Vetted by industry experts.",
     description:
-      "The curriculum was reviewed by professionals from the Indian Institutes of Management before a single session was taught.",
+      "The curriculum was reviewed by finance and education professionals before a single session was taught.",
   },
   {
     title: "One mentor per child.",
