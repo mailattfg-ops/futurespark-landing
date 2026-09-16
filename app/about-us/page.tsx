@@ -31,7 +31,7 @@ const whyPoints = [
   {
     art: <GlyphUsers className="h-10 w-10 lg:h-14 lg:w-14 text-[#0A0F3C]" />,
     title: "Expert curated",
-    body: "Designed with industry and academic experts including IIM & IIT.",
+    body: "Designed with industry and academic experts.",
   },
   {
     art: <GlyphUser className="h-10 w-10 lg:h-14 lg:w-14 text-[#0A0F3C]" />,

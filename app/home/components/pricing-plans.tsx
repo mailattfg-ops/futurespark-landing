@@ -12,7 +12,7 @@ export function PricingPlansSection() {
     "40 live 1-on-1 mentorship sessions (60 minutes each)",
     "Dedicated personal mentor for the entire year",
     "4 quarterly physical learning boxes delivered home",
-    "Curriculum vetted by IIM faculty",
+    "Curriculum vetted by industry experts",
     "Weekly parent progress reports & session summaries",
     "Final-month capstone project & presentation",
     "Certificate of completion in Financial Intelligence",

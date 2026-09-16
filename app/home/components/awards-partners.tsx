@@ -7,7 +7,7 @@ interface PartnerItem {
 }
 
 const partnersList: PartnerItem[] = [
-  { title: "IIM Alum Initiative" },
+  { title: "Industry Mentors Initiative" },
   { title: "Eco Sustainability Group" },
   { title: "Health & Wellness Coalition" },
   { title: "Digital Arts Collective" },
