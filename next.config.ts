@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     // Short, shareable brand-asset URLs. The artwork letters the name in white,
-    // so /logo bakes in the brand navy ground it is designed for — otherwise
+    // so /logo bakes in the neutral dark ground it is designed for — otherwise
     // the name vanishes wherever a viewer paints transparency light (Chrome,
     // Google results, Docs). The untouched transparent file stays at /logo-transparent.
     return [
