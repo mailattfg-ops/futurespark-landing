@@ -89,7 +89,10 @@ export const metadata: Metadata = {
     creator: "@finquojunior",
   },
   alternates: {
-    canonical: siteUrl,
+    // Relative, so every route canonicals to ITSELF against metadataBase.
+    // A literal siteUrl here pointed every page at the homepage, which is why
+    // Search Console dropped them as "Alternate page with proper canonical".
+    canonical: "./",
   },
   verification: {
     other: {
