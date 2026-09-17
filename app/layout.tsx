@@ -115,9 +115,7 @@ const jsonLdData = {
       "@id": `${brandUrl}/#organization`,
       "name": "FinQuo",
       "url": brandUrl,
-      // The wordmark, not the bare mark: this is what Google shows beside the
-      // brand, always on a white ground, so the navy-lettered file is the one.
-      "logo": `${brandUrl}/finquo-logo-on-white.png`,
+      "logo": `${brandUrl}/finquo-logo-full.png`,
       "description": "ISO-grade weekly 1-on-1 mentorship sessions in financial literacy, business, speaking, and digital skills for ages 8 to 18.",
       "sameAs": [
         "https://instagram.com/finquojunior",

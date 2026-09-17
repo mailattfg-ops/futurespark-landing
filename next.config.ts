@@ -13,14 +13,10 @@ const nextConfig: NextConfig = {
     return [{ source: "/pilotclaim-free-class", destination: "/claim-free-class", permanent: false }];
   },
   async rewrites() {
-    // Short, shareable brand-asset URLs. /logo is the navy wordmark because it
-    // is the one that stays visible on a white page; /logo-white is the same
-    // artwork for dark backgrounds.
+    // Short, shareable brand-asset URL.
     return [
-      { source: "/logo", destination: "/finquo-logo-on-white.png" },
-      { source: "/logo.png", destination: "/finquo-logo-on-white.png" },
-      { source: "/logo-white", destination: "/finquo-logo-full.png" },
-      { source: "/logo-white.png", destination: "/finquo-logo-full.png" },
+      { source: "/logo", destination: "/finquo-logo-full.png" },
+      { source: "/logo.png", destination: "/finquo-logo-full.png" },
     ];
   },
   async headers() {
