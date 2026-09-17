@@ -4,6 +4,7 @@ import { Preloader } from "@/components/preloader";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Suspense } from "react";
 import MetaPixel from "@/components/MetaPixel";
+import Clarity from "@/components/Clarity";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -168,6 +169,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <MetaPixel />
         </Suspense>
+        <Clarity />
       </body>
     </html>
   );
