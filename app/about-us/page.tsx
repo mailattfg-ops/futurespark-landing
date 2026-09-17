@@ -7,7 +7,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { track } from "@/lib/meta";
+import { trackCustom } from "@/lib/meta";
 import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
 import { Sparks } from "./components/decor";
 import { GlyphBook, GlyphChart, GlyphStar, GlyphUser, GlyphUsers } from "./components/glyphs";
@@ -171,7 +171,7 @@ export default function AboutUsPage() {
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
 
   const handleOpenDemoModal = () => {
-    track("InitiateCheckout");
+    trackCustom("StartDemoBooking");
     setIsDemoModalOpen(true);
   };
 

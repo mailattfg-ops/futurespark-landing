@@ -6,7 +6,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { track } from "@/lib/meta";
+import { trackCustom } from "@/lib/meta";
 import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
 import { MultiCategoryGallery } from "@/components/curriculum/multi-category-gallery";
 import {
@@ -143,7 +143,7 @@ export default function CurriculumPage() {
   const isEnabled = (key: string) => sections[key] !== false;
 
   const handleOpenDemoModal = () => {
-    track("InitiateCheckout");
+    trackCustom("StartDemoBooking");
     setIsDemoModalOpen(true);
   };
 
@@ -226,7 +226,7 @@ export default function CurriculumPage() {
                     href="#book-demo"
                     onClick={(e) => {
                       e.preventDefault();
-                      track("InitiateCheckout");
+                      trackCustom("StartDemoBooking");
                       const el = document.getElementById("book-demo") || document.getElementById("book-class");
                       if (el) {
                         el.scrollIntoView({ behavior: "smooth" });

@@ -5,7 +5,7 @@ import { Coins, PiggyBank, ShieldAlert, Receipt, TrendingUp, Megaphone, Cpu } fr
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { MultiCategoryGallery } from "@/components/curriculum/multi-category-gallery";
 import { BookDemoModal } from "./book-demo-modal";
-import { track } from "@/lib/meta";
+import { trackCustom } from "@/lib/meta";
 
 interface CourseStep {
   number: string;
@@ -95,7 +95,7 @@ export function CourseFlowSection() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   const handleOpenDemoModal = () => {
-    track("InitiateCheckout");
+    trackCustom("StartDemoBooking");
     setIsDemoModalOpen(true);
   };
   return (

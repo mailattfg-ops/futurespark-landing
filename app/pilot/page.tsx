@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer";
 import { BookDemoModal } from "@/app/home/components/book-demo-modal";
 import { BookDemoFormSection } from "@/app/home/components/book-demo-form";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { track } from "@/lib/meta";
+import { trackCustom } from "@/lib/meta";
 
 import { PilotHero } from "./components/pilot-hero";
 import { DualMarqueeSection } from "./components/dual-marquee";
@@ -19,7 +19,7 @@ export default function FinquoPilotPage() {
   const formRef = useRef<HTMLDivElement>(null);
 
   const handleConfirmSeat = () => {
-    track("InitiateCheckout");
+    trackCustom("StartDemoBooking");
     setIsDemoModalOpen(true);
   };
 

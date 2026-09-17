@@ -22,7 +22,7 @@ import { JoinThousandsSection } from "@/app/home/components/join-thousands";
 import { CertificationsTrustSection } from "@/app/home/components/certifications-trust";
 import { ParentReviewsSection } from "@/app/home/components/parent-reviews";
 import { Footer } from "@/components/footer";
-import { track } from "@/lib/meta";
+import { trackCustom } from "@/lib/meta";
 import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
 
 export default function HomePage() {
@@ -30,7 +30,7 @@ export default function HomePage() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   const handleOpenDemoModal = () => {
-    track("InitiateCheckout");
+    trackCustom("StartDemoBooking");
     setIsDemoModalOpen(true);
   };
 
