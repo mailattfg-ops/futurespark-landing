@@ -13,10 +13,15 @@ const nextConfig: NextConfig = {
     return [{ source: "/pilotclaim-free-class", destination: "/claim-free-class", permanent: false }];
   },
   async rewrites() {
-    // Short, shareable brand-asset URL.
+    // Short, shareable brand-asset URLs. The artwork letters the name in white,
+    // so /logo bakes in the brand navy ground it is designed for — otherwise
+    // the name vanishes wherever a viewer paints transparency light (Chrome,
+    // Google results, Docs). The untouched transparent file stays at /logo-transparent.
     return [
-      { source: "/logo", destination: "/finquo-logo-full.png" },
-      { source: "/logo.png", destination: "/finquo-logo-full.png" },
+      { source: "/logo", destination: "/finquo-logo-brand.png" },
+      { source: "/logo.png", destination: "/finquo-logo-brand.png" },
+      { source: "/logo-transparent", destination: "/finquo-logo-full.png" },
+      { source: "/logo-transparent.png", destination: "/finquo-logo-full.png" },
     ];
   },
   async headers() {
