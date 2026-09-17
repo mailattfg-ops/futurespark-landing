@@ -6,11 +6,16 @@ import Script from "next/script";
  * Microsoft Clarity — session recordings and heatmaps.
  *
  * Clarity tracks route changes on its own (it hooks the History API), so
- * unlike the Meta pixel this needs no per-navigation call. Renders nothing
- * when NEXT_PUBLIC_CLARITY_ID is unset, which keeps local and preview
- * environments out of the production project's recordings.
+ * unlike the Meta pixel this needs no per-navigation call.
+ *
+ * The project id is public — it ships in the page source of every site that
+ * uses Clarity — so it lives here like the Meta pixel id, with the env var
+ * left as an override. Development renders nothing, keeping localhost
+ * sessions out of the recordings.
  */
-const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
+const CLARITY_ID =
+  process.env.NEXT_PUBLIC_CLARITY_ID ||
+  (process.env.NODE_ENV === "production" ? "yjkchlk4vj" : "");
 
 export default function Clarity() {
   if (!CLARITY_ID) return null;
