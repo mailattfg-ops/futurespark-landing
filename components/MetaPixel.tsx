@@ -10,7 +10,14 @@ declare global {
   }
 }
 
-const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "2502934296849118";
+/**
+ * No fallback on purpose. A hard-coded id here made the environment variable
+ * an override rather than the source of truth: removing it from the host did
+ * not switch the pixel off, it just silently reinstated the baked-in one.
+ * With the variable authoritative, adding or removing it in Vercel is the
+ * whole switch — including pointing the site at a different pixel.
+ */
+const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
 export default function MetaPixel() {
   const pathname = usePathname();
