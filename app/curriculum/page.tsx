@@ -154,16 +154,22 @@ export default function CurriculumPage() {
       {/* 2. Hero Vector Banner & Main Floating Card Container */}
       {isEnabled("curriculum_hero") && (
         <div className="relative w-full pb-[480px] sm:pb-[420px] md:pb-[380px]">
-          <section className="bg-[#5B6EF6] relative overflow-hidden text-white mt-16 md:mt-20 h-[280px] sm:h-[360px] md:h-[400px]">
-            {/* Background Piggybank Coin Vector Image (Full Width cover focused on top hand & coin slot matching Image 2) */}
+          {/* The section colour matches the artwork's own sky (#7390FC), so
+              wherever object-cover leaves an edge at an unusual viewport width
+              the banner continues seamlessly instead of showing a seam. */}
+          <section className="bg-[#7390FC] relative overflow-hidden text-white mt-16 md:mt-20 h-[280px] sm:h-[360px] md:h-[400px]">
+            {/* A hand dropping a coin into a box. The floating card below
+                covers the banner's lower part, so the crop favours the coin and
+                the box's top face and lets the fingertips run off the top edge
+                — the same framing the previous artwork used. */}
             <div className="absolute inset-0 select-none pointer-events-none overflow-hidden">
               <Image
-                src="/curriculum-hero.png"
-                alt="Curriculum piggybank vector graphic"
+                src="/curriculum-hero-coin.png"
+                alt="A hand dropping a coin into a savings box"
                 fill
                 priority
                 sizes="100vw"
-                className="object-cover object-[center_12%] opacity-100"
+                className="object-cover object-[center_62%]"
               />
             </div>
           </section>
