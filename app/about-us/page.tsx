@@ -11,20 +11,17 @@ import { trackCustom } from "@/lib/meta";
 import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
 import { Sparks } from "./components/decor";
 import { GlyphBook, GlyphChart, GlyphStar, GlyphUser, GlyphUsers } from "./components/glyphs";
-import { CoinsIcon } from "./components/icons/coins";
-import { BulbIcon } from "./components/icons/bulb";
-import { CompassIcon } from "./components/icons/compass";
-import { MicIcon } from "./components/icons/mic";
-import { RobotIcon } from "./components/icons/robot";
-import { ShieldIcon } from "./components/icons/shield";
-import { PlantIcon } from "./components/icons/plant";
-import { HeartIcon } from "./components/icons/heart";
-import { RocketIcon } from "./components/icons/rocket";
+import { Lightbulb, Compass, Mic, Bot, ShieldCheck, HeartPulse, Rocket } from "lucide-react";
+/* Two subjects Lucide draws thinly: its `Coins` reads as poker chips at this
+ * size, and `Sprout` is a seedling where the card means the planet. Phosphor
+ * has both, and its duotone fill matches the weight of the stroke icons beside
+ * it — so these two come from there and the rest from Lucide. */
+import { Coins, Plant } from "@phosphor-icons/react";
 
 /* ── "Why Financial Literacy?" row ────────────────────────────────────────── */
 const whyPoints = [
   {
-    art: <CoinsIcon className="h-12 w-12 lg:h-16 lg:w-16" />,
+    art: <Coins className="h-10 w-10 lg:h-12 lg:w-12 text-[#0A0F3C]" weight="duotone" />,
     title: "Real decisions",
     body: "Understand real trade-offs through everyday scenarios.",
   },
@@ -39,7 +36,7 @@ const whyPoints = [
     body: "Every child has a dedicated mentor.",
   },
   {
-    art: <RocketIcon className="h-12 w-12 lg:h-16 lg:w-16" />,
+    art: <Rocket className="h-10 w-10 lg:h-12 lg:w-12 text-[#0A0F3C]" strokeWidth={1.7} />,
     title: "Practical & engaging",
     body: "Activities, challenges and real-world applications.",
   },
@@ -48,7 +45,14 @@ const whyPoints = [
 /* ── The eight learning areas ─────────────────────────────────────────────── */
 const learningAreas = [
   {
-    art: <CoinsIcon className="h-14 w-14 lg:h-[76px] lg:w-[76px]" />,
+    art: (
+      <span
+        className="inline-flex h-11 w-11 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-[14px] lg:rounded-[18px]"
+        style={{ backgroundColor: "#B6EFD0" }}
+      >
+        <Coins className="h-[22px] w-[22px] lg:h-7 lg:w-7" weight="duotone" style={{ color: "#0F3B2C" }} />
+      </span>
+    ),
     title: "Financial Literacy",
     sessions: "18 Sessions",
     body: "Understand money. Make smarter choices.",
@@ -59,7 +63,14 @@ const learningAreas = [
     body_: "#6F8A90",
   },
   {
-    art: <BulbIcon className="h-14 w-14 lg:h-[76px] lg:w-[76px]" />,
+    art: (
+      <span
+        className="inline-flex h-11 w-11 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-[14px] lg:rounded-[18px]"
+        style={{ backgroundColor: "#FAE3AC" }}
+      >
+        <Lightbulb className="h-[22px] w-[22px] lg:h-7 lg:w-7" strokeWidth={1.9} style={{ color: "#1E2040" }} />
+      </span>
+    ),
     title: "Entrepreneurship & Business Fundamentals",
     sessions: "4 Sessions",
     body: "Turn ideas into impact.",
@@ -70,7 +81,14 @@ const learningAreas = [
     body_: "#8A8472",
   },
   {
-    art: <CompassIcon className="h-14 w-14 lg:h-[76px] lg:w-[76px]" />,
+    art: (
+      <span
+        className="inline-flex h-11 w-11 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-[14px] lg:rounded-[18px]"
+        style={{ backgroundColor: "#D8CCFC" }}
+      >
+        <Compass className="h-[22px] w-[22px] lg:h-7 lg:w-7" strokeWidth={1.9} style={{ color: "#151066" }} />
+      </span>
+    ),
     title: "Career Awareness & Future Planning",
     sessions: "2 Sessions",
     body: "Explore. Discover. Plan.",
@@ -81,7 +99,14 @@ const learningAreas = [
     body_: "#7C7A93",
   },
   {
-    art: <MicIcon className="h-14 w-14 lg:h-[76px] lg:w-[76px]" />,
+    art: (
+      <span
+        className="inline-flex h-11 w-11 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-[14px] lg:rounded-[18px]"
+        style={{ backgroundColor: "#BFE0FB" }}
+      >
+        <Mic className="h-[22px] w-[22px] lg:h-7 lg:w-7" strokeWidth={1.9} style={{ color: "#131C74" }} />
+      </span>
+    ),
     title: "Public Speaking & Presentation Skills",
     sessions: "6 Sessions",
     body: "Find your voice. Share your ideas.",
@@ -92,7 +117,14 @@ const learningAreas = [
     body_: "#6E8299",
   },
   {
-    art: <RobotIcon className="h-14 w-14 lg:h-[76px] lg:w-[76px]" />,
+    art: (
+      <span
+        className="inline-flex h-11 w-11 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-[14px] lg:rounded-[18px]"
+        style={{ backgroundColor: "#D8CCFC" }}
+      >
+        <Bot className="h-[22px] w-[22px] lg:h-7 lg:w-7" strokeWidth={1.9} style={{ color: "#1A1A75" }} />
+      </span>
+    ),
     title: "AI Literacy & Emerging Technology",
     sessions: "4 Sessions",
     body: "Understand today. Build tomorrow.",
@@ -103,7 +135,14 @@ const learningAreas = [
     body_: "#7C7A93",
   },
   {
-    art: <ShieldIcon className="h-14 w-14 lg:h-[76px] lg:w-[76px]" />,
+    art: (
+      <span
+        className="inline-flex h-11 w-11 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-[14px] lg:rounded-[18px]"
+        style={{ backgroundColor: "#AFD9FB" }}
+      >
+        <ShieldCheck className="h-[22px] w-[22px] lg:h-7 lg:w-7" strokeWidth={1.9} style={{ color: "#2B3392" }} />
+      </span>
+    ),
     title: "Cybersecurity & Digital Safety",
     sessions: "2 Sessions",
     body: "Be smart. Be safe. Be responsible.",
@@ -114,7 +153,14 @@ const learningAreas = [
     body_: "#6E8299",
   },
   {
-    art: <PlantIcon className="h-14 w-14 lg:h-[76px] lg:w-[76px]" />,
+    art: (
+      <span
+        className="inline-flex h-11 w-11 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-[14px] lg:rounded-[18px]"
+        style={{ backgroundColor: "#C6F0B8" }}
+      >
+        <Plant className="h-[22px] w-[22px] lg:h-7 lg:w-7" weight="duotone" style={{ color: "#17362E" }} />
+      </span>
+    ),
     title: "Sustainability & Environmental Awareness",
     sessions: "2 Sessions",
     body: "A cleaner planet. A brighter future.",
@@ -125,7 +171,14 @@ const learningAreas = [
     body_: "#6E8C7A",
   },
   {
-    art: <HeartIcon className="h-14 w-14 lg:h-[76px] lg:w-[76px]" />,
+    art: (
+      <span
+        className="inline-flex h-11 w-11 lg:h-14 lg:w-14 shrink-0 items-center justify-center rounded-[14px] lg:rounded-[18px]"
+        style={{ backgroundColor: "#FBB9CE" }}
+      >
+        <HeartPulse className="h-[22px] w-[22px] lg:h-7 lg:w-7" strokeWidth={1.9} style={{ color: "#332C70" }} />
+      </span>
+    ),
     title: "Fitness, Health & Well-being",
     sessions: "2 Sessions",
     body: "A healthy mind. A brighter you.",
