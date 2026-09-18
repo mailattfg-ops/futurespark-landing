@@ -167,7 +167,7 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
             <div className="flex items-center gap-2.5">
               {/* Instagram */}
               <a
-                href="https://instagram.com/finquo.jr"
+                href="https://www.instagram.com/finquojunior"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"

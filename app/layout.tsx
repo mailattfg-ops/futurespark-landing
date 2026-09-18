@@ -119,7 +119,7 @@ const jsonLdData = {
       "logo": `${brandUrl}/finquo-logo-brand.png`,
       "description": "ISO-grade weekly 1-on-1 mentorship sessions in financial literacy, business, speaking, and digital skills for ages 8 to 18.",
       "sameAs": [
-        "https://instagram.com/finquojunior",
+        "https://www.instagram.com/finquojunior",
         "https://youtube.com/@finquojunior"
       ]
     },
