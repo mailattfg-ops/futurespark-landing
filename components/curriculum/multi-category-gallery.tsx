@@ -531,16 +531,13 @@ export function MultiCategoryGallery({ onOpenDemoModal, children }: MultiCategor
                 </svg>
               </div>
 
-              {onOpenDemoModal && (
-                <button
-                  type="button"
-                  onClick={onOpenDemoModal}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-extrabold text-sm shadow-md shadow-purple-500/25 transition-all hover:scale-105 cursor-pointer shrink-0"
-                >
-                  <span>Book Free Demo Class</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              )}
+              <a
+                href="https://demo.finquo.ai/"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-extrabold text-sm shadow-md shadow-purple-500/25 transition-all hover:scale-105 cursor-pointer shrink-0"
+              >
+                <span>Book Free Demo Class</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
         </ScrollReveal>

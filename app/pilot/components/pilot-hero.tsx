@@ -252,7 +252,7 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
         {/* Primary CTA Button */}
         <ScrollReveal variant="zoom-in" delay={400}>
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-            <button
+            <a href="https://demo.finquo.ai/"
               onClick={onOpenDemoModal}
               style={{
                 background: `linear-gradient(135deg, ${COLORS.gold} 0%, ${COLORS.orange} 100%)`,
@@ -271,16 +271,16 @@ export function PilotHero({ onOpenDemoModal }: PilotHeroProps) {
                 gap: 10,
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px) scale(1.02)";
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 12px 32px rgba(248, 114, 31, 0.45)`;
+                (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px) scale(1.02)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 12px 32px rgba(248, 114, 31, 0.45)`;
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0) scale(1)";
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 8px 28px rgba(248, 114, 31, 0.35)`;
+                (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0) scale(1)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 8px 28px rgba(248, 114, 31, 0.35)`;
               }}
             >
               Join Now →
-            </button>
+            </a>
           </div>
         </ScrollReveal>
       </div>

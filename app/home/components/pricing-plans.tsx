@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Check, Sparkles } from "lucide-react";
 import { trackCustom } from "@/lib/meta";
 
@@ -96,17 +95,13 @@ export function PricingPlansSection() {
               </div>
 
               <div className="pt-2">
-                <Link
-                  href="#book-demo"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    trackCustom("StartDemoBooking");
-                    document.getElementById("book-demo")?.scrollIntoView({ behavior: "smooth" });
-                  }}
+                <a
+                  href="https://demo.finquo.ai/"
+                  onClick={() => trackCustom("StartDemoBooking")}
                   className="w-full inline-flex items-center justify-center py-3.5 px-6 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-indigo-500/25 transition-all text-center cursor-pointer"
                 >
                   Confirm your seat
-                </Link>
+                </a>
               </div>
             </div>
 

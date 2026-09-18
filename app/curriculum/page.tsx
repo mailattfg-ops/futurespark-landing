@@ -32,7 +32,6 @@ import {
   PackageCheck,
   Wallet,
 } from "lucide-react";
-import Link from "next/link";
 
 interface MasterItem {
   title: string;
@@ -222,22 +221,12 @@ export default function CurriculumPage() {
 
                 {/* Bottom Full-Width CTA Button */}
                 <div className="mt-8 pt-2">
-                  <Link
-                    href="#book-demo"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      trackCustom("StartDemoBooking");
-                      const el = document.getElementById("book-demo") || document.getElementById("book-class");
-                      if (el) {
-                        el.scrollIntoView({ behavior: "smooth" });
-                      } else {
-                        window.location.hash = "book-demo";
-                      }
-                    }}
+                  <a
+                    href="https://demo.finquo.ai/"
                     className="w-full inline-flex items-center justify-center py-4 px-6 rounded-xl bg-[#5B45F5] hover:bg-[#4E39E0] text-white font-extrabold text-sm sm:text-base shadow-md hover:shadow-lg transition-all text-center cursor-pointer active:scale-98"
                   >
                     Confirm your seat
-                  </Link>
+                  </a>
                 </div>
               </ScrollReveal>
             </div>

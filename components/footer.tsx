@@ -137,13 +137,12 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
 
             {/* CTA Button */}
             <div className="pt-2 sm:pt-4">
-              <button
-                type="button"
-                onClick={handleJoinClick}
+              <a
+                href="https://demo.finquo.ai/"
                 className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-[#371085] hover:bg-amber-300 hover:text-[#280a66] text-xs sm:text-[13px] font-extrabold px-6 py-3 sm:py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95 text-center"
               >
                 Join Now
-              </button>
+              </a>
             </div>
           </div>
         </div>
