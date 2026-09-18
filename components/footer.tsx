@@ -180,7 +180,7 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
 
               {/* Facebook */}
               <a
-                href="https://facebook.com/finquojr"
+                href="https://www.facebook.com/finquojunior"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
