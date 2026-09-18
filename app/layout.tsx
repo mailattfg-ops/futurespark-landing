@@ -120,8 +120,7 @@ const jsonLdData = {
       "description": "ISO-grade weekly 1-on-1 mentorship sessions in financial literacy, business, speaking, and digital skills for ages 8 to 18.",
       "sameAs": [
         "https://www.instagram.com/finquojunior",
-        "https://www.facebook.com/finquojunior",
-        "https://youtube.com/@finquojunior"
+        "https://www.facebook.com/finquojunior"
       ]
     },
     {
