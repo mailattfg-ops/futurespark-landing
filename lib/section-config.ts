@@ -64,6 +64,14 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     enabled: true,
   },
   {
+    id: "hero_trustpilot",
+    name: "Hero Trustpilot Rating",
+    page: "home",
+    category: "Hero & Intro",
+    description: "The Trustpilot name and five green stars beside the hero CTA. Off until a real Trustpilot profile backs it.",
+    enabled: false,
+  },
+  {
     id: "whyFinancialLiteracy",
     name: "Why Financial Literacy",
     page: "home",

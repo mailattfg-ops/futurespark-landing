@@ -74,7 +74,7 @@ export default function HomePage() {
       <Navbar onOpenDemoModal={handleOpenDemoModal} />
 
       {/* 2. Hero Section */}
-      {isEnabled("hero") && <HeroSection onOpenDemoModal={handleOpenDemoModal} />}
+      {isEnabled("hero") && <HeroSection onOpenDemoModal={handleOpenDemoModal} showTrustpilot={isEnabled("hero_trustpilot")} />}
 
       {/* 3. Why Financial Literacy */}
       {isEnabled("whyFinancialLiteracy") && <WhyFinancialLiteracySection />}

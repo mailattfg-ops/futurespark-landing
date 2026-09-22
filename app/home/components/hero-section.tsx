@@ -5,9 +5,11 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface HeroSectionProps {
   onOpenDemoModal?: () => void;
+  /** Show the Trustpilot rating beside the CTA. Controlled from /admin. */
+  showTrustpilot?: boolean;
 }
 
-export function HeroSection({ onOpenDemoModal }: HeroSectionProps) {
+export function HeroSection({ onOpenDemoModal, showTrustpilot = false }: HeroSectionProps) {
   return (
     <section className="relative w-full overflow-hidden bg-white min-h-[100dvh] lg:h-[100dvh] lg:max-h-[820px] flex items-center justify-center pt-16">
       {/* Background Purple Sunburst (Desktop absolute positioning covering top-0 to bottom on the right) */}
@@ -59,46 +61,48 @@ export function HeroSection({ onOpenDemoModal }: HeroSectionProps) {
                 Confirm your seat
               </a>
 
-              {/* Trustpilot Review Badge */}
-              <div className="flex flex-col gap-1 select-none">
-                {/* Trustpilot Brand Header */}
-                <div className="flex items-center gap-1.5">
-                  {/* Trustpilot 4-Point Star Icon */}
-                  <svg
-                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00B67A]"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M12 0l3.09 9.51h10l-8.09 5.88 3.09 9.51L12 19.02l-8.09 5.88 3.09-9.51L0 9.51h10z" />
-                  </svg>
-                  <span className="font-bold text-gray-900 text-xs sm:text-sm tracking-tight font-sans">
-                    Trustpilot
-                  </span>
-                </div>
-
-                {/* 5 Green Rating Star Squares */}
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-4 h-4 sm:w-5 sm:h-5 bg-[#00B67A] flex items-center justify-center rounded-[2px]"
+              {/* Trustpilot Review Badge — off by default until a real profile backs it */}
+              {showTrustpilot && (
+                <div className="flex flex-col gap-1 select-none">
+                  {/* Trustpilot Brand Header */}
+                  <div className="flex items-center gap-1.5">
+                    {/* Trustpilot 4-Point Star Icon */}
+                    <svg
+                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00B67A]"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
                     >
-                      <svg
-                        className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-white fill-current"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                      </svg>
-                    </div>
-                  ))}
-                </div>
+                      <path d="M12 0l3.09 9.51h10l-8.09 5.88 3.09 9.51L12 19.02l-8.09 5.88 3.09-9.51L0 9.51h10z" />
+                    </svg>
+                    <span className="font-bold text-gray-900 text-xs sm:text-sm tracking-tight font-sans">
+                      Trustpilot
+                    </span>
+                  </div>
 
-                {/* TrustScore Text */}
-                {/* <span className="text-[10px] sm:text-xs text-gray-600 font-medium">
-                  TrustScore <strong className="text-gray-900">4.8</strong> |{" "}
-                  <strong className="text-gray-900">347</strong> reviews
-                </span> */}
-              </div>
+                  {/* 5 Green Rating Star Squares */}
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-4 h-4 sm:w-5 sm:h-5 bg-[#00B67A] flex items-center justify-center rounded-[2px]"
+                      >
+                        <svg
+                          className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-white fill-current"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* TrustScore Text */}
+                  {/* <span className="text-[10px] sm:text-xs text-gray-600 font-medium">
+                    TrustScore <strong className="text-gray-900">4.8</strong> |{" "}
+                    <strong className="text-gray-900">347</strong> reviews
+                  </span> */}
+                </div>
+              )}
             </div>
           </ScrollReveal>
 
