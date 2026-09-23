@@ -41,7 +41,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
   },
   {
     id: "navbar_cta",
-    name: "Navbar CTA Button (Free Pilot Program)",
+    name: "Navbar CTA Button (Book Free Demo Class)",
     page: "home",
     category: "Header Navigation",
     description: "Toggle the Free Pilot Program CTA button in top navbar.",

@@ -108,27 +108,27 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
             </nav>
           </div>
 
-          {/* Right: Actions (Reserve Your Seat) */}
+          {/* Right: Actions (Book Free Demo Class) */}
           {!isPilotPage && isEnabled("navbar_cta") && (
             <div className="hidden md:flex items-center gap-4 lg:gap-6">
-              <Link
-                href="/pilot"
+              <a
+                href="https://demo.finquo.ai/"
                 className="inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
-                Free Pilot Program
-              </Link>
+                Book Free Demo Class
+              </a>
             </div>
           )}
 
           {/* Mobile Menu Toggle Button */}
           <div className="flex md:hidden items-center gap-2.5">
             {!isPilotPage && isEnabled("navbar_cta") && (
-              <Link
-                href="/pilot"
+              <a
+                href="https://demo.finquo.ai/"
                 className="px-3 py-1.5 rounded-lg bg-[#F59E0B] text-white text-xs font-bold shadow-sm cursor-pointer"
               >
-                Free Pilot Program
-              </Link>
+                Book Free Demo Class
+              </a>
             )}
             <button
               type="button"
@@ -179,13 +179,13 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
             </nav>
             {!isPilotPage && isEnabled("navbar_cta") && (
               <div className="pt-2 border-t border-gray-100">
-                <Link
-                  href="/pilot"
+                <a
+                  href="https://demo.finquo.ai/"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center px-4 py-2.5 rounded-xl bg-[#F59E0B] hover:bg-[#D97706] text-white text-sm font-bold shadow-md transition-all text-center cursor-pointer"
                 >
-                  Free Pilot Program
-                </Link>
+                  Book Free Demo Class
+                </a>
               </div>
             )}
           </div>
