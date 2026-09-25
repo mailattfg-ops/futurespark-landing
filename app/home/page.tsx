@@ -15,6 +15,7 @@ import { BoxUnboxingSection } from "@/app/home/components/box-unboxing";
 import { CourseFlowSection } from "@/app/home/components/course-flow";
 import { FAQSection } from "@/app/home/components/faq-section";
 import { InstagramShowcaseSection } from "@/app/home/components/instagram-showcase";
+import { WebinarBannerSection } from "@/app/home/components/webinar-banner";
 import { UsOnMediaSection } from "@/app/home/components/us-on-media";
 import { BlogsSection } from "@/app/home/components/blogs-section";
 import { YoutubeSection } from "@/app/home/components/youtube-section";
@@ -105,6 +106,9 @@ export default function HomePage() {
 
       {/* 12. Frequently Asked Questions */}
       {isEnabled("faq") && <FAQSection />}
+
+      {/* 12b. Free Live Webinar */}
+      {isEnabled("webinar") && <WebinarBannerSection />}
 
       {/* 13. Instagram Social Proof Showcase */}
       {isEnabled("instagramShowcase") && <InstagramShowcaseSection />}

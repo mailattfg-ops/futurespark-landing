@@ -40,6 +40,14 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     enabled: false,
   },
   {
+    id: "navbar_event",
+    name: "Navbar Link: Free Webinar",
+    page: "home",
+    category: "Header Navigation",
+    description: "Toggle the Free Webinar link that opens webinar.finquo.ai.",
+    enabled: true,
+  },
+  {
     id: "navbar_cta",
     name: "Navbar CTA Button (Book Free Demo Class)",
     page: "home",
@@ -150,6 +158,14 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
     category: "Curriculum & Value",
     description: "Accordion of frequently asked questions and answers.",
     enabled: false,
+  },
+  {
+    id: "webinar",
+    name: "Free Live Webinar Banner",
+    page: "home",
+    category: "Events",
+    description: "Webinar banner above Instagram showcase; links to webinar.finquo.ai.",
+    enabled: true,
   },
   {
     id: "instagramShowcase",

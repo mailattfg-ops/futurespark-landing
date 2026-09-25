@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { WEBINAR_URL } from "@/app/home/components/webinar-banner";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -105,6 +106,20 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
                   About Us
                 </Link>
               )}
+              {isEnabled("navbar_event") && (
+                <a
+                  href={WEBINAR_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors"
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF8A3D] opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#FF8A3D]" />
+                  </span>
+                  Free Webinar
+                </a>
+              )}
             </nav>
           </div>
 
@@ -175,6 +190,17 @@ export function Navbar({ onOpenDemoModal }: NavbarProps) {
                 >
                   About Us
                 </Link>
+              )}
+              {isEnabled("navbar_event") && (
+                <a
+                  href={WEBINAR_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors"
+                >
+                  Free Webinar · Oct 1
+                </a>
               )}
             </nav>
             {!isPilotPage && isEnabled("navbar_cta") && (
