@@ -92,6 +92,12 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
                 <p className="leading-relaxed text-white/85">
                   World Trade Centre, Latifa Tower, Office No. 201, Sheikh Zayed Rd (opposite Museum of the Future), Dubai, United Arab Emirates
                 </p>
+                <a
+                  href="tel:+971543689895"
+                  className="inline-flex items-center gap-1.5 pt-0.5 text-amber-300 hover:text-amber-200 hover:underline font-semibold transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5" /> +971 54 368 9895
+                </a>
               </div>
             </div>
           </div>
