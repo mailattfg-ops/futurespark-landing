@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
       { source: "/logo.png", destination: "/finquo-logo-brand.png" },
       { source: "/logo-transparent", destination: "/finquo-logo-full.png" },
       { source: "/logo-transparent.png", destination: "/finquo-logo-full.png" },
+      // current webinar poster, shareable as finquo.ai/webinar-thumbnail
+      { source: "/webinar-thumbnail", destination: "/webinar-poster.jpg" },
+      { source: "/webinar-thumbnail.jpg", destination: "/webinar-poster.jpg" },
     ];
   },
   async headers() {
