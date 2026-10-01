@@ -24,6 +24,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/about-us", changeFrequency: "monthly", priority: 0.7 },
     { path: "/demo-class", changeFrequency: "weekly", priority: 0.6 },
     { path: "/privacy-policy", changeFrequency: "yearly", priority: 0.3 },
+    { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+    { path: "/refund-policy", changeFrequency: "yearly", priority: 0.3 },
+    { path: "/shipping-policy", changeFrequency: "yearly", priority: 0.3 },
   ];
 
   return pages.map(({ path, changeFrequency, priority }) => ({

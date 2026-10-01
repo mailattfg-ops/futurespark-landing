@@ -3,14 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
-
-// Policy pages are published on the webinar site; the home page links to the same ones.
-const POLICIES = [
-  { label: "Terms & Conditions", href: "https://webinar.finquo.ai/terms" },
-  { label: "Privacy Policy", href: "https://webinar.finquo.ai/privacy-policy" },
-  { label: "Refund & Cancellation", href: "https://webinar.finquo.ai/refund-policy" },
-  { label: "Shipping & Delivery", href: "https://webinar.finquo.ai/shipping-policy" },
-];
+import { POLICY_LINKS } from "@/components/legal-page";
 
 interface FooterProps {
   onOpenDemoModal?: () => void;
@@ -199,16 +192,10 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
             © 2026 FinQuo Versity And Edutech Private Limited. All rights reserved.
           </span>
           <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] sm:text-xs font-medium">
-            {POLICIES.map((p) => (
-              <a
-                key={p.href}
-                href={p.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white hover:underline transition-colors"
-              >
+            {POLICY_LINKS.map((p) => (
+              <Link key={p.href} href={p.href} className="text-white/80 hover:text-white hover:underline transition-colors">
                 {p.label}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>
