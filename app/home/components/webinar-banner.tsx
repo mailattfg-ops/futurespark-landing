@@ -2,11 +2,11 @@ import Image from "next/image";
 import { CalendarDays, Clock } from "lucide-react";
 import { WebinarButton } from "@/components/book-demo-button";
 import { WEBINAR } from "@/lib/site";
+import { NextWebinarDate } from "@/components/next-webinar-date";
 
 /**
- * Evergreen webinar block (brief F2 row 22, F10). No date is typed into this
- * page. When the webinar site exposes a next-session feed, read it here and
- * show the date beside the artwork; until then only the schedule line shows.
+ * Webinar block (brief F2 row 22, F10). Shows only the next session's date,
+ * worked out from the schedule in lib/site.ts; no date is typed into this page.
  * The dateless artwork from creative goes in ARTWORK when it arrives.
  */
 const ARTWORK = { src: "", alt: "Finquo Junior free live webinar for parents and children" };
@@ -18,12 +18,12 @@ export function WebinarBannerSection() {
         <div className={`grid grid-cols-1 ${ARTWORK.src ? "lg:grid-cols-2" : ""} gap-8 lg:gap-12 items-center`}>
           <div className={ARTWORK.src ? "" : "text-center max-w-3xl mx-auto"}>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0A0F3C] font-sans text-balance">
-              Free live webinar, every Monday and Thursday.
+              Next free live webinar: <NextWebinarDate />
             </h2>
             <div className={`mt-5 flex flex-col gap-2 text-sm sm:text-base text-gray-700 ${ARTWORK.src ? "" : "items-center"}`}>
               <p className="inline-flex items-center gap-2 font-semibold">
                 <CalendarDays className="w-[18px] h-[18px] text-[#4F46E5]" aria-hidden="true" />
-                {WEBINAR.schedule}
+                <span><NextWebinarDate />, 8:00 PM IST</span>
               </p>
               <p className="inline-flex items-start gap-2">
                 <Clock className="w-[18px] h-[18px] text-[#4F46E5] mt-0.5 shrink-0" aria-hidden="true" />

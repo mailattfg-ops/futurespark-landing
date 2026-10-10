@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { MENTORS } from "@/lib/mentors";
-import { TESTIMONIALS, testimonialMeta } from "@/lib/testimonials";
+import { TESTIMONIALS } from "@/lib/testimonials";
+import { TestimonialCarousel } from "@/components/testimonial-carousel";
 import { PROOF_LINE } from "@/lib/site";
 
 export function MentorsParentsSection() {
@@ -35,14 +36,7 @@ export function MentorsParentsSection() {
         {TESTIMONIALS.length > 0 && (
           <>
             <h2 className="mt-14 sm:mt-16 text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight font-sans">What parents and kids say</h2>
-            <ul className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 list-none m-0 p-0">
-              {TESTIMONIALS.map((t) => (
-                <li key={t.name + t.quote.slice(0, 12)} className="rounded-3xl border border-gray-200/90 bg-[#FAF9FF] p-6 sm:p-7 flex flex-col justify-between">
-                  <blockquote className="text-sm sm:text-base text-gray-700 leading-relaxed italic m-0">“{t.quote}”</blockquote>
-                  <p className="mt-5 pt-4 border-t border-gray-100 text-sm font-bold text-gray-900">{testimonialMeta(t)}</p>
-                </li>
-              ))}
-            </ul>
+            <TestimonialCarousel items={TESTIMONIALS} />
           </>
         )}
 

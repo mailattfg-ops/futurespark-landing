@@ -35,7 +35,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
   { id: "bonusSessions", name: "Bonus Sessions", page: "home", category: "Programme", description: "Five free sessions in AI, Public Speaking or Cyber Awareness after completion.", enabled: true },
   { id: "moneyHabits", name: "20 Money Habits", page: "home", category: "Programme", description: "Six sticker cards and the link to all 20 sessions.", enabled: true },
   { id: "mentorsParents", name: "Mentors & Parents", page: "home", category: "Social Proof", description: "Four mentor cards, parent quotes and the proof line.", enabled: true },
-  { id: "webinar", name: "Free Live Webinar", page: "home", category: "Events", description: "Evergreen webinar block: every Monday and Thursday, with the registration button.", enabled: true },
+  { id: "webinar", name: "Free Live Webinar", page: "home", category: "Events", description: "Webinar block: the next session date (Mondays and Thursdays, from 15 Oct 2026), with the registration button.", enabled: true },
   { id: "instagramShowcase", name: "Instagram Posts", page: "home", category: "Social Proof", description: "Three posts from finquojunior, each linked to the post.", enabled: true },
   { id: "usOnMedia", name: "US On Media", page: "home", category: "Social Proof", description: "Media coverage logos.", enabled: true },
   { id: "blogs", name: "Blogs & Articles", page: "home", category: "Content", description: "Blog cards.", enabled: true },
