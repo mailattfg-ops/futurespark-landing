@@ -1,392 +1,149 @@
 "use client";
 
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { BookDemoModal } from "@/app/home/components/book-demo-modal";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
-import { trackCustom } from "@/lib/meta";
 import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/section-config";
-import { MultiCategoryGallery } from "@/components/curriculum/multi-category-gallery";
-import {
-  BookOpen,
-  Award,
-  Briefcase,
-  Calendar,
-  Star,
-  ChevronDown,
-  BarChart2,
-  TrendingUp,
-  CreditCard,
-  Building2,
-  PieChart,
-  ShieldCheck,
-  Coins,
-  Sparkles,
-  Layers,
-  ArrowRight,
-  CheckCircle2,
-  UserCheck,
-  FolderCheck,
-  PackageCheck,
-  Wallet,
-} from "lucide-react";
+import { CourseDetailsCard } from "@/app/home/components/course-details-card";
+import { ModuleCards, RoadmapSummary } from "@/app/home/components/course-flow";
+import { BonusSessionsSection } from "@/app/home/components/bonus-sessions";
+import { GraduationSection } from "@/app/home/components/graduation";
+import { PriceSection } from "@/app/home/components/price-section";
+import { ParentReviewsSection } from "@/app/home/components/parent-reviews";
+import { Award, Wallet, ShieldCheck, Percent, Target, ClipboardList, Store, Sparkles } from "lucide-react";
 
-interface MasterItem {
-  title: string;
-  icon: ReactNode;
-  isHighlight?: boolean;
-}
-
-const masterItems: MasterItem[] = [
-  {
-    title: "Think like an entrepreneur and build a business mind set",
-    icon: <Building2 className="w-5 h-5 text-emerald-600" />,
-  },
-  {
-    title: "Budget wisely, understand taxes and manage money smarty",
-    icon: <ShieldCheck className="w-5 h-5 text-emerald-600" />,
-  },
-  {
-    title: "Master saving, compounding and smart financial decisions",
-    icon: <Coins className="w-5 h-5 text-emerald-600" />,
-  },
-  {
-    title: "Evaluate loans, EMIs and investments",
-    icon: <TrendingUp className="w-5 h-5 text-emerald-600" />,
-  },
-  {
-    title: "Navigate market cycles, behavioural biases and risk",
-    icon: <PieChart className="w-5 h-5 text-emerald-600" />,
-  },
-  {
-    title: "Acclaimed Certification included upon completion",
-    icon: <Award className="w-5 h-5 text-emerald-600" />,
-    isHighlight: true,
-  },
+const ICON = "w-5 h-5 text-emerald-600";
+const masterItems = [
+  { title: "Plan a budget and stick to it.", icon: <Wallet className={ICON} /> },
+  { title: "Use banks, UPI and cards safely, and spot a scam.", icon: <ShieldCheck className={ICON} /> },
+  { title: "Understand interest, loans, inflation, tax and insurance.", icon: <Percent className={ICON} /> },
+  { title: "Weigh a big purchase and set a money goal.", icon: <Target className={ICON} /> },
+  { title: "Write a business plan and keep simple accounts.", icon: <ClipboardList className={ICON} /> },
+  { title: "Build and present a small business in the capstone.", icon: <Store className={ICON} /> },
+  { title: "Finquo Junior completion certificate at graduation.", icon: <Award className="w-5 h-5 text-[#4F46E5]" />, highlight: true },
 ];
 
-interface ReviewItem {
-  name: string;
-  role: string;
-  company: string;
-  avatar: string;
-  comment: string;
-}
-
-const reviews: ReviewItem[] = [
-  {
-    name: "Leah Andrews",
-    role: "CEO",
-    company: "Inspihire",
-    avatar: "/avatar-woman-pink.png",
-    comment:
-      "Whether you're a beginner or an expert, Finquo Junior provides excellent resources to help your child achieve financial mastery.",
-  },
-  {
-    name: "Raj Patel",
-    role: "COO",
-    company: "GrowthHacks",
-    avatar: "/avatar-woman-pink.png",
-    comment:
-      "Streamlining processes and boosting financial confidence early is key to scaling a child's business mindset effectively.",
-  },
-  {
-    name: "Michael Thomson",
-    role: "CTO",
-    company: "Innovatech",
-    avatar: "/avatar-woman-pink.png",
-    comment:
-      "Innovation drives success. Finquo Junior transforms complex economic concepts into clear, engaging, real-world habits.",
-  },
-];
-
-const features = [
-  { icon: <BookOpen className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "40 interactive sessions" },
-  { icon: <UserCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "a year long mentorship program" },
-  { icon: <FolderCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "1 capstone project" },
-  { icon: <PackageCheck className="w-5 h-5 text-[#5B45F5] stroke-[2]" />, label: "quarterly mailed physical worksheets" },
-];
+const STATS = ["20 live sessions", "1 hour each", "1-on-1", "Grades 5 to 8", "5 bonus sessions"];
 
 export default function CurriculumPage() {
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [sections, setSections] = useState<SectionState>(getDefaultSectionState());
 
   useEffect(() => {
     clearLegacyStorage();
-
     async function loadSectionsConfig() {
       try {
         const res = await fetch("/api/sections", { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
-          if (json.success && json.data) {
-            setSections(json.data);
-          }
+          if (json.success && json.data) setSections(json.data);
         }
-      } catch { }
+      } catch {}
     }
     loadSectionsConfig();
-
-    const handleUpdate = () => loadSectionsConfig();
-    window.addEventListener("storage_sections_updated", handleUpdate);
-    const handleOpenModalEvent = () => handleOpenDemoModal();
-    window.addEventListener("open_demo_modal", handleOpenModalEvent);
-    return () => {
-      window.removeEventListener("storage_sections_updated", handleUpdate);
-      window.removeEventListener("open_demo_modal", handleOpenModalEvent);
-    };
+    window.addEventListener("storage_sections_updated", loadSectionsConfig);
+    return () => window.removeEventListener("storage_sections_updated", loadSectionsConfig);
   }, []);
 
   const isEnabled = (key: string) => sections[key] !== false;
 
-  const handleOpenDemoModal = () => {
-    trackCustom("StartDemoBooking");
-    setIsDemoModalOpen(true);
-  };
-
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden">
-      {/* 1. Shared Navigation Header */}
-      <Navbar onOpenDemoModal={handleOpenDemoModal} />
+      <Navbar />
 
-      {/* 2. Hero Vector Banner & Main Floating Card Container */}
+      {/* 1. Banner with the programme card overlapping it */}
       {isEnabled("curriculum_hero") && (
-        <div className="relative w-full pb-[480px] sm:pb-[420px] md:pb-[380px]">
-          {/* The section colour matches the artwork's own sky (#7390FC), so
-              wherever object-cover leaves an edge at an unusual viewport width
-              the banner continues seamlessly instead of showing a seam. */}
+        <div className="w-full">
           <section className="bg-[#7390FC] relative overflow-hidden text-white mt-16 md:mt-20 h-[280px] sm:h-[360px] md:h-[400px]">
-            {/* A hand dropping a coin into a box. The floating card below
-                covers the banner's lower part, so the crop favours the coin and
-                the box's top face and lets the fingertips run off the top edge
-                — the same framing the previous artwork used. */}
             <div className="absolute inset-0 select-none pointer-events-none overflow-hidden">
-              <Image
-                src="/curriculum-hero-coin.png"
-                alt="A hand dropping a coin into a savings box"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover object-[center_62%]"
-              />
+              <Image src="/curriculum-hero-coin.png" alt="A hand dropping a coin into a savings box" fill priority sizes="100vw" className="object-cover object-[center_62%]" />
             </div>
           </section>
-
-          {/* Main Floating Card Overlapping Hero Banner with position absolute */}
-          <section id="course-details" className="absolute inset-x-0 top-40 sm:top-56 md:top-64 z-20 w-full py-0">
+          <section id="course-details" className="relative z-20 w-full -mt-28 sm:-mt-36 md:-mt-40 pb-4">
             <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <ScrollReveal variant="zoom-in" duration={700} delay={150} className="bg-white border border-gray-200/90 rounded-3xl p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-center">
-                  {/* Left Column: Course Graphic & Price Info */}
-                  <div className="flex flex-col justify-between h-full space-y-4">
-                    {/* Graphic Thumbnail */}
-                    <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#F8F5EE] border border-[#E9DAC6] shadow-xs">
-                      <Image
-                        src="/course-thumbnail.jpg"
-                        alt="Financial literacy Foundations of Wealth"
-                        fill
-                        priority
-                        quality={100}
-                        sizes="(min-width: 768px) 50vw, 100vw"
-                        className="object-cover object-center"
-                      />
-                    </div>
-
-                    {/* Title & Info Row Under Image */}
-                    <div className="pt-1 flex flex-col sm:flex-row items-start justify-between gap-3 border-t border-gray-100">
-                      <div className="space-y-1">
-                        <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 font-sans tracking-tight">
-                          Foundations of Wealth
-                        </h3>
-                        <p className="text-[11px] sm:text-xs text-gray-500 font-normal leading-relaxed">
-                          Inclusive of quarterly physical worksheets &amp; mentorship
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: 4 Feature Points List */}
-                  <div className="flex flex-col justify-center space-y-3.5 sm:space-y-4 h-full">
-                    {features.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-3.5 bg-[#FAFAFA] p-3.5 sm:p-4 rounded-2xl border border-gray-100 transition-all hover:border-indigo-100 hover:bg-white hover:shadow-xs"
-                      >
-                        <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 text-[#5B45F5]">
-                          {item.icon}
-                        </div>
-                        <span className="text-xs sm:text-[14px] font-bold text-gray-800 font-sans">
-                          {item.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bottom Full-Width CTA Button */}
-                <div className="mt-8 pt-2">
-                  <a
-                    href="https://demo.finquo.ai/"
-                    className="w-full inline-flex items-center justify-center py-4 px-6 rounded-xl bg-[#5B45F5] hover:bg-[#4E39E0] text-white font-extrabold text-sm sm:text-base shadow-md hover:shadow-lg transition-all text-center cursor-pointer active:scale-98"
-                  >
-                    Confirm your seat
-                  </a>
-                </div>
-              </ScrollReveal>
+              <CourseDetailsCard placement="curriculum" />
             </div>
           </section>
         </div>
       )}
 
-      {/* 3. What Your Child Will Master Section */}
+      {/* 2. What Your Child Will Master */}
       {isEnabled("curriculum_master") && (
         <section className="w-full bg-white py-14 sm:py-20 font-sans">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <ScrollReveal variant="fade-up" duration={600}>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E1B4B] tracking-tight mb-8 sm:mb-10 text-left font-sans">
-                What Your Child Will Master
-              </h2>
-            </ScrollReveal>
-
-            {/* 6 Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-              {masterItems.map((item, idx) => (
-                <ScrollReveal
-                  key={idx}
-                  variant="fade-up"
-                  duration={550}
-                  delay={idx * 80}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E1B4B] tracking-tight mb-8 sm:mb-10 font-sans">What Your Child Will Master</h2>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 list-none m-0 p-0">
+              {masterItems.map((item) => (
+                <li
+                  key={item.title}
+                  className={`p-4 sm:p-5 rounded-2xl flex items-center gap-3.5 ${item.highlight ? "bg-[#4F46E5] text-white" : "bg-[#F4FBF7] border border-[#D1F2E0] text-gray-900"}`}
                 >
-                  <div
-                    className={`p-4 sm:p-5 rounded-2xl flex items-center gap-3.5 transition-all duration-200 ${item.isHighlight
-                      ? "bg-[#8B5CF6] text-white shadow-md border border-[#7C3AED]"
-                      : "bg-[#F4FBF7] border border-[#D1F2E0] text-gray-900 hover:border-[#A3E6C3] hover:shadow-xs"
-                      }`}
-                  >
-                    <div
-                      className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-white shadow-xs"
-                    >
-                      {item.icon}
-                    </div>
-                    <span
-                      className={`text-sm sm:text-base font-extrabold leading-snug font-sans ${item.isHighlight ? "text-white" : "text-gray-900"
-                        }`}
-                    >
-                      {item.title}
-                    </span>
-                  </div>
-                </ScrollReveal>
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-white" aria-hidden="true">{item.icon}</div>
+                  <span className={`text-sm sm:text-base font-extrabold leading-snug font-sans ${item.highlight ? "text-white" : "text-gray-900"}`}>{item.title}</span>
+                </li>
               ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      {/* 3. The 20-session syllabus, by module */}
+      {isEnabled("curriculum_syllabus") && (
+        <section className="w-full bg-[#FAFAFA] py-14 sm:py-20 font-sans border-t border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8 sm:mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-[#4F46E5] text-xs font-bold tracking-wide uppercase mb-3">
+                <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
+                Finquo Junior Curriculum
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#18181B] tracking-tight font-sans text-balance">Our 20-Session Financial Literacy Programme</h2>
+              <p className="mt-2.5 text-base sm:text-lg text-[#52525B] font-medium max-w-2xl mx-auto">Real rupees, real decisions, one mentor.</p>
+            </div>
+
+            <ModuleCards showHabits />
+
+            <p className="mt-8 text-center text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+              Learning from the UAE or another GCC country? Your child follows the version of this curriculum made for your country.
+            </p>
+
+            <div className="mt-10 sm:mt-14">
+              <RoadmapSummary placement="curriculum" />
             </div>
           </div>
         </section>
       )}
 
-      {/* 4. Weekly Course Plan Multi-Category Gallery Section */}
-      {isEnabled("curriculum_weeklyPlan") && (
-		<MultiCategoryGallery onOpenDemoModal={handleOpenDemoModal}>
-			{/* Top Header Banner matching Finquo Junior style */}
-	        <ScrollReveal variant="fade-up" duration={600} className="text-center mb-8">
-	          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-[#7C3AED] text-xs font-bold tracking-wide uppercase mb-3">
-	            <Sparkles className="w-3.5 h-3.5" />
-	            Finquo Junior Curriculum
-	          </div>
-	          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#18181B] tracking-tight font-sans">
-	            Our 40-Session Learning Program
-	          </h2>
-	          <p className="mt-2.5 text-base sm:text-lg text-[#52525B] font-medium max-w-2xl mx-auto">
-	            Practical skills. Real-world learning. A brighter future.
-	          </p>
-	        </ScrollReveal>
-        </MultiCategoryGallery>
-      )}
-
-      {/* 5. Summary Pill Badges Row */}
+      {/* 4. Stats strip */}
       {isEnabled("curriculum_summaryBadges") && (
         <section className="w-full py-8 bg-white border-b border-gray-100 font-sans">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-              <span className="px-4 py-2 rounded-xl bg-purple-50 text-[#8B5CF6] text-xs sm:text-sm font-extrabold">
-                48 Interactive Modules
-              </span>
-              <span className="px-4 py-2 rounded-xl bg-purple-50 text-[#8B5CF6] text-xs sm:text-sm font-extrabold">
-                Capstone Business Project
-              </span>
-              <span className="px-4 py-2 rounded-xl bg-purple-50 text-[#8B5CF6] text-xs sm:text-sm font-extrabold">
-                52-Week Structured Program
-              </span>
-              <span className="px-4 py-2 rounded-xl bg-amber-50 text-amber-700 text-xs sm:text-sm font-extrabold flex items-center gap-1.5">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                4.5 Ratings
-              </span>
-              <span className="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-xs sm:text-sm font-extrabold">
-                Grades 5 to 12
-              </span>
-            </div>
-          </div>
+          <ul className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4 list-none m-0">
+            {STATS.map((s) => (
+              <li key={s} className="px-4 py-2 rounded-xl bg-purple-50 text-[#4F46E5] text-xs sm:text-sm font-extrabold">{s}</li>
+            ))}
+          </ul>
         </section>
       )}
 
-      {/* 6. What parents and kids say Section */}
-      {isEnabled("curriculum_reviews") && (
-        <section className="w-full bg-white py-14 sm:py-20 font-sans">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <ScrollReveal variant="fade-up" duration={600}>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 text-center tracking-tight mb-10 sm:mb-14 font-sans">
-                What parents and kids say
-              </h2>
-            </ScrollReveal>
-
-            {/* 3 Review Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {reviews.map((rev, idx) => (
-                <ScrollReveal
-                  key={idx}
-                  variant="fade-up"
-                  duration={600}
-                  delay={idx * 100}
-                >
-                  <div className="bg-[#FAF9FF] border border-indigo-100/80 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md transition-all flex flex-col justify-between h-full space-y-6">
-                    {/* Top User Profile */}
-                    <div className="flex items-center gap-3.5">
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden border border-indigo-200 flex-shrink-0">
-                        <Image
-                          src={rev.avatar}
-                          alt={rev.name}
-                          fill
-                          sizes="48px"
-                          className="object-cover"
-                        />
-                      </div>
-                      <div>
-                        <h4 className="text-base font-extrabold text-gray-900 font-sans leading-tight">
-                          {rev.name}
-                        </h4>
-                        <p className="text-xs text-gray-500 font-medium">
-                          {rev.role}, {rev.company}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Testimonial Quote */}
-                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal italic">
-                      &ldquo;{rev.comment}&rdquo;
-                    </p>
-                  </div>
-                </ScrollReveal>
-              ))}
+      {/* 5. Bonus, graduation, price */}
+      {isEnabled("curriculum_bonus") && (
+        <>
+          <section className="w-full bg-white py-14 sm:py-20 font-sans">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-20">
+              <BonusSessionsSection embedded />
+              <GraduationSection embedded />
             </div>
-          </div>
-        </section>
+          </section>
+          <PriceSection compact />
+          <p className="max-w-3xl mx-auto px-4 sm:px-6 py-6 text-center text-xs sm:text-sm text-gray-500">
+            Finquo Junior teaches money concepts for education. We do not give investment advice or sell financial products.
+          </p>
+        </>
       )}
 
-      {/* 7. Shared Navigation Footer */}
-      {isEnabled("curriculum_footer") && <Footer onOpenDemoModal={handleOpenDemoModal} />}
+      {/* 6. Reviews */}
+      {isEnabled("curriculum_reviews") && <ParentReviewsSection />}
 
-      {/* 8. Booking Modal */}
-      <BookDemoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
+      {isEnabled("curriculum_footer") && <Footer />}
     </div>
   );
 }

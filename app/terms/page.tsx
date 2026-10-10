@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Finquo Junior",
+  title: "Terms & Conditions",
   description:
     "Terms that apply when you use finquo.ai, register for a free Finquo Junior webinar, or pay for a Finquo Junior programme.",
 };
@@ -17,7 +17,7 @@ export default function TermsPage() {
         {
           heading: "What we offer",
           blocks: [
-            "Finquo Junior runs live, mentor-led financial-literacy sessions for children aged 8 to 18. This includes free webinars and paid programmes. What a paid programme includes (number of sessions, schedule and any bonuses) is described in the offer or payment form at the time you pay.",
+            "Finquo Junior runs live, mentor-led financial-literacy sessions for children in Grades 5 to 8. This includes free webinars and paid programmes. The paid programme is 20 one-hour 1-on-1 sessions. Five bonus sessions are provided free after completion. What a paid programme includes (number of sessions, schedule and any bonuses) is described in the offer or payment form at the time you pay.",
           ],
         },
         {
@@ -38,7 +38,7 @@ export default function TermsPage() {
             {
               bullets: [
                 "Payments are processed securely by our payment partner, Cashfree Payments. We never see or store your card or bank details.",
-                "Prices are in Indian Rupees (₹). Any GST or other tax is shown before you pay.",
+                "Prices are in Indian Rupees (₹) for all countries. Any GST or other tax is shown before you pay.",
                 "Special offers are valid only for the period stated in the offer. After that, the regular price applies.",
                 "Bonuses included with an offer are provided as described in that offer and have no separate cash value.",
               ],
@@ -80,6 +80,10 @@ export default function TermsPage() {
           blocks: [
             "Session materials, worksheets, recordings and other content belong to Finquo Junior. You may use them for your family's personal learning, but please don't copy, resell or publish them.",
           ],
+        },
+        {
+          heading: "Certificate",
+          blocks: ["The completion certificate is issued by Finquo Junior."],
         },
         {
           heading: "Liability",

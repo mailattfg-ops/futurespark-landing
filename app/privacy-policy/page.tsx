@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Finquo Junior",
+  title: "Privacy Policy",
   description:
     "What information FinQuo Versity And Edutech Private Limited collects when you use finquo.ai, register for a webinar or pay for a Finquo Junior programme, how it is used, and the choices you have.",
 };
@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
             {
               bullets: [
                 "When you register: parent's name, child's name and age, email address, WhatsApp number (with country code), and your choice about receiving reminders.",
-                "When you pay for a programme: the details on the payment form, such as name, phone, email and, where a learning kit is sent, your delivery address. Card and bank details are handled by Cashfree Payments and are never seen or stored by us.",
+                "When you pay for a programme: the details on the payment form, such as name, phone, email and, where printed worksheets are sent, your delivery address. Card and bank details are handled by Cashfree Payments and are never seen or stored by us.",
                 "When you join a live session: the name and email you enter in Zoom.",
                 "When you contact us: whatever you choose to tell us by email or WhatsApp.",
               ],
@@ -63,7 +63,7 @@ export default function PrivacyPolicyPage() {
                 "To register your child and send the class link, reminders and updates by WhatsApp and email.",
                 "To run live sessions and know who attended.",
                 "To follow up after a session about your child's learning and our programmes, including by phone.",
-                "To process payments, deliver learning kits, and handle refunds.",
+                "To process payments, deliver printed worksheets and sticker packs, and handle refunds.",
                 "To measure and improve our website, sessions and advertising.",
                 "To prevent spam and misuse, and to meet legal and accounting requirements.",
               ],
@@ -82,7 +82,7 @@ export default function PrivacyPolicyPage() {
                 "Zoom (live sessions)",
                 "Cashfree Payments (payment processing)",
                 "Google and Microsoft (website analytics)",
-                "Courier partners (to deliver learning kits)",
+                "Courier partners (to deliver printed worksheets and sticker packs)",
               ],
             },
             "We may also share information if the law requires it.",

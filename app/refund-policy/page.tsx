@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
 
 export const metadata: Metadata = {
-  title: "Refund & Cancellation Policy | Finquo Junior",
+  title: "Refund & Cancellation Policy",
   description: "How refunds and cancellations work when you pay for a Finquo Junior programme.",
 };
 
@@ -15,7 +15,7 @@ export default function RefundPolicyPage() {
       sections={[
         {
           heading: "Free webinars",
-          blocks: ["Our live webinars and masterclasses are free. No payment is taken, so there is nothing to refund."],
+          blocks: ["Our live webinars are free. No payment is taken, so there is nothing to refund."],
         },
         {
           heading: "Full refund within 7 days",
@@ -26,14 +26,13 @@ export default function RefundPolicyPage() {
         {
           heading: "After classes have started",
           blocks: [
-            "Once your child has attended their first class, or 7 days after payment (whichever comes first), the fee is not refundable. If something comes up, talk to us: we can usually move your child to a later batch or reschedule classes instead.",
+            "Once your child has attended their first class, or 7 days after payment (whichever comes first), the fee is not refundable. If something comes up, talk to us: we can usually reschedule sessions with your mentor instead.",
           ],
         },
         {
-          heading: "Learning kit and bonus sessions",
+          heading: "Worksheets and bonus sessions",
           blocks: [
-            "Bonuses included with an offer (such as the learning kit, recorded sessions and bonus classes) come free with the programme and can't be refunded or exchanged for money separately.",
-            "If you cancel within the 7-day refund window after the learning kit has already been dispatched, please return it unused. If it isn't returned, we may deduct its cost from your refund.",
+            "Printed worksheets, sticker packs and the five bonus sessions come free with the programme and can't be refunded or exchanged for money separately.",
           ],
         },
         {

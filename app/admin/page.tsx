@@ -30,8 +30,6 @@ import {
   RotateCcw,
   Save,
   Sliders,
-  Layers,
-  Sparkle,
   BookOpen,
   Info,
   Menu,
@@ -55,8 +53,6 @@ interface PageOption {
 
 const PAGES_LIST: PageOption[] = [
   { id: "home", label: "Homepage", route: "/", icon: Layout, color: "text-indigo-400" },
-  { id: "confirm-your-seat", label: "Confirm Your Seat", route: "/confirm-your-seat", icon: Sparkle, color: "text-amber-400" },
-  { id: "claim-free-class", label: "Claim Free Class", route: "/claim-free-class", icon: Layers, color: "text-emerald-400" },
   { id: "curriculum", label: "Curriculum", route: "/curriculum", icon: BookOpen, color: "text-purple-400" },
   { id: "about-us", label: "About Us", route: "/about-us", icon: Info, color: "text-sky-400" },
 ];

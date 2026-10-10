@@ -1,30 +1,18 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { POLICY_LINKS } from "@/components/legal-page";
+import { BookDemoButton } from "@/components/book-demo-button";
+import { CONTACT, FOOTER_TAGLINE, LEGAL_NAME, webinarUrl } from "@/lib/site";
 
-interface FooterProps {
-  onOpenDemoModal?: () => void;
-}
+const LINK = "flex items-center min-h-[44px] hover:text-white transition-colors";
 
-export function Footer({ onOpenDemoModal }: FooterProps) {
-  const handleJoinClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (onOpenDemoModal) {
-      onOpenDemoModal();
-    } else {
-      window.dispatchEvent(new Event("open_demo_modal"));
-    }
-  };
-
+export function Footer() {
   return (
     <footer className="w-full bg-[#371085] text-white pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 relative overflow-hidden font-sans">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top 3-Column Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-8 pb-8 sm:pb-12">
-          {/* Column 1: Brand & Mission (span 4) */}
+          {/* Column 1: Brand & Mission */}
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="inline-block">
               <div className="relative w-36 h-9 sm:w-40 sm:h-10">
@@ -32,7 +20,6 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
                   src="/finquo-footer-logo.png"
                   alt="Finquo Junior"
                   fill
-                  priority
                   unoptimized
                   sizes="(max-width: 640px) 144px, 160px"
                   className="object-contain object-left"
@@ -40,60 +27,36 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
               </div>
             </Link>
 
-            <p className="text-xs sm:text-[13px] text-white/85 max-w-full sm:max-w-sm leading-relaxed font-normal pt-1">
-              Raising a financially secure generation through curated, ISO-grade weekly 1-on-1 mentorship sessions for ages 8 to 18.
-            </p>
+            <p className="text-xs sm:text-[13px] text-white/85 max-w-full sm:max-w-sm leading-relaxed font-normal pt-1">{FOOTER_TAGLINE}</p>
 
-            {/* Email Contact */}
-            <div className="pt-1">
-              <a
-                href="mailto:info@finquo.ai"
-                className="inline-flex items-center gap-2.5 text-xs sm:text-[13px] text-white/85 hover:text-white font-medium transition-colors group"
-              >
+            <div className="pt-1 space-y-2">
+              <a href={`mailto:${CONTACT.email}`} className="inline-flex items-center gap-2.5 min-h-[44px] text-xs sm:text-[13px] text-white/85 hover:text-white font-medium transition-colors group">
                 <span className="w-7 h-7 rounded-full bg-white/15 group-hover:bg-white/25 flex items-center justify-center flex-shrink-0 transition-colors">
                   <Mail className="w-3.5 h-3.5 text-amber-300" />
                 </span>
-                <span>info@finquo.ai</span>
+                <span>{CONTACT.email}</span>
               </a>
             </div>
 
             {/* Socials */}
             <div className="flex items-center gap-2.5">
-              {/* Instagram */}
-              <a
-                href="https://www.instagram.com/finquojunior"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white transition-colors"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-11 h-11 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                 </svg>
               </a>
-
-              {/* Facebook */}
-              <a
-                href="https://www.facebook.com/finquojunior"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white transition-colors"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-11 h-11 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
               </a>
             </div>
           </div>
 
-          {/* Column 2: OFFICE ADDRESSES (span 4) */}
+          {/* Column 2: Offices */}
           <div className="lg:col-span-4 space-y-5">
-            <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-3 sm:mb-4">
-              OUR OFFICES
-            </h3>
+            <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-3 sm:mb-4">Our Offices</h3>
 
-            {/* India Office */}
             <div className="flex items-start gap-3 text-xs sm:text-[13px] text-white/85">
               <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <MapPin className="w-3.5 h-3.5 text-amber-300" />
@@ -103,16 +66,12 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
                 <p className="leading-relaxed text-white/85">
                   Tower 2, 2nd Floor, 2/1149/I 94, 95, 96, HiLITE Business Park, Guruvayurappan College Road, Olavanna, Kozhikode, Kerala - 673014
                 </p>
-                <a
-                  href="tel:+919745001121"
-                  className="inline-flex items-center gap-1.5 pt-0.5 text-amber-300 hover:text-amber-200 hover:underline font-semibold transition-colors"
-                >
-                  <Phone className="w-3.5 h-3.5" /> +91 97450 01121
+                <a href={CONTACT.phoneHref} className="inline-flex items-center gap-1.5 min-h-[44px] text-amber-300 hover:text-amber-200 hover:underline font-semibold transition-colors">
+                  <Phone className="w-3.5 h-3.5" /> {CONTACT.phone}
                 </a>
               </div>
             </div>
 
-            {/* UAE Office */}
             <div className="flex items-start gap-3 text-xs sm:text-[13px] text-white/85">
               <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                 <MapPin className="w-3.5 h-3.5 text-amber-300" />
@@ -122,78 +81,41 @@ export function Footer({ onOpenDemoModal }: FooterProps) {
                 <p className="leading-relaxed text-white/85">
                   World Trade Centre, Latifa Tower, Office No. 201, Sheikh Zayed Rd (opposite Museum of the Future), Dubai, United Arab Emirates
                 </p>
-                <a
-                  href="tel:+971543689895"
-                  className="inline-flex items-center gap-1.5 pt-0.5 text-amber-300 hover:text-amber-200 hover:underline font-semibold transition-colors"
-                >
-                  <Phone className="w-3.5 h-3.5" /> +971 54 368 9895
+                <a href={CONTACT.uaePhoneHref} className="inline-flex items-center gap-1.5 min-h-[44px] text-amber-300 hover:text-amber-200 hover:underline font-semibold transition-colors">
+                  <Phone className="w-3.5 h-3.5" /> {CONTACT.uaePhone}
                 </a>
               </div>
             </div>
           </div>
 
-          {/* Column 3: NAVIGATION (span 4) */}
+          {/* Column 3: Links + demo button */}
           <div className="lg:col-span-4 flex flex-col justify-between space-y-6 lg:space-y-0">
             <div>
-              <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-3 sm:mb-4">
-                EXPLORE & RESOURCES
-              </h3>
-              <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 sm:gap-y-3 text-xs sm:text-[13px] text-white/80 font-medium">
-                <li>
-                  <Link href="/curriculum" className="hover:text-white transition-colors block py-0.5">
-                    Curriculum Details
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/teachers" className="hover:text-white transition-colors block py-0.5">
-                    Our Teachers
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/about-us" className="hover:text-white transition-colors block py-0.5">
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={handleJoinClick}
-                    className="hover:text-white transition-colors block py-0.5 text-left font-medium cursor-pointer"
-                  >
-                    Schedule Demo
-                  </button>
-                </li>
+              <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-white mb-3 sm:mb-4">Explore</h3>
+              <ul className="grid grid-cols-2 gap-x-4 text-xs sm:text-[13px] text-white/80 font-medium">
+                <li><Link href="/curriculum" className={LINK}>Curriculum</Link></li>
+                <li><Link href="/mentors" className={LINK}>Mentors</Link></li>
+                <li><Link href="/about-us" className={LINK}>About Us</Link></li>
+                <li><Link href="/#faq" className={LINK}>FAQ</Link></li>
                 <li className="col-span-2 sm:col-span-1">
-                  <Link href="#faq" className="hover:text-white transition-colors block py-0.5">
-                    Help Center / FAQ
-                  </Link>
+                  <a href={webinarUrl("footer")} target="_blank" rel="noopener noreferrer" className={LINK}>Free Webinar</a>
                 </li>
               </ul>
             </div>
 
-            {/* CTA Button */}
             <div className="pt-2 sm:pt-4">
-              <a
-                href="https://demo.finquo.ai/"
-                className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-[#371085] hover:bg-amber-300 hover:text-[#280a66] text-xs sm:text-[13px] font-extrabold px-6 py-3 sm:py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95 text-center"
-              >
-                Join Now
-              </a>
+              <BookDemoButton placement="footer" className="w-full sm:w-auto" />
             </div>
           </div>
         </div>
 
-        {/* Thin Translucent White Divider */}
         <div className="border-t border-white/20 my-6 sm:my-8" />
 
-        {/* Bottom Bar: Copyright + Policies */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/80 text-center sm:text-left">
-          <span className="text-[11px] sm:text-xs text-white/70 font-normal">
-            © 2026 FinQuo Versity And Edutech Private Limited. All rights reserved.
-          </span>
-          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] sm:text-xs font-medium">
+          <span className="text-[11px] sm:text-xs text-white/70 font-normal">© 2026 {LEGAL_NAME}. All rights reserved.</span>
+          <nav aria-label="Policies" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[11px] sm:text-xs font-medium">
             {POLICY_LINKS.map((p) => (
-              <Link key={p.href} href={p.href} className="text-white/80 hover:text-white hover:underline transition-colors">
+              <Link key={p.href} href={p.href} className="flex items-center min-h-[44px] text-white/80 hover:text-white hover:underline transition-colors">
                 {p.label}
               </Link>
             ))}

@@ -8,9 +8,20 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
   async redirects() {
-    // WhatsApp template finquo_free_demo_marketing has button base URL "/pilot{{1}}",
-    // so the suffix "claim-free-class" gets glued on. Fix the template base URL, then drop this.
-    return [{ source: "/pilotclaim-free-class", destination: "/claim-free-class", permanent: false }];
+    // Every demo booking happens on demo.finquo.ai; the forms this site used
+    // to host are gone (change brief F6). /teachers became /mentors.
+    const demo = "https://demo.finquo.ai/";
+    return [
+      { source: "/pilot", destination: demo, permanent: true },
+      { source: "/pilot/:path*", destination: demo, permanent: true },
+      // The WhatsApp template finquo_free_demo_marketing glues "claim-free-class" onto "/pilot".
+      { source: "/pilotclaim-free-class", destination: demo, permanent: true },
+      { source: "/confirm-your-seat", destination: demo, permanent: true },
+      { source: "/claim-free-class", destination: demo, permanent: true },
+      { source: "/demo-class", destination: demo, permanent: true },
+      { source: "/demo-class/:path*", destination: demo, permanent: true },
+      { source: "/teachers", destination: "/mentors", permanent: true },
+    ];
   },
   async rewrites() {
     // Short, shareable brand-asset URLs. The artwork letters the name in white,

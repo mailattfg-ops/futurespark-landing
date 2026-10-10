@@ -59,25 +59,12 @@ export function CertificationsTrustSection() {
                   className="h-12 sm:h-14 w-auto max-w-[85%] object-contain mx-auto"
                 />
               </div>
-              <span className="bg-[#00B67A] text-white text-xs sm:text-sm font-extrabold px-5 py-2 rounded-full font-sans shadow-xs mt-3">
-                5/5 ★
-              </span>
             </div>
           </ScrollReveal>
         </div>
 
         {/* Bottom 2 Info Badges */}
         <ScrollReveal variant="fade-up" duration={600} delay={400} className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 max-w-2xl mx-auto mt-6 sm:mt-8">
-          {/* Badge 1: ISO 27001 */}
-          <div className="w-full sm:w-1/2 rounded-2xl border border-gray-200/90 bg-white p-5 text-center shadow-xs hover:shadow-md transition-all">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-[#7C3AED] font-sans block">
-              ISO 27001 COMPLIANT
-            </span>
-            <span className="text-sm sm:text-base font-extrabold text-gray-900 leading-tight mt-1.5 font-sans block">
-              Enterprise Data Protection
-            </span>
-          </div>
-
           {/* Badge 2: STEM Outreach Award */}
           <div className="w-full sm:w-1/2 rounded-2xl border border-gray-200/90 bg-white p-5 text-center shadow-xs hover:shadow-md transition-all">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#7C3AED] font-sans block">

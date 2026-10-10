@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { Preloader } from "@/components/preloader";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Suspense } from "react";
 import MetaPixel from "@/components/MetaPixel";
 import Clarity from "@/components/Clarity";
+import { FAQS } from "@/lib/faq";
+import { LEGAL_NAME, CONTACT } from "@/lib/site";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -19,36 +20,36 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 // away and Google keeps indexing the old subdomain.
 const siteUrl = "https://finquo.ai";
 
+const DEFAULT_TITLE = "Finquo Junior | 1-on-1 Financial Literacy for Grades 5 to 8";
+const DEFAULT_DESCRIPTION =
+  "A 20-session, 1-on-1 financial literacy programme for children in Grades 5 to 8. One live hour a week with a dedicated mentor. Book a free demo class.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Finquo Junior | The Skills School Forgets to Teach",
+    default: DEFAULT_TITLE,
     template: "%s | Finquo Junior",
   },
-  description:
-    "A 1-year weekly 1-on-1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits taught by real mentors.",
+  description: DEFAULT_DESCRIPTION,
   keywords: [
     "Finquo Junior",
     "Financial literacy for kids",
-    "Money management for teens",
-    "Kids entrepreneurship course",
+    "Financial literacy for Grades 5 to 8",
+    "Money skills for children",
     "1-on-1 mentorship for students",
-    "Public speaking for kids",
-    "AI tools for students",
-    "Smart spending for teenagers",
-    "Financial intelligence school",
+    "Budgeting for kids",
+    "Money management for children India",
+    "Financial literacy classes UAE",
   ],
   authors: [{ name: "Finquo Junior", url: siteUrl }],
   creator: "Finquo Junior",
-  publisher: "Finquo Junior",
+  publisher: LEGAL_NAME,
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
       { url: "/icon.png", type: "image/png", sizes: "512x512" },
     ],
-    apple: [
-      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   robots: {
     index: true,
@@ -64,35 +65,22 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
     url: siteUrl,
-    // The SITE is FinQuo; "Finquo Junior" is the programme. Google reads this
-    // (with WebSite.name below) for the site name it prints above a result.
-    siteName: "FinQuo",
-    title: "Finquo Junior | The Skills School Forgets to Teach",
-    description:
-      "A 1-year weekly 1-on-1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits taught by real mentors.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Finquo Junior - Financial Literacy & Essential Skills Mentorship",
-      },
-    ],
+    siteName: "Finquo Junior",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Finquo Junior: 1-on-1 financial literacy for Grades 5 to 8" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Finquo Junior | The Skills School Forgets to Teach",
-    description:
-      "A 1-year weekly 1-on-1 mentorship program for ages 8 to 18. Financial literacy, entrepreneurship, public speaking, AI tools & smart digital habits.",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     images: ["/og-image.jpg"],
     creator: "@finquojunior",
   },
   alternates: {
     // Relative, so every route canonicals to ITSELF against metadataBase.
-    // A literal siteUrl here pointed every page at the homepage, which is why
-    // Search Console dropped them as "Alternate page with proper canonical".
     canonical: "./",
   },
   verification: {
@@ -102,68 +90,70 @@ export const metadata: Metadata = {
   },
 };
 
-/* The organisation and the website are FinQuo, on the apex domain. "Finquo
- * Junior" is the programme FinQuo runs — it belongs on the Course node below,
- * never on the Organization or WebSite node, which is what Google reads for
- * the site name it prints in results. */
-const brandUrl = "https://finquo.ai";
-
 const jsonLdData = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "EducationalOrganization",
-      "@id": `${brandUrl}/#organization`,
-      "name": "FinQuo",
-      "url": brandUrl,
-      "logo": `${brandUrl}/finquo-logo-brand.png`,
-      "description": "ISO-grade weekly 1-on-1 mentorship sessions in financial literacy, business, speaking, and digital skills for ages 8 to 18.",
-      "sameAs": [
-        "https://www.instagram.com/finquojunior",
-        "https://www.facebook.com/finquojunior"
-      ]
+      "@id": `${siteUrl}/#organization`,
+      name: "Finquo Junior",
+      legalName: LEGAL_NAME,
+      url: siteUrl,
+      logo: `${siteUrl}/finquo-logo-brand.png`,
+      description: "A 20-session, 1-on-1 financial literacy programme for children in Grades 5 to 8.",
+      email: CONTACT.email,
+      telephone: CONTACT.phone,
+      sameAs: [CONTACT.instagram, CONTACT.facebook],
     },
     {
       "@type": "WebSite",
-      "@id": `${brandUrl}/#website`,
-      "url": brandUrl,
-      "name": "FinQuo",
-      "publisher": {
-        "@id": `${brandUrl}/#organization`
-      }
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "Finquo Junior",
+      publisher: { "@id": `${siteUrl}/#organization` },
     },
     {
       "@type": "Course",
-      "@id": `${brandUrl}/#course`,
-      "name": "Foundations of Wealth & Future Skills",
-      "description": "40 interactive 1-on-1 sessions covering money foundations, budgeting, scam safety, economy, investing, public speaking, and AI tools.",
-      "alternateName": "Finquo Junior",
-      "provider": {
-        "@id": `${brandUrl}/#organization`
-      }
-    }
-  ]
+      "@id": `${siteUrl}/#course`,
+      name: "Foundations of Wealth",
+      description: "A 20-session, 1-on-1 financial literacy programme for children in Grades 5 to 8.",
+      provider: { "@id": `${siteUrl}/#organization` },
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "Online",
+        courseWorkload: "PT20H",
+      },
+      offers: {
+        "@type": "Offer",
+        category: "Paid",
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          price: 29000,
+          priceCurrency: "INR",
+          valueAddedTaxIncluded: false,
+        },
+      },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${siteUrl}/#faq`,
+      mainEntity: FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: { "@type": "Answer", text: f.answer },
+      })),
+    },
+  ],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${plusJakartaSans.variable} font-sans antialiased h-full text-[16px]`}
-    >
+    <html lang="en" className={`${plusJakartaSans.variable} font-sans antialiased h-full text-[16px]`}>
       <head>
         <meta name="facebook-domain-verification" content="v9m93wnlwouc74fqueatyyf08hn1jr" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }} />
       </head>
       <body className="min-h-full flex flex-col bg-white text-gray-900 selection:bg-[#4F46E5]/20 selection:text-[#4F46E5] overflow-x-hidden font-sans">
-        <Preloader />
         {children}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
         <Suspense fallback={null}>
