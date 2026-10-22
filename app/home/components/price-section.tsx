@@ -10,7 +10,7 @@ export function PriceSection({ compact = false }: Props) {
   return (
     <section id="price" className="w-full bg-[#4F46E5] text-white py-12 sm:py-16 lg:py-20">
       <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight font-sans text-balance">
+        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold tracking-[-0.03em] font-sans text-balance">
           {compact ? `${PRICE} for the full programme.` : "One programme. One price."}
         </h2>
         {!compact && (

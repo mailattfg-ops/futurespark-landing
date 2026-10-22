@@ -7,7 +7,7 @@ import { demoUrl, webinarUrl, DEMO_LABEL, WEBINAR_LABEL, Placement } from "@/lib
  * label and the campaign tag can never drift between sections.
  */
 const BASE =
-  "inline-flex items-center justify-center gap-2 min-h-[44px] rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-bold shadow-md shadow-indigo-500/25 transition-colors cursor-pointer";
+  "inline-flex items-center justify-center gap-2 min-h-[44px] rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] text-white font-bold shadow-md shadow-indigo-500/25 transition-[background-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/30 cursor-pointer";
 
 const SIZES = {
   sm: "px-4 py-2 text-xs sm:text-sm",

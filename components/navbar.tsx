@@ -8,7 +8,7 @@ import { getDefaultSectionState, SectionState, clearLegacyStorage } from "@/lib/
 import { webinarUrl, WEBINAR, DEMO_LABEL } from "@/lib/site";
 import { BookDemoButton } from "@/components/book-demo-button";
 
-const LINK = "text-sm lg:text-[15px] font-bold text-gray-900 hover:text-[#4F46E5] transition-colors py-2";
+const LINK = "text-sm lg:text-[15px] font-semibold text-gray-900 hover:text-[#4F46E5] transition-colors py-1";
 const MOBILE_LINK =
   "flex items-center min-h-[44px] px-3 rounded-lg text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-[#4F46E5] transition-colors";
 
@@ -59,7 +59,7 @@ export function Navbar() {
       }`}
     >
       <div className="w-full max-w-8xl mx-auto px-4 sm:px-6 lg:px-18">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="relative flex items-center justify-between h-16 md:h-20">
           {/* Left: Brand Logo & Main Nav */}
           <div className="flex items-center gap-6 lg:gap-10 md:pl-6">
             <Link href="/" className="flex items-center group">
@@ -75,7 +75,7 @@ export function Navbar() {
               </div>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-5 lg:gap-7">
+            <nav className="hidden md:flex items-center gap-6 lg:gap-8 md:absolute md:left-1/2 md:-translate-x-1/2 whitespace-nowrap rounded-full bg-[#EEF0FF] px-6 py-2.5">
               {links.map((l) =>
                 !isEnabled(l.key) ? null : l.external ? (
                   <a key={l.key} href={l.href} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-1.5 ${LINK}`}>

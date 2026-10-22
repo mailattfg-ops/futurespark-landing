@@ -17,7 +17,7 @@
   "youtube": false,
   "joinThousands": false,
   "certificationsTrust": false,
-  "parentReviews": false,
+  "parentReviews": true,
   "footer": true,
   "curriculum_hero": true,
   "curriculum_master": true,

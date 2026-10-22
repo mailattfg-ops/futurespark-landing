@@ -12,7 +12,7 @@ export function FAQSection() {
     <section id="faq" className="w-full bg-white pt-10 sm:pt-14 pb-16 sm:pb-20 scroll-mt-24">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight font-sans">FAQ</h2>
+          <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] tracking-[-0.03em] font-sans">FAQ</h2>
           <p className="text-base sm:text-lg text-gray-600 mt-3 font-medium font-sans">Common questions about learning with Finquo Junior</p>
         </div>
 

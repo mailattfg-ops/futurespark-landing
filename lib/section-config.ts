@@ -34,7 +34,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
   { id: "courseFlow", name: "Course Roadmap", page: "home", category: "Programme", description: "The five modules with their session titles, the value tiles and the closing line.", enabled: true },
   { id: "bonusSessions", name: "Bonus Sessions", page: "home", category: "Programme", description: "Five free sessions in AI, Public Speaking or Cyber Awareness after completion.", enabled: true },
   { id: "moneyHabits", name: "20 Money Habits", page: "home", category: "Programme", description: "Six sticker cards and the link to all 20 sessions.", enabled: true },
-  { id: "mentorsParents", name: "Mentors & Parents", page: "home", category: "Social Proof", description: "Four mentor cards, parent quotes and the proof line.", enabled: true },
+  { id: "mentorsParents", name: "Meet the Mentors", page: "home", category: "Social Proof", description: "Four mentor cards with the link to /mentors.", enabled: true },
   { id: "webinar", name: "Free Live Webinar", page: "home", category: "Events", description: "Webinar block: the next session date (Mondays and Thursdays, from 15 Oct 2026), with the registration button.", enabled: true },
   { id: "instagramShowcase", name: "Instagram Posts", page: "home", category: "Social Proof", description: "Three posts from finquojunior, each linked to the post.", enabled: true },
   { id: "usOnMedia", name: "US On Media", page: "home", category: "Social Proof", description: "Media coverage logos.", enabled: true },
@@ -42,7 +42,7 @@ export const DEFAULT_SECTIONS: LandingSection[] = [
   { id: "youtube", name: "YouTube Highlights", page: "home", category: "Content", description: "Video thumbnails.", enabled: true },
   { id: "joinThousands", name: "Join Thousands Community", page: "home", category: "Social Proof", description: "Community face cloud.", enabled: true },
   { id: "certificationsTrust", name: "Certifications & Trust", page: "home", category: "Social Proof", description: "Trust badges. Keep off until the ratings are real.", enabled: false },
-  { id: "parentReviews", name: "Parent & Kid Reviews", page: "home", category: "Social Proof", description: "Quote cards from the shared testimonials list.", enabled: true },
+  { id: "parentReviews", name: "Success Stories", page: "home", category: "Social Proof", description: "Quote cards from the shared testimonials list.", enabled: true },
   { id: "faq", name: "FAQ", page: "home", category: "Main Content", description: "Eight questions, just above the footer. The footer's FAQ link points here.", enabled: true },
   { id: "footer", name: "Footer", page: "home", category: "Footer", description: "Offices, links, policies and the demo button.", enabled: true },
 

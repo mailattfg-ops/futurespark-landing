@@ -48,31 +48,32 @@ export default function HomePage() {
 
   const isEnabled = (key: string) => sections[key] !== false;
 
-  // Order follows the change brief (F2 and F9).
+  // Order follows the "Home web final" design; sections the design does not
+  // show keep their place from the change brief.
   return (
     <main className="min-h-screen flex flex-col bg-white">
       <Navbar />
       {isEnabled("hero") && <HeroSection showTrustpilot={isEnabled("hero_trustpilot")} />}
       {isEnabled("whyFinancialLiteracy") && <WhyFinancialLiteracySection />}
-      {isEnabled("studentSpotlight") && <StudentSpotlightSection />}
       {isEnabled("howItWorks") && <HowItWorksSection />}
       {isEnabled("graduation") && <GraduationSection />}
       {isEnabled("awardsPartners") && <AwardsPartnersSection />}
       {isEnabled("foundationsOfWealth") && <FoundationsOfWealthSection />}
-      {isEnabled("price") && <PriceSection />}
-      {isEnabled("worksheets") && <WorksheetsSection />}
       {isEnabled("courseFlow") && <CourseFlowSection />}
+      {isEnabled("worksheets") && <WorksheetsSection />}
       {isEnabled("bonusSessions") && <BonusSessionsSection />}
-      {isEnabled("moneyHabits") && <MoneyHabitsSection />}
       {isEnabled("mentorsParents") && <MentorsParentsSection />}
+      {isEnabled("moneyHabits") && <MoneyHabitsSection />}
+      {isEnabled("parentReviews") && <ParentReviewsSection />}
+      {isEnabled("studentSpotlight") && <StudentSpotlightSection />}
+      {isEnabled("joinThousands") && <JoinThousandsSection />}
       {isEnabled("webinar") && <WebinarBannerSection />}
       {isEnabled("instagramShowcase") && <InstagramShowcaseSection />}
+      {isEnabled("price") && <PriceSection />}
       {isEnabled("usOnMedia") && <UsOnMediaSection />}
       {isEnabled("blogs") && <BlogsSection />}
       {isEnabled("youtube") && <YoutubeSection />}
-      {isEnabled("joinThousands") && <JoinThousandsSection />}
       {isEnabled("certificationsTrust") && <CertificationsTrustSection />}
-      {isEnabled("parentReviews") && <ParentReviewsSection />}
       {isEnabled("faq") && <FAQSection />}
       {isEnabled("footer") && <Footer />}
     </main>

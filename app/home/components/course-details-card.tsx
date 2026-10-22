@@ -24,8 +24,8 @@ export function CourseDetailsCard({ placement }: { placement: Placement }) {
   return (
     <div className="bg-white border border-gray-200/90 rounded-3xl p-6 sm:p-8 shadow-xl">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-center">
-        <div className="flex flex-col justify-between h-full space-y-4">
-          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#F8F5EE] border border-[#E9DAC6]">
+        <div className="flex flex-col justify-center h-full gap-4">
+          <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#F8F5EE] border border-[#E9DAC6]">
             <Image src={THUMBNAIL.src} alt={THUMBNAIL.alt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover object-center" />
           </div>
           <div className="pt-1 border-t border-gray-100">
