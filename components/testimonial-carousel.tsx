@@ -2,41 +2,45 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 import type { Testimonial } from "@/lib/testimonials";
 
-const EVERY_MS = 6000;
+const EVERY_MS = 3000;
 const CARD_GROUNDS = ["bg-[#EEF0FF]", "bg-[#FBF4EE]"];
 
 const roleOf = (t: Testimonial) => [t.city, t.grade].filter(Boolean).join(" · ") || "Finquo Junior family";
 
 /**
  * Two cards at a time (one on phones), moving on by one every few seconds and
- * starting over after the last. Dots and arrows let the visitor drive it;
- * it pauses while hovered.
+ * starting over after the last, with a short slide so each change is seen.
+ * The dots jump to a card and restart the count. It keeps moving under the
+ * mouse; it holds only while a dot has keyboard focus, so someone tabbing
+ * through can read without it moving on.
  */
 export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
   const [start, setStart] = useState(0);
   const [paused, setPaused] = useState(false);
   const n = items.length;
 
+  // Restarts on every change, so picking a dot gives that card the full time.
   useEffect(() => {
     if (paused || n < 2) return;
-    const id = window.setInterval(() => setStart((s) => (s + 1) % n), EVERY_MS);
-    return () => window.clearInterval(id);
-  }, [paused, n]);
+    const id = window.setTimeout(() => setStart((s) => (s + 1) % n), EVERY_MS);
+    return () => window.clearTimeout(id);
+  }, [start, paused, n]);
 
   if (n === 0) return null;
   const shown = n === 1 ? [items[0]] : [items[start], items[(start + 1) % n]];
-  const go = (d: number) => setStart((s) => (s + d + n) % n);
 
   return (
-    <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <div>
       <ul className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6 list-none m-0 p-0">
         {shown.map((t, i) => (
           <li
-            key={t.name}
-            className={`${i === 1 ? "hidden xl:grid" : "grid"} ${CARD_GROUNDS[i]} grid-cols-1 sm:grid-cols-[30%_1fr] gap-5 rounded-[28px] p-5 sm:p-6 shadow-[0_24px_60px_-36px_rgba(79,70,229,0.45)] motion-safe:animate-in motion-safe:fade-in motion-safe:duration-500`}
+            // Keyed by position too, so every change remounts the card and replays the slide.
+            key={`${start}-${t.name}`}
+            style={{ animationDelay: `${i * 90}ms` }}
+            className={`swap-in ${i === 1 ? "hidden xl:grid" : "grid"} ${CARD_GROUNDS[i]} grid-cols-1 sm:grid-cols-[30%_1fr] gap-5 rounded-[28px] p-5 sm:p-6 shadow-[0_24px_60px_-36px_rgba(79,70,229,0.45)]`}
           >
             <div className="flex flex-col">
               <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-white">
@@ -57,20 +61,21 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
       </ul>
 
       {n > 1 && (
-        <div className="mt-6 flex items-center justify-between">
-          <div className="flex items-center gap-2" aria-hidden="true">
-            {items.map((_, i) => (
-              <span key={i} className={`h-2 rounded-full transition-all ${i === start ? "w-6 bg-[#4F46E5]" : "w-2 bg-[#C7CBE3]"}`} />
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <button type="button" onClick={() => go(-1)} aria-label="Previous" className="w-11 h-11 rounded-full border border-[#C7CBE3] bg-white text-[#4F46E5] flex items-center justify-center hover:bg-[#EEF0FF] cursor-pointer">
-              <ChevronLeft className="w-5 h-5" />
+        <div className="mt-6 flex items-center justify-center gap-1" onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
+          {items.map((t, i) => (
+            <button
+              key={t.name}
+              type="button"
+              aria-label={`Show ${t.name}'s review`}
+              aria-current={i === start}
+              onClick={() => setStart(i)}
+              className="group flex items-center justify-center h-11 min-w-[28px] px-1 cursor-pointer focus-visible:outline-none"
+            >
+              <span
+                className={`h-2 rounded-full transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-indigo-300 ${i === start ? "w-7 bg-[#4F46E5]" : "w-2 bg-[#C7CBE3] group-hover:bg-[#A5ABD3]"}`}
+              />
             </button>
-            <button type="button" onClick={() => go(1)} aria-label="Next" className="w-11 h-11 rounded-full bg-[#4F46E5] text-white flex items-center justify-center hover:bg-[#4338CA] cursor-pointer">
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
+          ))}
         </div>
       )}
     </div>

@@ -39,12 +39,12 @@ const MODULE_TINTS = [
 
 /* ── "What Makes Finquo Junior Different?" row ────────────────────────────── */
 const differentiators = [
-  { icon: <UserRound className="w-6 h-6" />, tile: "bg-[#3B6CFF]", title: "1-on-1 Mentorship", body: "Personalised guidance in every session." },
-  { icon: <BookOpen className="w-6 h-6" />, tile: "bg-[#1CB5B5]", title: "Real-World Learning", body: "Practical, relatable and engaging." },
-  { icon: <Users className="w-6 h-6" />, tile: "bg-[#F5A524]", title: "Built by Professionals", body: "Designed with finance and education professionals." },
-  { icon: <BarChart3 className="w-6 h-6" />, tile: "bg-[#F26B2E]", title: "Continuous Evaluation", body: "Track progress and build consistently." },
-  { icon: <Star className="w-6 h-6" />, tile: "bg-[#7C3AED]", title: "Skills That Compound", body: "Knowledge they'll use for life." },
-  { icon: <Printer className="w-6 h-6" />, tile: "bg-[#7CB342]", title: "Printed Worksheets", body: "A worksheet and sticker pack for every session." },
+  { icon: <UserRound className="w-6 h-6" />, tile: "bg-[#3B6CFF]", title: "1-on-1 mentorship", body: "Personalised guidance in every session." },
+  { icon: <BookOpen className="w-6 h-6" />, tile: "bg-[#1CB5B5]", title: "Real-world learning", body: "Practical, relatable and engaging." },
+  { icon: <Users className="w-6 h-6" />, tile: "bg-[#F5A524]", title: "Built by professionals", body: "Designed with finance and education professionals." },
+  { icon: <BarChart3 className="w-6 h-6" />, tile: "bg-[#F26B2E]", title: "Continuous evaluation", body: "Track progress and build consistently." },
+  { icon: <Star className="w-6 h-6" />, tile: "bg-[#7C3AED]", title: "Skills that compound", body: "Knowledge they'll use for life." },
+  { icon: <Printer className="w-6 h-6" />, tile: "bg-[#7CB342]", title: "Printed worksheets", body: "A worksheet and sticker pack for every session." },
 ];
 
 /** Founder names and photos come from marketing (brief F4 row 6). The block appears once this list has entries. */
@@ -133,7 +133,7 @@ export default function AboutUsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-10 items-center">
               <div className="lg:col-span-4">
                 <h2 className={H2}>
-                  Why <span className="text-[#3B6CFF]">Financial</span> Literacy?
+                  Why <span className="text-[#3B6CFF]">Financial</span> Literacy
                 </h2>
                 <p className={SUB}>A grounding, not a lecture.</p>
                 <p className="mt-5 max-w-[430px] text-sm sm:text-[15px] leading-relaxed text-gray-500">
@@ -232,7 +232,7 @@ export default function AboutUsPage() {
         {isEnabled("about_people") && (
           <section className={`${PANEL} bg-[#EEF0FF]`}>
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#5B2BE0]">Our mentors</p>
-            <h2 className={`${H2} mt-2`}>The people behind Finquo Junior</h2>
+            <h2 className={`${H2} mt-2`}>The People Behind Finquo Junior</h2>
             <span className="block mt-4 h-1 w-16 rounded-full bg-[#5B2BE0]" aria-hidden="true" />
 
             {FOUNDERS.length > 0 && (
@@ -305,9 +305,9 @@ export default function AboutUsPage() {
 
               <div className="order-1 lg:order-2 pb-2 lg:pb-16">
                 <h2 className={H2}>
-                  Let&rsquo;s raise a
+                  Let&rsquo;s Raise a
                   <br />
-                  <span className="text-[#5B2BE0]">financially confident generation.</span>
+                  <span className="text-[#5B2BE0]">Financially Confident Generation</span>
                 </h2>
                 <p className="mt-4 text-base sm:text-lg text-gray-500">Confident. Responsible. Curious. Money smart.</p>
                 <div className="mt-7 lg:mt-9">

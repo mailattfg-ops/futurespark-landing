@@ -13,8 +13,8 @@ export function ParentReviewsSection() {
 
   return (
     <section id="reviews" className="relative w-full bg-gradient-to-b from-white to-[#EEF0FF] py-14 sm:py-20 overflow-hidden">
-      <div className="absolute -right-24 top-10 w-80 h-80 rounded-[45%] bg-[#DED6FF]/60" aria-hidden="true" />
-      <div className="absolute -left-16 bottom-0 w-40 h-40 rounded-[45%] bg-[#DED6FF]/60" aria-hidden="true" />
+      <div className="hidden sm:block absolute -right-24 top-10 w-80 h-80 rounded-[45%] bg-[#DED6FF]/60" aria-hidden="true" />
+      <div className="hidden sm:block absolute -left-16 bottom-0 w-40 h-40 rounded-[45%] bg-[#DED6FF]/60" aria-hidden="true" />
 
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] text-center tracking-[-0.03em] font-sans">

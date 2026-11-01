@@ -65,7 +65,7 @@ export default function CurriculumPage() {
                 Finquo Junior Curriculum
               </span>
               <h1 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] text-white drop-shadow-sm text-balance">
-                Financial literacy for Grades 5 to 8
+                Financial Literacy for Grades 5 to 8
               </h1>
             </div>
           </section>

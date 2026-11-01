@@ -200,11 +200,19 @@ export function StepExplorer({ steps, initial = null }: StepExplorerProps) {
           })}
 
           {node && (
-            <g className="hiw-move" style={{ transform: `translate(${node.x}px, ${node.y}px)`, transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)" }}>
+            <g className="hiw-move" pointerEvents="none" style={{ transform: `translate(${node.x}px, ${node.y}px)`, transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)" }}>
               <circle r="26" fill={`url(#${baseId}-glow)`} />
               <circle r="8" fill="#fff" stroke={lit!.color} strokeWidth="3" />
             </g>
           )}
+
+          {/* The dots light their step too: an invisible, finger-sized target over each dot on the wave and its anchor */}
+          {NODES.map((n, i) => (
+            <g key={`hit-${i}`} className="cursor-pointer" fill="transparent" pointerEvents="all" {...handlers(i)}>
+              <circle cx={n.x} cy={n.y} r="28" />
+              <circle cx={n.x} cy={n.anchor} r="16" />
+            </g>
+          ))}
         </svg>
 
         {/* The numbers are the controls */}

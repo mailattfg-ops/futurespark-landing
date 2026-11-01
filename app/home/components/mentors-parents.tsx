@@ -6,10 +6,10 @@ import { MENTORS } from "@/lib/mentors";
 /** "Meet the mentors" on the homepage. The parent quotes live in parent-reviews.tsx. */
 export function MentorsParentsSection() {
   return (
-    <section className="w-full bg-gradient-to-b from-[#EEF0FF] via-[#F7F8FF] to-white py-14 sm:py-20">
+    <section className="w-full bg-gradient-to-b from-white via-[#F7F8FF] to-[#EEF0FF] py-14 sm:py-20">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <p className="text-center text-xs font-bold uppercase tracking-[0.3em] text-[#5B2BE0]">Our mentors</p>
-        <h2 className="mt-3 text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] text-center tracking-[-0.03em] font-sans">Meet the mentors</h2>
+        <h2 className="mt-3 text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] text-center tracking-[-0.03em] font-sans">Meet the <span className="text-[#5B2BE0]">Mentors</span></h2>
         <span className="block mx-auto mt-4 h-1 w-16 rounded-full bg-[#5B2BE0]" aria-hidden="true" />
         <p className="mt-5 max-w-2xl mx-auto text-center text-base sm:text-lg text-gray-500 leading-relaxed">
           Every child learns with one mentor for all 20 sessions. The team is led by a Chartered Accountant and taught by Finquo Junior master mentors.

@@ -27,7 +27,8 @@ const features = [
 ];
 
 /** Replace with the real 1-on-1 session image from creative (brief F2 row 9); keep the alt true to the picture. */
-const IMAGE = { src: "/classroom-boy.png", alt: "A young student raising his hand in a classroom" };
+// Pexels photo 8466776 by Anastasia Shuraeva (Pexels licence: free for commercial use, no credit required).
+const IMAGE = { src: "/classroom-girl.jpg", alt: "A young student smiling and raising her hand in a classroom" };
 
 export function WhyFinancialLiteracySection() {
   return (
@@ -44,7 +45,7 @@ export function WhyFinancialLiteracySection() {
             <div className="absolute -left-2 -top-6 w-[62%] h-[70%] rounded-[56px] bg-[#C7BBFF]/70 rotate-[-8deg]" aria-hidden="true" />
             <div className="absolute -left-4 bottom-2 w-[70%] h-28 rounded-[100%] border border-[#5B2BE0]/40" aria-hidden="true" />
             <div className="relative aspect-[4/3] rounded-[28px] overflow-hidden shadow-lg shadow-indigo-900/10 lift">
-              <Image src={IMAGE.src} alt={IMAGE.alt} fill sizes="(min-width: 1024px) 460px, 100vw" className="object-cover object-center" />
+              <Image src={IMAGE.src} alt={IMAGE.alt} fill sizes="(min-width: 1024px) 520px, 100vw" className="object-cover object-center" />
             </div>
           </div>
 

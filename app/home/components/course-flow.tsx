@@ -19,7 +19,7 @@ const MODULE_TINTS = [
 ];
 
 const TILES = [
-  { icon: <Sticker className="w-5 h-5 text-[#F5A524]" aria-hidden="true" />, title: "A Money Habit sticker every session", bg: "from-[#FFF8E1] to-[#FDEFC7] border-[#F7E7B5]" },
+  { icon: <Sticker className="w-5 h-5 text-[#F5A524]" aria-hidden="true" />, title: "A money habit sticker every session", bg: "from-[#FFF8E1] to-[#FDEFC7] border-[#F7E7B5]" },
   { icon: <UserCheck className="w-5 h-5 text-[#1CB5B5]" aria-hidden="true" />, title: "One mentor throughout", bg: "from-[#E6FBF7] to-[#CFF3EC] border-[#BDE9E0]" },
   { icon: <Printer className="w-5 h-5 text-[#3B6CFF]" aria-hidden="true" />, title: "Worksheets in hand", bg: "from-[#EAF1FF] to-[#D6E3FF] border-[#C8D6FF]" },
   { icon: <Landmark className="w-5 h-5 text-[#7C3AED]" aria-hidden="true" />, title: "Built by finance professionals", bg: "from-[#F1EAFF] to-[#E3D6FF] border-[#D9CBFF]" },
@@ -118,7 +118,7 @@ export function CourseFlowSection() {
     `min-h-[44px] px-5 py-2 rounded-full text-sm font-bold text-white transition-colors cursor-pointer ${active ? "bg-[#3B6CFF]" : "bg-[#1CB5B5] hover:bg-[#169E9E]"}`;
 
   return (
-    <section className="w-full bg-gradient-to-b from-[#EEF0FF] to-white py-14 sm:py-20">
+    <section className="w-full bg-gradient-to-b from-white to-[#EEF0FF] py-14 sm:py-20">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] text-center tracking-[-0.03em] font-sans text-balance">
           Course <span className="text-[#3B6CFF]">Flow &amp; Roadmap</span>

@@ -23,7 +23,7 @@ export function Footer() {
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block">
               <div className="relative w-36 h-9 sm:w-40 sm:h-10">
-                <Image src="/finquo-footer-logo.png" alt="Finquo Junior" fill unoptimized sizes="(max-width: 640px) 144px, 160px" className="object-contain object-left" />
+                <Image src="/finquo-footer-logo.png" alt="Finquo Junior" fill unoptimized sizes="(max-width: 640px) 144px, 160px" className="object-contain object-left brightness-0 invert" />
               </div>
             </Link>
             <p className="mt-6 text-lg sm:text-xl font-bold leading-snug max-w-sm">{FOOTER_TAGLINE}</p>
@@ -102,10 +102,10 @@ export function Footer() {
 
         <div className="border-t border-white/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/75 text-center sm:text-left">
           <span>© 2026 {LEGAL_NAME}. All rights reserved.</span>
-          <nav aria-label="Policies" className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+          <nav aria-label="Policies" className="flex flex-wrap items-center justify-center gap-x-5 sm:gap-x-2 gap-y-1">
             {POLICY_LINKS.map((p, i) => (
               <span key={p.href} className="flex items-center">
-                {i > 0 && <span className="mx-3 text-white/30" aria-hidden="true">|</span>}
+                {i > 0 && <span className="hidden sm:inline mx-3 text-white/30" aria-hidden="true">|</span>}
                 <Link href={p.href} className="flex items-center min-h-[44px] hover:text-white hover:underline">{p.label}</Link>
               </span>
             ))}

@@ -14,7 +14,7 @@ export function BonusSessionsSection({ embedded = false }: Props) {
   const body = (
     <>
       <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] tracking-[-0.03em] font-sans text-center text-balance">
-        Finish the 20, <span className="text-[#5B2BE0]">get 5 more free.</span>
+        Finish the 20, <span className="text-[#5B2BE0]">Get 5 More Free</span>
       </h2>
       <p className="mt-4 text-sm sm:text-base text-gray-600 leading-relaxed max-w-2xl mx-auto text-center">
         After completing the programme, your child gets five free 1-on-1 sessions in AI, Public Speaking or Cyber Awareness. You choose the mix,

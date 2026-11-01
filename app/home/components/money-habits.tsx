@@ -21,9 +21,9 @@ const CARDS = [
 
 export function MoneyHabitsSection() {
   return (
-    <section className="w-full bg-gradient-to-b from-white to-[#EEF0FF] py-14 sm:py-20">
+    <section className="w-full bg-gradient-to-b from-[#EEF0FF] to-white py-14 sm:py-20">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] tracking-[-0.03em] font-sans text-balance">20 sessions. 20 money habits.</h2>
+        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] tracking-[-0.03em] font-sans text-balance">20 Sessions, 20 Money Habits</h2>
         <p className="mt-3 text-base sm:text-lg text-gray-500 leading-relaxed max-w-2xl mx-auto">
           Every session ends with one habit your child takes home, on a sticker they earn.
         </p>

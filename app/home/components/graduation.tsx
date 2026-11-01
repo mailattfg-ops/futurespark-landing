@@ -16,7 +16,7 @@ export function GraduationSection({ embedded = false }: Props) {
         <div className={`float inline-flex w-12 h-12 rounded-2xl bg-indigo-50 text-[#4F46E5] items-center justify-center mb-4 ${CERTIFICATE_IMAGE ? "" : "mx-auto"}`}>
           <GraduationCap className="w-6 h-6" aria-hidden="true" />
         </div>
-        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] tracking-[-0.03em] font-sans text-balance">Session 20 is <span className="text-[#3B6CFF]">graduation.</span></h2>
+        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F1035] tracking-[-0.03em] font-sans text-balance">Session 20 is <span className="text-[#3B6CFF]">Graduation</span></h2>
         <p className={`mt-4 text-sm sm:text-base text-gray-600 leading-relaxed ${CERTIFICATE_IMAGE ? "max-w-xl" : "max-w-2xl mx-auto"}`}>
           Your child presents the business they built, takes the “I am Money Smart” pledge and receives the Finquo Junior certificate. Parents are
           invited to watch.
@@ -33,7 +33,7 @@ export function GraduationSection({ embedded = false }: Props) {
   if (embedded) return body;
 
   return (
-    <section className="w-full bg-[#FAFAFA] py-10 sm:py-12 lg:py-14 border-t border-gray-100">
+    <section className="w-full bg-gradient-to-b from-[#EEF0FF] to-white py-14 sm:py-20">
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">{body}</div>
     </section>
   );

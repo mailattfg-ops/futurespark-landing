@@ -23,7 +23,7 @@ export default function MentorsPage() {
           <div className="text-center rise">
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#5B2BE0]">Our mentors</p>
             <h1 className="mt-3 text-4xl sm:text-5xl lg:text-[56px] font-extrabold tracking-[-0.03em] text-[#0F1035] text-balance">
-              Meet the <span className="text-[#5B2BE0]">mentors</span>
+              Meet the <span className="text-[#5B2BE0]">Mentors</span>
             </h1>
             <span className="block mx-auto mt-4 h-1 w-16 rounded-full bg-[#5B2BE0]" aria-hidden="true" />
             <p className="mt-5 max-w-2xl mx-auto text-base sm:text-lg text-gray-500 leading-relaxed">

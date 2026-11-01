@@ -42,7 +42,7 @@ export function InstagramShowcaseSection() {
           </a>
         </div>
 
-        <ul className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:grid-cols-3 sm:gap-4 lg:-space-x-6 list-none m-0 items-center [scrollbar-width:none]">
+        <ul className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible lg:-space-x-6 list-none m-0 items-center [scrollbar-width:none]">
           {POSTS.map((post, idx) => (
             <li key={post.image} className={`snap-start shrink-0 w-[260px] sm:w-auto transition-transform duration-300 lg:hover:rotate-0 lg:hover:-translate-y-2 hover:z-20 ${TILT[idx]}`}>
               <a
